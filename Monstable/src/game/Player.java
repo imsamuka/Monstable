@@ -1,6 +1,7 @@
 package game;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import inputs.KeyInput;
 import inputs.KeyObj;
 import inputs.MouseInput;
@@ -38,6 +39,21 @@ protected void tick(){
 		else yvel = 0;
 	}else{
 		
+		String pos;
+		
+		if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
+			pos = "left";
+		}else if (new Rectangle(bounds.x + bounds.width,bounds.y,Windows.WIDTH - bounds.x - bounds.width,bounds.height).contains(mouseX,mouseY)) {
+			pos = "right";
+		}else if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
+			pos = "left";
+		}else if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
+			pos = "left";
+		}
+		
+		
+		
+		
 		
 		double diffX = bounds.getCenterX() - mouseX;
 		double diffY = bounds.getCenterY() - mouseY;
@@ -70,7 +86,6 @@ protected void render(Graphics g){
 	g.drawString(getTileDR(16).x+","+getTileDR(16).y, 160, 40);
 	g.drawString(bounds.x+","+bounds.y, 160, 60);
 	g.drawString(GameHandler.objList.size()+"", 160, 80);
-	
 	
 	g.fillRect(0,bounds.y,bounds.x,bounds.height); // left
 	g.fillRect(bounds.x + bounds.width,bounds.y,Windows.WIDTH - bounds.x - bounds.width,bounds.height); // right
