@@ -10,9 +10,7 @@ import main.Windows;
 public abstract class GameObject{
 protected float     x, y, xvel, yvel, Spd;
 protected Rectangle bounds;
-
 public Rectangle getBounds(){ return bounds; }
-
 protected ID      id;
 protected Images  image;
 protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
@@ -47,7 +45,7 @@ protected void setHitBox(int x, int y, int width, int height){
 	bounds.height = height;
 	refreshBounds();
 }
-protected int stringPos(String pos){
+protected int stringDirection(String pos){
 	
 	switch(pos){
 		case "down":
@@ -181,7 +179,6 @@ protected boolean[] getCollisionWithWall(GameObject tO){
 	if (tO.id != ID.Wall) return collide;
 	setBounds(xvel, yvel);
 	if (!( bounds.intersects(tO.bounds) )) return collide;
-	tO.visibleBounds = true;
 	float tempXvel = xvel;
 	float tempYvel = yvel;
 	setBounds(xvel, 0);

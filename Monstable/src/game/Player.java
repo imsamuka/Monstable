@@ -12,6 +12,7 @@ public class Player extends GameObject{
 protected boolean     moving           = false;
 public static boolean getOneMorePlayer = false, roll = false;
 public float          mouseX           = 0, mouseY = 0;
+public int rollCount = 0;
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/slime.png", 16, 16, 1);
@@ -39,14 +40,20 @@ protected void tick(){
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
 	}else{
-	
-		System.out.println(checkForDirection(mouseX, mouseY, 10, false));
+		rollCount++;
 		
-		double diffX = bounds.getCenterX() - mouseX;
-		double diffY = bounds.getCenterY() - mouseY;
-		double distance = (double) ( Math.sqrt(( x - mouseX ) * ( x - mouseX ) + ( y - mouseY ) * ( y - mouseY )) );
-		xvel = (float) ( -1 / ( distance ) * diffX * Spd );
-		yvel = (float) ( -1 / ( distance ) * diffY * Spd );
+		if (rollCount > 24) {
+			rollCount = 0;
+			roll = false;
+		}
+		if (rollCount == 1) {
+			//System.out.println(checkForDirection(mouseX, mouseY, 10, false));
+			double diffX = bounds.getCenterX() - mouseX;
+			double diffY = bounds.getCenterY() - mouseY;
+			double distance =  Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY )) ;
+			xvel = (float) ( -1 / ( distance ) * diffX * (Spd*1.8) );
+			yvel = (float) ( -1 / ( distance ) * diffY * (Spd*1.8) );
+		}
 	}
 	// 
 	int size = GameHandler.objList.size();
@@ -56,7 +63,7 @@ protected void tick(){
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		tO.visibleBounds = false;
+		
 		getCollisionWithWall(tO);
 	}
 	// Movement Apply
