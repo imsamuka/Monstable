@@ -9,21 +9,22 @@ import main.Game;
 import main.Windows;
 
 public class Player extends GameObject{
-protected boolean moving = false;
+protected boolean     moving           = false;
 public static boolean getOneMorePlayer = false, roll = false;
-public float mouseX = 0, mouseY = 0;
+public float          mouseX           = 0, mouseY = 0;
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/slime.png", 16, 16, 1);
 	collision     = true;
-	entitie = true;
+	entitie       = true;
 	Spd           = 1.5f;
 	visibleBounds = true;
 	setHitBox(2, 7, 12, 9);
 }
 protected void tick(){
+	
 	// Movement check
-	if (!roll) {
+	if (!roll){
 		moving = KeyInput.isAnyKeyPressed(KeyObj.types.movement);
 		if (KeyInput.right.isPressed()
 		&& KeyInput.left.isPressed()) if (KeyInput.keyIsFirst(KeyInput.right, KeyInput.left)) xvel = Spd;
@@ -38,22 +39,8 @@ protected void tick(){
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
 	}else{
-		
-		String pos;
-		
-		if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
-			pos = "left";
-		}else if (new Rectangle(bounds.x + bounds.width,bounds.y,Windows.WIDTH - bounds.x - bounds.width,bounds.height).contains(mouseX,mouseY)) {
-			pos = "right";
-		}else if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
-			pos = "left";
-		}else if (new Rectangle(0,bounds.y,bounds.x,bounds.height).contains(mouseX,mouseY)) {
-			pos = "left";
-		}
-		
-		
-		
-		
+	
+		System.out.println(checkForDirection(mouseX, mouseY, 10, false));
 		
 		double diffX = bounds.getCenterX() - mouseX;
 		double diffY = bounds.getCenterY() - mouseY;
@@ -61,8 +48,6 @@ protected void tick(){
 		xvel = (float) ( -1 / ( distance ) * diffX * Spd );
 		yvel = (float) ( -1 / ( distance ) * diffY * Spd );
 	}
-	
-
 	// 
 	int size = GameHandler.objList.size();
 	
@@ -71,7 +56,6 @@ protected void tick(){
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		
 		tO.visibleBounds = false;
 		getCollisionWithWall(tO);
 	}
@@ -87,40 +71,7 @@ protected void render(Graphics g){
 	g.drawString(bounds.x+","+bounds.y, 160, 60);
 	g.drawString(GameHandler.objList.size()+"", 160, 80);
 	
-	g.fillRect(0,bounds.y,bounds.x,bounds.height); // left
-	g.fillRect(bounds.x + bounds.width,bounds.y,Windows.WIDTH - bounds.x - bounds.width,bounds.height); // right
-	g.fillRect(bounds.x,0,bounds.width,bounds.y); //up
-	g.fillRect(bounds.x,bounds.y + bounds.height,bounds.width,Windows.HEIGHT - bounds.y - bounds.height); // down
-	
 	g.setColor(new Color(255, 255, 255, 130));
-	
-	g.fillRect(0,0,bounds.x,bounds.y); // upper-left
-	g.fillRect(bounds.x + bounds.width,0,Windows.WIDTH - bounds.x - bounds.width,bounds.y); // upper-right
-	g.fillRect(0,bounds.y + bounds.height, bounds.x,Windows.HEIGHT - bounds.y - bounds.height); // down-left
-	g.fillRect(bounds.x + bounds.width,bounds.y + bounds.height,Windows.WIDTH - bounds.x - bounds.width,Windows.HEIGHT - bounds.y - bounds.height); // down-right
-	
-	
-	
-	
-	
-	int value = 2;
-	int area = 1;
-	int posi = value*area;
-	/*
-	g.fillRect(0,bounds.y - posi,bounds.x,area); // left - up
-	g.fillRect(bounds.x - posi,0,area,bounds.y); //up - left
-	
-	g.fillRect(bounds.x + bounds.width,bounds.y - posi,Windows.WIDTH - bounds.x - bounds.width,area); // right - up
-	g.fillRect(bounds.x + bounds.width + ((value-1)*area),0,area,bounds.y); //up - right
-	
-	g.fillRect(0,bounds.y + bounds.height + ((value-1)*area), bounds.x,area); // left - down
-	g.fillRect(bounds.x - posi,bounds.y + bounds.height,area,Windows.HEIGHT - bounds.y - bounds.height); // down - left
-	
-	g.fillRect(bounds.x + bounds.width,bounds.y + bounds.height + ((value-1)*area),Windows.WIDTH - bounds.x - bounds.width,area); // right - down
-	g.fillRect(bounds.x + bounds.width + ((value-1)*area),bounds.y + bounds.height,area,Windows.HEIGHT - bounds.y - bounds.height); // down - left
-	*/
-	
-	
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
 	renderBounds(g);

@@ -5,15 +5,18 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Random;
 import main.Images;
+import main.Windows;
 
 public abstract class GameObject{
 protected float     x, y, xvel, yvel, Spd;
 protected Rectangle bounds;
+
 public Rectangle getBounds(){ return bounds; }
-protected ID        id;
-protected Images    image;
-protected int       wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
-protected boolean   death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false;
+
+protected ID      id;
+protected Images  image;
+protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
+protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false;
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
 	this.x  = x;
@@ -29,7 +32,6 @@ protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, in
 	this.wSprite = wSprite;
 	bounds       = new Rectangle((int) x, (int) y, sWidth, sHeight);
 }
-
 protected void refreshBounds(){
 	bounds.x = (int) x + hitboxX;
 	bounds.y = (int) y + hitboxY;
@@ -45,13 +47,104 @@ protected void setHitBox(int x, int y, int width, int height){
 	bounds.height = height;
 	refreshBounds();
 }
+protected int stringPos(String pos){
+	
+	switch(pos){
+		case "down":
+			return 0;
+		case "up":
+			return 1;
+		case "left":
+			return 2;
+		case "right":
+			return 3;
+		case "down-left":
+			return 4;
+		case "down-right":
+			return 5;
+		case "upper-left":
+			return 6;
+		case "upper-right":
+			return 7;
+		default:
+			return 0;
+	}
+}
+protected String checkForDirection(float posx, float posy, int area, boolean withDiagonals){
+	if (new Rectangle(0, bounds.y, bounds.x, bounds.height).contains(posx, posy)) return "left";
+	else if (new Rectangle(bounds.x + bounds.width, bounds.y, Windows.WIDTH - bounds.x - bounds.width, bounds.height).contains(posx, posy)) return "right";
+	else if (new Rectangle(bounds.x, 0, bounds.width, bounds.y).contains(posx, posy)) return "up";
+	else if (new Rectangle(bounds.x, bounds.y + bounds.height, bounds.width, Windows.HEIGHT - bounds.y - bounds.height).contains(posx, posy)) return "down";
+	else if (new Rectangle(0, 0, bounds.x, bounds.y).contains(posx, posy)){
+		if (withDiagonals) return "upper-left";
+		double limit = Math.min(Math.ceil(( bounds.y + area * 2 ) / area), Math.ceil(( bounds.x + area * 2 ) / area));
+		
+		for (int value = 0; value < limit; value++){
+			if (new Rectangle(0, bounds.y - ( ( value + 1 ) * area ), bounds.x - ( value * area ), area).contains(posx, posy)) return "left"; // left - up
+			else if (new Rectangle(bounds.x - ( ( value + 1 ) * area ), 0, area, bounds.y - ( value * area )).contains(posx, posy)) return "up"; //up - left
+		}
+	}else if (new Rectangle(bounds.x + bounds.width, 0, Windows.WIDTH - bounds.x - bounds.width, bounds.y).contains(posx, posy)){
+		if (withDiagonals) return "upper-right";
+		double limit = Math.min(Math.ceil(( bounds.y + area * 2 ) / area), Math.ceil(( Windows.WIDTH - bounds.x - bounds.width + area * 2 ) / area));
+		
+		for (int value = 0; value < limit; value++){
+			if (new Rectangle(bounds.x + bounds.width + ( value * area ), bounds.y - ( ( value + 1 ) * area ), Windows.WIDTH - bounds.x - bounds.width - ( value * area ), area).contains(posx, posy)) return "right"; // right - up
+			else if (new Rectangle(bounds.x + bounds.width + ( value * area ), 0, area, bounds.y - ( value * area )).contains(posx, posy)) return "up"; // up - right
+		}
+	}else if (new Rectangle(0, bounds.y + bounds.height, bounds.x, Windows.HEIGHT - bounds.y - bounds.height).contains(posx, posy)){
+		if (withDiagonals) return "down-left";
+		double limit = Math.min(Math.ceil(( bounds.x + area * 2 ) / area), Math.ceil(( Windows.HEIGHT - bounds.y - bounds.height + area * 2 ) / area));
+		
+		for (int value = 0; value < limit; value++){
+			if (new Rectangle(0, bounds.y + bounds.height + ( value * area ), bounds.x - ( value * area ), area).contains(posx, posy)) return "left"; // left - down
+			else if (new Rectangle(bounds.x - ( ( value + 1 ) * area ), bounds.y + bounds.height + ( value * area ), area, Windows.HEIGHT - bounds.y - bounds.height - ( value * area )).contains(posx, posy)) return "down"; // down - left
+		}
+	}else if (new Rectangle(bounds.x + bounds.width, bounds.y + bounds.height, Windows.WIDTH - bounds.x - bounds.width, Windows.HEIGHT - bounds.y - bounds.height).contains(posx, posy)){
+		if (withDiagonals) return "down-right";
+		double limit = Math.min(Math.ceil(( Windows.WIDTH - bounds.x - bounds.width + area * 2 ) / area), Math.ceil(( Windows.HEIGHT - bounds.y - bounds.height + area * 2 ) / area));
+		
+		for (int value = 0; value < limit; value++){
+			if (new Rectangle(bounds.x + bounds.width + ( value * area ), bounds.y + bounds.height + ( value * area ), Windows.WIDTH - bounds.x - bounds.width - ( value * area ), area).contains(posx, posy)) return "right"; // right - down
+			else if (new Rectangle(bounds.x + bounds.width + ( value * area ), bounds.y + bounds.height + ( value * area ), area, Windows.HEIGHT - bounds.y - bounds.height - ( value * area )).contains(posx, posy)) return "down"; // down - right
+		}
+	}
+	return null;
+}
 protected void checkForDeath(){ if (life == 0) death = true; }
-protected void autoDestroy() { GameHandler.objList.remove(this); }
+protected void autoDestroy(){ GameHandler.objList.remove(this); }
 protected void renderBounds(Graphics g){
 	
 	if (visibleBounds){
 		g.setColor(new Color(0, 0, 255, 100));
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		/*
+		g.setColor(new Color(255, 255, 255, 130));
+		g.fillRect(0,bounds.y,bounds.x,bounds.height); // left
+		g.fillRect(bounds.x + bounds.width,bounds.y,Windows.WIDTH - bounds.x - bounds.width,bounds.height); // right
+		g.fillRect(bounds.x,0,bounds.width,bounds.y); //up
+		g.fillRect(bounds.x,bounds.y + bounds.height,bounds.width,Windows.HEIGHT - bounds.y - bounds.height); // down
+		*/
+		/*
+		g.setColor(new Color(255, 255, 255, 130));
+		g.fillRect(0,0,bounds.x,bounds.y); // upper-left
+		g.fillRect(bounds.x + bounds.width,0,Windows.WIDTH - bounds.x - bounds.width,bounds.y); // upper-right
+		g.fillRect(0,bounds.y + bounds.height, bounds.x,Windows.HEIGHT - bounds.y - bounds.height); // down-left
+		g.fillRect(bounds.x + bounds.width,bounds.y + bounds.height,Windows.WIDTH - bounds.x - bounds.width,Windows.HEIGHT - bounds.y - bounds.height); // down-right
+		*/
+		/*
+		g.setColor(new Color(255, 255, 255, 130));
+		int area = 1;
+		for (int value = 0; value < 200; value++){
+			g.fillRect(0, bounds.y - ( ( value + 1 ) * area ), bounds.x - ( value * area ), area); // left - up
+			g.fillRect(bounds.x - ( ( value + 1 ) * area ), 0, area, bounds.y - ( value * area )); //up - left
+			g.fillRect(bounds.x + bounds.width + ( value * area ), bounds.y - ( ( value + 1 ) * area ), Windows.WIDTH - bounds.x - bounds.width - ( value * area ), area); // right - up
+			g.fillRect(bounds.x + bounds.width + ( value * area ), 0, area, bounds.y - ( value * area )); //up - right
+			g.fillRect(0, bounds.y + bounds.height + ( value * area ), bounds.x - ( value * area ), area); // left - down
+			g.fillRect(bounds.x - ( ( value + 1 ) * area ), bounds.y + bounds.height + ( value * area ), area, Windows.HEIGHT - bounds.y - bounds.height - ( value * area )); // down - left
+			g.fillRect(bounds.x + bounds.width + ( value * area ), bounds.y + bounds.height + ( value * area ), Windows.WIDTH - bounds.x - bounds.width - ( value * area ), area); // right - down
+			g.fillRect(bounds.x + bounds.width + ( value * area ), bounds.y + bounds.height + ( value * area ), area, Windows.HEIGHT - bounds.y - bounds.height - ( value * area )); // down - right
+		}
+		*/
 	}
 }
 protected void renderSprite(Graphics g){
@@ -83,18 +176,8 @@ protected boolean filterInTiles(GameObject tO){
 	}
 	return false;
 }
-protected int stringPos(String pos) {
-	switch (pos){
-		case "up": return 1;
-		case "down": return 2;
-		default: return 0;
-	}	
-}
-
-
-
 protected boolean[] getCollisionWithWall(GameObject tO){
-	boolean[] collide = new boolean[] {false,false};
+	boolean[] collide = new boolean[ ] {false, false};
 	if (tO.id != ID.Wall) return collide;
 	setBounds(xvel, yvel);
 	if (!( bounds.intersects(tO.bounds) )) return collide;
@@ -115,7 +198,6 @@ protected boolean[] getCollisionWithWall(GameObject tO){
 			int b = (int) tO.bounds.getMaxX();
 			xvel = -( a - b );
 		}
-		
 		collide[0] = true;
 	}
 	setBounds(0, yvel);

@@ -20,14 +20,13 @@ public static boolean keyIsFirst(KeyObj key1, KeyObj key2){
 }
 public static boolean isAnyKeyPressed(KeyObj.types type){
 	int size = KeyList.size();
+	
 	for (int i = 0; i < size; i++){
 		KeyObj key = KeyList.get(i);
 		if (key.getType() == type && key.isPressed()) return true;
 	}
 	return false;
 }
-
-
 public boolean isOppositeKeyPressed(KeyObj oKey){
 	if (oKey.getOppositeKey() != null) for (KeyObj oKey2: KeyList) if (oKey.getOppositeKey() == oKey2.getName()
 	&& oKey2.isPressed()) return true;
@@ -55,7 +54,11 @@ public static KeyObj down  = new KeyObj(new int[ ] {KeyEvent.VK_DOWN, KeyEvent.V
 public static KeyObj up    = new KeyObj(new int[ ] {KeyEvent.VK_UP, KeyEvent.VK_W}, "up", "down");
 public static KeyObj left  = new KeyObj(new int[ ] {KeyEvent.VK_LEFT, KeyEvent.VK_A}, "left", "right");
 public static KeyObj right = new KeyObj(new int[ ] {KeyEvent.VK_RIGHT, KeyEvent.VK_D}, "right", "left");
-public static KeyObj x=new KeyObj(new int[]{KeyEvent.VK_X},"x",new InputInt(){public void OnSinglePressed(){System.out.println("Power");}public void OnPressed(){}public void OnReleased(){}});
+public static KeyObj x     = new KeyObj(new int[ ] {KeyEvent.VK_X}, "x", new InputInt(){
+							public void OnSinglePressed(){ System.out.println("Power"); }
+							public void OnPressed(){}
+							public void OnReleased(){}
+							});
 public static KeyObj esc   = new KeyObj(new int[ ] {KeyEvent.VK_ESCAPE}, "esc", new InputInt(){
 							public void OnSinglePressed(){ System.exit(1); }
 							public void OnPressed(){}
