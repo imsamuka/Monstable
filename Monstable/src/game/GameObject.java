@@ -14,7 +14,7 @@ public Rectangle getBounds(){ return bounds; }
 protected ID      id;
 protected Images  image;
 protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
-protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false;
+protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false, knockback = false;
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
 	this.x  = x;
@@ -25,8 +25,8 @@ protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, in
 		image = new Images(spritesheet);
 		image.getEverySprite(sWidth, sHeight);
 	}
-	this.sWidth  = sWidth;
-	this.sHeight = sHeight;
+		this.sWidth  = sWidth;
+		this.sHeight = sHeight;
 	this.wSprite = wSprite;
 	bounds       = new Rectangle((int) x, (int) y, sWidth, sHeight);
 }
@@ -45,7 +45,7 @@ protected void setHitBox(int x, int y, int width, int height){
 	bounds.height = height;
 	refreshBounds();
 }
-protected int stringDirection(String pos){
+protected int directionToInt(String pos){
 	
 	switch(pos){
 		case "down":
@@ -66,6 +66,29 @@ protected int stringDirection(String pos){
 			return 7;
 		default:
 			return 0;
+	}
+}
+protected Point directionToPoint(String pos){
+	
+	switch(pos){
+		case "down":
+			return new Point(0,1);
+		case "up":
+			return new Point(0,-1);
+		case "left":
+			return new Point(-1,0);
+		case "right":
+			return new Point(1,0);
+		case "down-left":
+			return new Point(-1,1);
+		case "down-right":
+			return new Point(1,1);
+		case "upper-left":
+			return new Point(-1,-1);
+		case "upper-right":
+			return new Point(1,-1);
+		default:
+			return new Point(0,0);
 	}
 }
 protected String checkForDirection(float posx, float posy, int area, boolean withDiagonals){

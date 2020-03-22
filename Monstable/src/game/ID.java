@@ -8,6 +8,7 @@ public enum ID{
 		Floor(Tile), 
 		Wall(Tile), 
 	Attack(null), 
+		Melee(Attack),
 		Goop(Attack);
 
 private ID parent = null;

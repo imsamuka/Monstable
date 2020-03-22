@@ -13,7 +13,7 @@ protected boolean     moving           = false;
 public static boolean getOneMorePlayer = false, roll = false;
 public float          mouseX           = 0, mouseY = 0;
 public int rollCount = 0;
-
+private GameObject attack;
 public Player(float x, float y){
 	super(x, y, ID.Player, "/slime.png", 16, 16, 1);
 	collision     = true;
@@ -21,6 +21,7 @@ public Player(float x, float y){
 	Spd           = 1.5f;
 	visibleBounds = true;
 	setHitBox(2, 7, 12, 9);
+	life = 100;
 }
 protected void tick(){
 	
@@ -45,14 +46,22 @@ protected void tick(){
 		if (rollCount > 24) {
 			rollCount = 0;
 			roll = false;
-		}
-		if (rollCount == 1) {
-			//System.out.println(checkForDirection(mouseX, mouseY, 10, false));
+			GameHandler.objList.remove(attack);
+		}else if (rollCount == 1) {
+			
 			double diffX = bounds.getCenterX() - mouseX;
 			double diffY = bounds.getCenterY() - mouseY;
 			double distance =  Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY )) ;
 			xvel = (float) ( -1 / ( distance ) * diffX * (Spd*1.8) );
 			yvel = (float) ( -1 / ( distance ) * diffY * (Spd*1.8) );
+			
+			attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10,this,checkForDirection(mouseX, mouseY, 10, true));
+			GameHandler.objList.add(attack);
+				
+			
+			
+			
+			
 		}
 	}
 	
@@ -77,6 +86,7 @@ protected void render(Graphics g){
 	g.drawString(getTileDR(16).x+","+getTileDR(16).y, 160, 40);
 	g.drawString(bounds.x+","+bounds.y, 160, 60);
 	g.drawString(GameHandler.objList.size()+"", 160, 80);
+	g.drawString(life+"", 160, 100);
 	
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());

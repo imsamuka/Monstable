@@ -12,6 +12,7 @@ public Goop(float mouseX, float mouseY){
 	visibleBounds = true;
 	Spd           = 3f;
 	setHitBox(2, 2, 12, 12);
+	damage = 10;
 	double diffX = bounds.getCenterX() - mouseX;
 	double diffY = bounds.getCenterY() - mouseY;
 	double distance = (double) ( Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY )) );
@@ -26,7 +27,12 @@ protected void tick(){
 		if (tO == this || tO == GameHandler.player) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		if (tO.entitie && tO.bounds.intersects(bounds)) tO.life -= damage;
+		if (tO.entitie && tO.bounds.intersects(bounds)) {
+			tO.life -= damage;
+			autoDestroy();
+			return;
+		}
+		
 		getCollisionWithWall(tO);
 	}
 	tempX = x;
