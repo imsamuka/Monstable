@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 public class UIHandler{
-public static UIStates       uiState     = UIStates.MainMenu;
+public static UIStates       uiState     = UIStates.Game;
 public static LinkedList<UIObject> objList;
 private int                  size        = 0;
 private UIStates             tempuiState = null;
