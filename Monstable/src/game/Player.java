@@ -56,7 +56,7 @@ protected void render(Graphics g){
 	g.drawString(getTileDR(16).x+","+getTileDR(16).y, 160, 40);
 	g.drawString(bounds.x+"", 160, 60);
 	g.drawString(bounds.y+"", 160, 80);
-	if (MouseInput.isOnScreen()) g.drawLine((int)bounds.getCenterX(), (int) bounds.getCenterY(),(int) MouseInput.getMouseX(),(int) MouseInput.getMouseY());
+	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
 	renderBounds(g);
 }

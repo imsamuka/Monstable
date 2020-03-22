@@ -52,7 +52,7 @@ protected void renderBounds(Graphics g){
 	}
 }
 protected void renderSprite(Graphics g){
-	if (invertedSprite) g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x + sWidth ), (int) ( y ),-sWidth,sHeight, null);
+	if (invertedSprite) g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x + sWidth ), (int) ( y ), -sWidth, sHeight, null);
 	else g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
 }
 public Point getTileUL(int grid){
@@ -118,12 +118,10 @@ protected void getCollisionWithWall(GameObject tO){
 		}
 	}
 	
-	if (tempXvel == xvel && tempYvel == yvel) {
-		if (new Random().nextInt(2) == 1)  xvel = 0;
+	if (tempXvel == xvel && tempYvel == yvel){
+		if (new Random().nextInt(2) == 1) xvel = 0;
 		else yvel = 0;
 	}
-		
-	
 }
 protected abstract void tick();
 protected abstract void render(Graphics g);
