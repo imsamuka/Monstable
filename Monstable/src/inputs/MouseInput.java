@@ -3,6 +3,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import game.GameHandler;
+import game.Goop;
 import game.Player;
 import main.Windows;
 import ui.UIHandler;
@@ -23,7 +24,7 @@ public static float getMouseY(){ return mouseY; }
 public static boolean isOnScreen(){ return onScreen; }
 
 // What happens to witch key
-private InputInt left = new InputInt(){
+private InputInt left  = new InputInt(){
 						public void OnSinglePressed(){}                                        // Mouse n tem Singlepressed
 						public void OnPressed(){
 							int size = UIHandler.objList.size();
@@ -38,13 +39,30 @@ private InputInt left = new InputInt(){
 								}
 							}
 							
-							if (UIHandler.uiState == UIStates.Game && Player.getOneMorePlayer){
-								GameHandler.objList.add(new Player(mouseX - 8, mouseY - 11));
+							if (UIHandler.uiState == UIStates.Game){
+								if (!GameHandler.player.getBounds().contains(mouseX, mouseY))
+									GameHandler.objList.add(new Goop(mouseX, mouseY));
 							}
 						}
 						public void OnReleased(){}
 						};
-private InputInt middle, right;
+private InputInt right = new InputInt(){
+						public void OnSinglePressed(){}
+						public void OnPressed(){
+							if (UIHandler.uiState == UIStates.Game){
+								if (!GameHandler.player.roll && !GameHandler.player.getBounds().contains(mouseX, mouseY)) {
+									GameHandler.player.mouseX = mouseX;
+									GameHandler.player.mouseY = mouseY;
+									GameHandler.player.roll = true;
+								}
+								
+							}
+							
+							
+						}
+						public void OnReleased(){}
+						};
+private InputInt middle;
 
 private InputInt getInputInt(int btn){
 	if (btn == 0) return left;

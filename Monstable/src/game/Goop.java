@@ -21,7 +21,6 @@ public Goop(float mouseX, float mouseY){
 protected void tick(){
 	if (tempX == x || tempY == y) autoDestroy();
 	int size = GameHandler.objList.size();
-	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this || tO == GameHandler.player) continue;

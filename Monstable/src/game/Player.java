@@ -55,7 +55,7 @@ protected void tick(){
 			yvel = (float) ( -1 / ( distance ) * diffY * (Spd*1.8) );
 		}
 	}
-	// 
+	
 	int size = GameHandler.objList.size();
 	
 	for (int m = 0; m < size; m++){
