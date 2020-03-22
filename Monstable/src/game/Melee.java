@@ -11,7 +11,7 @@ protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObjec
 	super(x, y, ID.Melee, null, sWidth, sHeight, 0);
 	this.damage = damage;
 	this.parent = parent;
-	visibleBounds = true;
+	//visibleBounds = true;
 	size = 4;
 	if (direction != null) {
 		this.direction = directionToPoint(direction);

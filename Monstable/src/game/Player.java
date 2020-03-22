@@ -14,7 +14,8 @@ public static boolean getOneMorePlayer = false, roll = false;
 public float          mouseX           = 0, mouseY = 0;
 public int            rollCount        = 0, knockbackCount = 0, frame = 0;
 private GameObject    attack;
-private double timer1 = System.nanoTime();
+private double timer1 = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime();
+private String direction = "";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
@@ -54,12 +55,19 @@ protected void tick(){
 		
 		if (tmoving != moving) frame = 0;
 		
-		if (System.nanoTime() - timer1 > (0.1)*(1000000000)) {
+		if (!moving && System.nanoTime() - timer1 > (0.1)*(1000000000)) {
 			
-			if (frame == 8 && moving) frame = 0;
-			if (frame == 4 && !moving) frame = 0;
+		
+			if (frame >= 4 && !moving) frame = 0;
 			frame++;
 			timer1 = System.nanoTime(); }
+		
+		if (moving &&System.nanoTime() - timer2 > (0.06)*(1000000000)) {
+			
+			if (frame >= 6 && moving) frame = 0;
+			
+			frame++;
+			timer2 = System.nanoTime(); }
 		}
 	
 	if (knockback){
@@ -88,9 +96,21 @@ protected void tick(){
 			double distance = Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY ));
 			xvel   = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.8 ) );
 			yvel   = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.8 ) );
+			
+			direction = checkForDirection(mouseX, mouseY, 10, false);
+			KeyInput.setFirst(direction);
 			attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(mouseX, mouseY, 10, true));
 			GameHandler.objList.add(attack);
 		}
+		
+		if (System.nanoTime() - timer3 > (0.1)*(1000000000)) {
+			
+			if (frame >= 8) frame = 0;
+			
+			frame++;
+			timer3 = System.nanoTime(); }
+		
+		
 	}
 	int size = GameHandler.objList.size();
 	
@@ -117,8 +137,8 @@ protected void tick(){
 }
 protected void render(Graphics g){
 	
-	
-	if (moving) wSprite = 48 + frame + 8*directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
+	if (roll) wSprite = 16 + frame + 8*directionToInt(direction);
+	else if (moving) wSprite = 48 + frame + 8*directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4*directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	
 	

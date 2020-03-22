@@ -12,6 +12,15 @@ public static KeyObj getFirst(KeyObj.types type){
 	for (int i = 0; i < size; i++) if (KeyList.get(i).getType() == type) return KeyList.get(i);
 	return null;
 }
+public static void setFirst(String name) {
+	int size = KeyList.size();
+	for (int i = 0; i < size; i++) if (KeyList.get(i).getName() == name) {
+		KeyObj oKey = KeyList.get(i);
+		KeyList.offerFirst(oKey);
+		KeyList.removeLastOccurrence(oKey);
+		break;
+	}
+}
 public static KeyObj getFirstOf(KeyObj key1, KeyObj key2){
 	return KeyList.indexOf(key1) < KeyList.indexOf(key2) ? key1 : key2;
 }
