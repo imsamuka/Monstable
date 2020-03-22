@@ -12,7 +12,7 @@ protected Rectangle bounds;
 protected ID        id;
 protected Images    image;
 protected int       wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
-protected boolean   death = false, visibleBounds = false, collision = false;
+protected boolean   death = false, visibleBounds = false, collision = false, invertedSprite = false;
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
 	this.x  = x;
@@ -47,9 +47,13 @@ protected void checkForDeath(){ if (life == 0) death = true; }
 protected void renderBounds(Graphics g){
 	
 	if (visibleBounds){
-		g.setColor(new Color(200, 0, 100, 170));
+		g.setColor(new Color(0, 0, 255, 100));
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
+}
+protected void renderSprite(Graphics g){
+	if (invertedSprite) g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x + sWidth ), (int) ( y ),-sWidth,sHeight, null);
+	else g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
 }
 public Point getTileUL(int grid){
 	return new Point((int) Math.floor(bounds.x / grid), (int) Math.floor(bounds.y / grid));

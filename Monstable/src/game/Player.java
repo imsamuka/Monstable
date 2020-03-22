@@ -51,13 +51,13 @@ protected void tick(){
 	refreshBounds();
 }
 protected void render(Graphics g){
-	g.setColor(new Color(0, 0, 255, 100));
+	g.setColor(new Color(0, 0, 255, 130));
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
 	g.drawString(getTileDR(16).x+","+getTileDR(16).y, 160, 40);
 	g.drawString(bounds.x+"", 160, 60);
 	g.drawString(bounds.y+"", 160, 80);
 	if (MouseInput.isOnScreen()) g.drawLine((int)bounds.getCenterX(), (int) bounds.getCenterY(),(int) MouseInput.getMouseX(),(int) MouseInput.getMouseY());
-	g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
+	renderSprite(g);
 	renderBounds(g);
 }
 }
