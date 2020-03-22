@@ -2,9 +2,12 @@ package inputs;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import game.GameHandler;
+import game.Player;
 import main.Windows;
 import ui.UIHandler;
 import ui.UIObject;
+import ui.UIStates;
 
 public class MouseInput implements MouseListener, MouseMotionListener{
 // Fields
@@ -21,9 +24,10 @@ public static boolean isOnScreen(){ return onScreen; }
 
 // What happens to witch key
 private InputInt left = new InputInt(){
-						public void OnSinglePressed(){}
+						public void OnSinglePressed(){}                                        // Mouse n tem Singlepressed
 						public void OnPressed(){
 							int size = UIHandler.objList.size();
+							
 							for (int i = 0; i < size; i++){
 								UIObject tO = UIHandler.objList.get(i);
 								tO.hoveringCheck();
@@ -32,6 +36,10 @@ private InputInt left = new InputInt(){
 									tO.onClick();
 									break;
 								}
+							}
+							
+							if (UIHandler.uiState == UIStates.Game && Player.getOneMorePlayer){
+								GameHandler.objList.add(new Player(mouseX - 8, mouseY - 11));
 							}
 						}
 						public void OnReleased(){}
@@ -63,12 +71,12 @@ public void mouseReleased(MouseEvent e){
 	if (getInputInt(btn) != null) getInputInt(btn).OnReleased();
 }
 public void mouseMoved(MouseEvent e){
-	mouseX = e.getX()/Windows.SCALE;
-	mouseY = e.getY()/Windows.SCALE;
+	mouseX = e.getX() / Windows.SCALE;
+	mouseY = e.getY() / Windows.SCALE;
 }
 public void mouseDragged(MouseEvent e){
-	mouseX = e.getX()/Windows.SCALE;
-	mouseY = e.getY()/Windows.SCALE;
+	mouseX = e.getX() / Windows.SCALE;
+	mouseY = e.getY() / Windows.SCALE;
 }
 public void mouseEntered(MouseEvent e){ onScreen = true; }
 public void mouseExited(MouseEvent e){ onScreen = false; }

@@ -9,6 +9,7 @@ import main.Windows;
 
 public class Player extends GameObject{
 protected boolean moving = false;
+public static boolean getOneMorePlayer = false;
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/slime.png", 16, 16, 1);

@@ -16,10 +16,9 @@ public GameHandler(){
 	
 	
 	objList.add(new Player(66- 16*4, 64 - 16*4));
-	
-	size = objList.size();
 }
 public void tick(){
+	size = objList.size();
 	for (int i = 0; i < size; i++) {
 		objList.get(i).tick();
 	}
