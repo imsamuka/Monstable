@@ -21,7 +21,7 @@ public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
 	collision     = true;
 	entitie       = true;
-	Spd           = 1.5f;
+	Spd           = 1.3f;
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
 	life = 100;
@@ -86,7 +86,7 @@ protected void tick(){
 	if (roll){
 		rollCount++;
 		
-		if (rollCount == 25){
+		if (rollCount == 32){
 			rollCount = 0;
 			roll      = false;
 			GameHandler.objList.remove(attack);
@@ -94,21 +94,20 @@ protected void tick(){
 			double diffX = bounds.getCenterX() - mouseX;
 			double diffY = bounds.getCenterY() - mouseY;
 			double distance = Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY ));
-			xvel   = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.8 ) );
-			yvel   = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.8 ) );
+			xvel   = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.5 ) );
+			yvel   = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.5 ) );
 			
 			direction = checkForDirection(mouseX, mouseY, 10, false);
 			KeyInput.setFirst(direction);
+			//frame = 0;
 			attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(mouseX, mouseY, 10, true));
 			GameHandler.objList.add(attack);
 		}
 		
-		if (System.nanoTime() - timer3 > (0.1)*(1000000000)) {
+		
+			frame =(int) Math.ceil(rollCount/4);
 			
-			if (frame >= 8) frame = 0;
 			
-			frame++;
-			timer3 = System.nanoTime(); }
 		
 		
 	}
