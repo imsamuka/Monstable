@@ -35,14 +35,20 @@ protected void tick(){
 		if (tO == this || tO == parent) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		if (tO.entitie && tO.bounds.intersects(bounds)) {
+		if (tO.entitie && tO.bounds.intersects(bounds)){
 			tO.life -= damage;
 			autoDestroy();
 			return;
 		}
-		getCollisionWithWall(tO);
+		if (!parent.knockback) {
+			boolean[] c = tO.getCollisionWithWall(tO);
+			if (c[0] || c[1]) {
+				parent.knockback = true;
+				
+			}
+		}
+			
 	}
-	
 	
 	
 }

@@ -14,7 +14,9 @@ public Rectangle getBounds(){ return bounds; }
 protected ID      id;
 protected Images  image;
 protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
-protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false, knockback = false;
+protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false; 
+protected boolean collideX = false, collideY = false,knockback = false;
+
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
 	this.x  = x;

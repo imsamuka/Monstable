@@ -12,10 +12,10 @@ public class Player extends GameObject{
 protected boolean     moving           = false;
 public static boolean getOneMorePlayer = false, roll = false;
 public float          mouseX           = 0, mouseY = 0;
-public int rollCount = 0;
+public int rollCount = 0, knockbackCount = 0;
 private GameObject attack;
 public Player(float x, float y){
-	super(x, y, ID.Player, "/slime.png", 16, 16, 1);
+	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
 	collision     = true;
 	entitie       = true;
 	Spd           = 1.5f;
@@ -24,9 +24,24 @@ public Player(float x, float y){
 	life = 100;
 }
 protected void tick(){
+	collideX = false;
+	collideY = false;
 	
 	// Movement check
-	if (!roll){
+	if(knockback){
+		roll = false;
+		GameHandler.objList.remove(attack);
+		knockbackCount -= rollCount;
+		rollCount = 0;
+		
+		knockbackCount++;
+		if (knockbackCount == 9) {
+			knockbackCount = 0;
+			knockback = false;
+		}
+	}
+	
+	if (!roll && !knockback){
 		moving = KeyInput.isAnyKeyPressed(KeyObj.types.movement);
 		if (KeyInput.right.isPressed()
 		&& KeyInput.left.isPressed()) if (KeyInput.keyIsFirst(KeyInput.right, KeyInput.left)) xvel = Spd;
@@ -40,10 +55,11 @@ protected void tick(){
 		else if (KeyInput.down.isPressed()) yvel = Spd;
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
-	}else{
+	}
+	if (roll){
 		rollCount++;
 		
-		if (rollCount > 24) {
+		if (rollCount == 25) {
 			rollCount = 0;
 			roll = false;
 			GameHandler.objList.remove(attack);
@@ -67,26 +83,36 @@ protected void tick(){
 	
 	int size = GameHandler.objList.size();
 	
+	
+	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		
-		getCollisionWithWall(tO);
+		boolean[] c = getCollisionWithWall(tO);
+		collideX = c[0] ? true : collideX;
+		collideY = c[1] ? true : collideY;
 	}
+	
+	if (collideX && knockback) {
+		xvel = xvel > 0 ? -Spd : Spd;
+	}
+	if (collideY && knockback) {
+		yvel = yvel > 0 ? -Spd : Spd;
+	}
+	
 	// Movement Apply
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
 }
 protected void render(Graphics g){
-	g.setColor(new Color(0, 0, 255, 130));
+	g.setColor(new Color(0, 0, 0, 255));
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
-	g.drawString(getTileDR(16).x+","+getTileDR(16).y, 160, 40);
-	g.drawString(bounds.x+","+bounds.y, 160, 60);
-	g.drawString(GameHandler.objList.size()+"", 160, 80);
-	g.drawString(life+"", 160, 100);
+	g.drawString(bounds.x+","+bounds.y, 160, 40);
+	g.drawString("Objects:"+GameHandler.objList.size(), 160, 60);
+	g.drawString("HP:"+life, 160, 80);
 	
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());

@@ -4,8 +4,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Images{
-private static BufferedImage[] images   = new BufferedImage[32];
-private static String[]        pathList = new String[32];
+private static BufferedImage[] images   = new BufferedImage[256];
+private static String[]        pathList = new String[256];
 private static int             current  = 0;
 private BufferedImage          thisImage = null;
 private int                    thisImageIndex = 0;
