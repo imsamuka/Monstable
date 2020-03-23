@@ -129,7 +129,7 @@ protected void render(Graphics g){
 	
 	//if ( roll ) if (System.nanoTime() - timer3 > ( 0.1 ) * ( 1000000000 )){ frame1 = Game.clampSwitch(frame1 + 1, 1, 8);timer3 = System.nanoTime();}
 	
-	if (jumpAnimation) if (System.nanoTime() - timer2 > ( 1 ) * ( 1000000000 )){
+	if (jumpAnimation) if (System.nanoTime() - timer2 > ( 0.065 ) * ( 1000000000 )){
 			int min = 1;
 			int max = 6;
 			
@@ -144,7 +144,7 @@ protected void render(Graphics g){
 			timer2 = System.nanoTime();
 		}
 	
-	if (!roll && !jumpAnimation) if (System.nanoTime() - timer1 > ( 1 ) * ( 1000000000 )){
+	if (!roll && !jumpAnimation) if (System.nanoTime() - timer1 > ( 0.1 ) * ( 1000000000 )){
 		frame = Game.clampSwitch(frame + 1, 1, 4);
 		timer1 = System.nanoTime();
 	}
