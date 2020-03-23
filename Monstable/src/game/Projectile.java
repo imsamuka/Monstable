@@ -19,14 +19,17 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 		autoDestroy();
 		return;
 	}else if (option == Opt.Goop) {
-		image = new Images("/assets.png");
+		GameHandler.player.stamina -= GameHandler.player.goopCost;
+		
+		image = new Images("/Slimesheet.png");
 		sWidth = 16;
 		sHeight = 16;
-		wSprite = 8;
-		Shift = 0;
-		setHitBox(2, 2, 12, 12);
-		x -= 2 + 6;
-		y -= 2 + 6;
+		wSprite = 118;
+		Shift = 1;
+		
+		x -= 7 + 2;
+		y -= 6 + 1.5;
+		setHitBox(7, 6, 4, 3);
 	}
 	
 	MainSprite = wSprite;

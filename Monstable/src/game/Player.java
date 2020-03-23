@@ -16,13 +16,14 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
+public final float rollCost = 15 , goopCost = 12;
 public float       stamina = 0;
 public int         rollCount  = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
 private GameObject attack;
 private UIObject   StaminaBar, LifeBar;
 private double     timer1     = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
 timer4 = System.nanoTime();
-private String     direction  = "";
+private String     direction  = "down";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
@@ -105,7 +106,6 @@ protected void render(Graphics g){
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
 	g.drawString(bounds.x+","+bounds.y, 185, 20);
 	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
-	g.drawString("HP:"+life, 160, 60);
 	//
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
@@ -156,7 +156,7 @@ private void getAnimations(){
 }
 public void newRoll(float goX, float goY, int rollQtd){
 	// Checking Stamina
-	if (stamina >= 10) stamina -= 10;
+	if (stamina >= rollCost) stamina -= rollCost;
 	else return;
 	//Setting Defaults
 	this.rollQtd = rollQtd;
