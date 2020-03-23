@@ -28,7 +28,7 @@ public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
 	collision     = true;
 	entitie       = true;
-	Spd           = 1.3f;
+	Spd           = 1.5f;
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
 	life = 100;
@@ -94,7 +94,7 @@ protected void tick(){
 protected void render(Graphics g){
 	getAnimations();
 	// Sprite Choosing
-	if (idleAnimation) wSprite = 128 + frame;
+	if (idleAnimation && !roll && !knockback) wSprite = 128 + frame;
 	else if (roll) wSprite = 16 + frame + 8 * directionToInt(direction);
 	else if (knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
@@ -163,6 +163,7 @@ public void newRoll(float goX, float goY, int rollQtd){
 	roll         = true;
 	frame        = 1;
 	rollCount    = 1;
+	timer3 = System.nanoTime();
 	// Search for Direction
 	double diffX = bounds.getCenterX() - goX;
 	double diffY = bounds.getCenterY() - goY;
@@ -178,7 +179,8 @@ public void newRoll(float goX, float goY, int rollQtd){
 private void checkRoll(){
 	if (!roll) return;
 	rollCount++;
-	frame = (int) Math.ceil(rollCount / rollQtd) + 1;
+	frame = Game.clampSwitch(rollCount / rollQtd + 1, 1, 8);
+	
 	
 	if (rollCount == 8 * rollQtd){
 		// Roll End

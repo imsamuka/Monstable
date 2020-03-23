@@ -3,8 +3,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import game.GameHandler;
-import game.Goop;
-import game.Player;
+import game.Projectile;
 import main.Windows;
 import ui.UIHandler;
 import ui.UIObject;
@@ -41,7 +40,7 @@ private InputInt left  = new InputInt(){
 							
 							if (UIHandler.uiState == UIStates.Game){
 								if (!GameHandler.player.getBounds().contains(mouseX, mouseY))
-									GameHandler.objList.add(new Goop(mouseX, mouseY));
+									GameHandler.objList.add(new Projectile((float) ( GameHandler.player.getBounds().getCenterX() ),(float) ( GameHandler.player.getBounds().getCenterY()),mouseX, mouseY, Projectile.Opt.Goop, 3, 10));
 							}
 						}
 						public void OnReleased(){}
@@ -52,7 +51,7 @@ private InputInt right = new InputInt(){
 							if (UIHandler.uiState == UIStates.Game){
 								if (!GameHandler.player.isRoll() && !GameHandler.player.getBounds().contains(mouseX, mouseY)) {
 									
-									GameHandler.player.newRoll(mouseX, mouseY, 4);
+									GameHandler.player.newRoll(mouseX, mouseY, 3);
 								}
 								
 							}
