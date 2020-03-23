@@ -145,6 +145,7 @@ protected void render(Graphics g){
 	
 	
 	if (System.nanoTime() - timer3 > ( 14 ) * ( 1000000000 )){
+		if (!idleAnimation) frame = 0;
 		idleAnimation = true;
 		if (System.nanoTime() - timer4 > ( 0.2 ) * ( 1000000000 )) {
 			frame = Game.clampSwitch(frame + 1, 1, 8);
@@ -197,7 +198,7 @@ protected void render(Graphics g){
 	
 	
 	
-	if (idleAnimation) wSprite = frame + 8 * directionToInt(direction);
+	if (idleAnimation) wSprite = frame;
 	else if (rollAnimation) wSprite = 16 + frame + 8 * directionToInt(direction);
 	else if (jumpAnimation && !knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else if (jumpAnimation && knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
