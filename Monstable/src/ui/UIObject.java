@@ -43,8 +43,8 @@ protected UIObject(float x, float y, int width, int height, UIStates id){
 	bounds      = new Rectangle((int) x, (int) y, width + 1, height + 1);
 }
 // Methods:
-protected abstract void tick();
-protected abstract void render(Graphics g);
+public abstract void tick();
+public abstract void render(Graphics g);
 public void onClick(){ if (onClick != null && active) onClick.onClick(); }
 public void hoveringCheck(){
 	if (bounds.contains(MouseInput.getMouseX(), MouseInput.getMouseY())) hovering = true;
@@ -82,7 +82,7 @@ protected int              frames, currentFrame = 0;
 protected Enum<animations> animation = animations.nothing;
 protected Enum<ftypes>     ftype     = ftypes.linear;
 
-protected void setAnimation(Enum<animations> animation, int frames){
+public void setAnimation(Enum<animations> animation, int frames){
 	this.animation = animation;
 	this.frames    = frames;
 	
@@ -134,21 +134,10 @@ protected Images  image;
 protected int     wSprite, spriteWidth, spriteHeight;
 protected boolean fullImage = true;
 
-protected void setImage(String path, int spriteWidth, int spriteHeight){
+public void setImage(String path, int spriteWidth, int spriteHeight){
 	if (path != null) this.image = new Images(path);
 	this.spriteWidth  = spriteWidth;
 	this.spriteHeight = spriteHeight;
-}
-// Methods:
-protected BufferedImage getImage(){
-	
-	try{
-		if (fullImage) return image.getThisImage();
-		return image.getSprite(wSprite, spriteWidth, spriteHeight);
-	}
-	catch(Exception e){
-		return null;
-	}
 }
 public void setSprite(int wSprite){
 	
@@ -159,21 +148,58 @@ public void setSprite(int wSprite){
 	fullImage    = false;
 	this.wSprite = wSprite;
 }
+protected BufferedImage getImage(){
+	if (image == null) return null;
+	try{
+		if (fullImage) return image.getThisImage();
+		return image.getSprite(wSprite, spriteWidth, spriteHeight);
+	}
+	catch(Exception e){
+		return null;
+	}
+}
+
+//////// Fill ////////
+protected float fillValue, min, max;
+protected boolean fill;
+protected Color ffull, fbackground, fdefault;
+
+public void setFillBar(float Value, float Min, float Max, Color Default, Color Full, Color Background) {
+	fill = true;
+	min = Min;
+	max = Max;
+	setFillValue(Value);
+	ffull = Full;
+	fbackground = Background;
+	fdefault = Default;
+}
+public void setFillValue(float Value) { fillValue = Game.clamp(Value, min, max) ; }
+protected void getFillBar(Graphics g) {
+	if (!fill) return;
+	if (fbackground != null) {
+		g.setColor(fbackground);
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+	if (fillValue == max) g.setColor(ffull);
+	else g.setColor(fdefault);
+	g.fillRect(bounds.x, bounds.y,(int) (bounds.width*(fillValue/max)), bounds.height);
+}
+
 
 //////// Text ////////
 protected String text;
 protected Color  defaultColor, selectedColor, inactiveColor;
 protected Font   font;
 
-protected void setText(String text, Color defaultColor, Color selectedColor, Color inactiveColor, Font font){
+public void setText(String text, Color defaultColor, Color selectedColor, Color inactiveColor, Font font){
 	this.text          = text;
 	this.defaultColor  = defaultColor;
 	this.selectedColor = selectedColor;
 	this.inactiveColor = inactiveColor;
 	this.font          = font;
 }
-//Methods:
-public void drawString(Graphics g){
+protected void drawString(Graphics g){
+	if (text == null) return;
 	if (!active) g.setColor(inactiveColor);
 	else if (hovering) g.setColor(selectedColor);
 	else g.setColor(defaultColor);

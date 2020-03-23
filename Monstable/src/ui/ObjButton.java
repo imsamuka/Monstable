@@ -7,20 +7,21 @@ public ObjButton(float x, float y, int width, int height, UIStates id, OnClick o
 	super(x, y, width, height, id, onClick);
 	if (onClick == null) active = false;
 }
-protected void tick(){
+public void tick(){
 	refreshBounds();
 	hoveringCheck();
 	if (animation != animations.nothing) getAnimation();
 }
-protected void render(Graphics g){
+public void render(Graphics g){
 	
-	if (image != null) g.drawImage(getImage(), (int) ( x ), (int) ( y ), width + 1, height + 1, null);
-	else{
+	if (image == null){
 		if (!active) g.setColor(Color.gray);
 		else if (isHovering()) g.setColor(Color.red);
 		else g.setColor(Color.black);
 		g.drawRect((int) x, (int) y, width, height);
 	}
-	if (text != null) drawString(g);
+	getFillBar(g);
+	g.drawImage(getImage(), (int) ( x ), (int) ( y ), width + 1, height + 1, null);
+	drawString(g);
 }
 }

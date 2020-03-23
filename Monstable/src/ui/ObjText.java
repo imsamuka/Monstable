@@ -8,6 +8,6 @@ protected ObjText(float x, float y, UIStates id, String text, Color defaultColor
 	super(x, y, 0, 0, id);
 	setText(text, defaultColor, null, null, font);
 }
-protected void tick(){ if (animation != animations.nothing) getAnimation(); }
-protected void render(Graphics g){ drawString(g); }
+public void tick(){ if (animation != animations.nothing) getAnimation(); }
+public void render(Graphics g){ drawString(g); }
 }

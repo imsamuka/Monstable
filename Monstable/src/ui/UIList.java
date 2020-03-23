@@ -11,6 +11,17 @@ public class UIList{
 private static Vector<UIObject> masterlist;
 private static Font             font1 = new Font("Arial", Font.PLAIN, 18);
 
+public static LinkedList<UIObject> getList(UIStates id){
+	LinkedList<UIObject> list = new LinkedList<UIObject>();
+	int size = masterlist.size();
+	
+	for (int i = 0; i < size; i++){
+		
+		if (masterlist.get(i).id == id){ list.add(masterlist.get(i)); }
+	}
+	return list;
+}
+
 public UIList(){
 	masterlist = new Vector<UIObject>(30);
 	UIObject obj;
@@ -92,14 +103,5 @@ public UIList(){
 	obj.setText("On", Color.black, Color.red, Color.GRAY, font1);
 	masterlist.add(obj);
 }
-public static LinkedList<UIObject> getList(UIStates id){
-	LinkedList<UIObject> list = new LinkedList<UIObject>();
-	int size = masterlist.size();
-	
-	for (int i = 0; i < size; i++){
-		
-		if (masterlist.get(i).id == id){ list.add(masterlist.get(i)); }
-	}
-	return list;
-}
+
 }

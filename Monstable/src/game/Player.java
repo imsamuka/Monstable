@@ -6,6 +6,9 @@ import inputs.KeyObj;
 import inputs.MouseInput;
 import main.Game;
 import main.Windows;
+import ui.ObjImage;
+import ui.UIObject;
+import ui.UIStates;
 
 public class Player extends GameObject{
 protected boolean moving = false, roll = false, jumpAnimation = false, idleAnimation = false;
@@ -13,12 +16,13 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
-public float       mouseX    = 0, mouseY = 0;
-public int         rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
+public float       mouseX     = 0, mouseY = 0, stamina = 0;
+public int         rollCount  = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
 private GameObject attack;
-private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
+private UIObject   StaminaBar, LifeBar;
+private double     timer1     = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
 timer4 = System.nanoTime();
-private String     direction = "";
+private String     direction  = "";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
@@ -28,8 +32,13 @@ public Player(float x, float y){
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
 	life = 100;
+	LifeBar = new ObjImage(5, 5, 50, 5, UIStates.Game, null, 0, 0, 0);
+	LifeBar.setFillBar(life, 0, 100, new Color(200,0,0,210), new Color(250,30,30,255), new Color(140,140,140,140));
+	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
+	StaminaBar.setFillBar(stamina, 0, 100, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
 }
 protected void tick(){
+	if (!roll) stamina = Game.clamp( stamina + 0.5f, 0, 100);
 	
 	// Movement check
 	if (!roll && !knockback){
@@ -56,26 +65,7 @@ protected void tick(){
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
 	}
-	
-	if (knockback){
-		GameHandler.objList.remove(attack);
-		if (rollCount != 0 && ( 8 / 2 * rollQtd ) >= rollCount) knockbackCount -= ( ( 8 / 2 * rollQtd ) - rollCount );
-		rollCount     = 0;
-		roll          = false;
-		jumpAnimation = true;
-		waitKnockback = false;
-		knockbackCount++;
-		
-		if (knockbackCount >= 8){
-			knockbackCount = 0;
-			knockback      = false;
-			jumpAnimation  = false;
-			frame          = 1;
-			timer1         = System.nanoTime();
-			timer2         = System.nanoTime();
-			timer3         = System.nanoTime();
-		}
-	}
+	checkKnockback();
 	checkRoll();
 	collideX = false;
 	collideY = false;
@@ -90,11 +80,11 @@ protected void tick(){
 	}
 	
 	if (collideX && waitKnockback){
-		knockback = true;
-		xvel      = xvel > 0 ? -Spd : Spd;
+		newKnockback();
+		xvel = xvel > 0 ? -Spd : Spd;
 	}else if (collideY && waitKnockback){
-		knockback = true;
-		yvel      = yvel > 0 ? -Spd : Spd;
+		newKnockback();
+		yvel = yvel > 0 ? -Spd : Spd;
 	}
 	// Movement Apply
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
@@ -121,6 +111,10 @@ protected void render(Graphics g){
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
 	renderBounds(g);
+	StaminaBar.setFillValue(stamina);
+	StaminaBar.render(g);
+	LifeBar.setFillValue(life);
+	LifeBar.render(g);
 }
 private void getAnimations(){
 	
@@ -161,6 +155,9 @@ private void getAnimations(){
 	}
 }
 public void newRoll(float goX, float goY, int rollQtd){
+	// Checking Stamina
+	if (stamina >= 10) stamina -= 10;
+	else return;
 	//Setting Defaults
 	this.rollQtd = rollQtd;
 	roll         = true;
@@ -192,6 +189,32 @@ private void checkRoll(){
 		timer2    = System.nanoTime();
 		timer3    = System.nanoTime();
 		GameHandler.objList.remove(attack);
+	}
+}
+private void newKnockback(){
+	knockback     = true;
+	waitKnockback = false;
+	
+	if (roll){
+		GameHandler.objList.remove(attack);
+		if (rollCount != 0 && ( 8 / 2 * rollQtd ) >= rollCount) knockbackCount -= ( ( 8 / 2 * rollQtd ) - rollCount );
+		rollCount     = 0;
+		roll          = false;
+		jumpAnimation = true;
+	}
+}
+private void checkKnockback(){
+	if (!knockback) return;
+	knockbackCount++;
+	
+	if (knockbackCount >= 8){
+		knockbackCount = 0;
+		knockback      = false;
+		if (!moving) jumpAnimation = false;
+		frame  = 1;
+		timer1 = System.nanoTime();
+		timer2 = System.nanoTime();
+		timer3 = System.nanoTime();
 	}
 }
 }

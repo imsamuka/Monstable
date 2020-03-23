@@ -8,10 +8,11 @@ public static LinkedList<UIObject> objList;
 private int                  size        = 0;
 private UIStates             tempuiState = null;
 
-public UIHandler(){ new UIList(); }
+public UIHandler(){}
 public void tick(){
 	
 	if (tempuiState != uiState){
+		new UIList();
 		objList = UIList.getList(uiState);
 		size    = objList.size();
 	}
