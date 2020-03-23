@@ -25,7 +25,7 @@ protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, in
 	
 	if (spritesheet != null){
 		image = new Images(spritesheet);
-		image.getEverySprite(sWidth, sHeight);
+		//image.getEverySprite(sWidth, sHeight);
 	}
 		this.sWidth  = sWidth;
 		this.sHeight = sHeight;

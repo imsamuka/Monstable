@@ -125,8 +125,8 @@ protected void getAnimation(){
 		vel = svel * ( ( ( currentFrame - ( frames / 2 ) ) ^ 2 ) / ( 4 * ( 0.0625f * ( frames ^ 2 ) ) ) );
 		currentFrame++;
 	}
-	if (animation == animations.slideLeft || animation == animations.slideRight) x = Game.clampPlus(x + vel, x, finaly);
-	if (animation == animations.slideDown || animation == animations.slideUp) y = Game.clampPlus(y + vel, y, finaly);
+	if (animation == animations.slideLeft || animation == animations.slideRight) x = Game.clampAuto(x + vel, x, finaly);
+	if (animation == animations.slideDown || animation == animations.slideUp) y = Game.clampAuto(y + vel, y, finaly);
 }
 
 //////// Images ////////

@@ -50,10 +50,10 @@ private InputInt right = new InputInt(){
 						public void OnSinglePressed(){}
 						public void OnPressed(){
 							if (UIHandler.uiState == UIStates.Game){
-								if (!GameHandler.player.roll && !GameHandler.player.getBounds().contains(mouseX, mouseY)) {
+								if (!GameHandler.player.isRoll() && !GameHandler.player.getBounds().contains(mouseX, mouseY)) {
 									GameHandler.player.mouseX = mouseX;
 									GameHandler.player.mouseY = mouseY;
-									GameHandler.player.roll = true;
+									GameHandler.player.setRoll(true);
 								}
 								
 							}

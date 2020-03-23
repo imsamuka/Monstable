@@ -2,6 +2,8 @@ package inputs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
+import game.GameHandler;
+import main.Game;
 
 public class KeyInput extends KeyAdapter{
 // KeyList
@@ -64,7 +66,7 @@ public static KeyObj up    = new KeyObj(new int[ ] {KeyEvent.VK_UP, KeyEvent.VK_
 public static KeyObj left  = new KeyObj(new int[ ] {KeyEvent.VK_LEFT, KeyEvent.VK_A}, "left", "right");
 public static KeyObj right = new KeyObj(new int[ ] {KeyEvent.VK_RIGHT, KeyEvent.VK_D}, "right", "left");
 public static KeyObj x     = new KeyObj(new int[ ] {KeyEvent.VK_X}, "x", new InputInt(){
-							public void OnSinglePressed(){ System.out.println("Power"); }
+							public void OnSinglePressed(){ System.out.println("Power");}
 							public void OnPressed(){}
 							public void OnReleased(){}
 							});

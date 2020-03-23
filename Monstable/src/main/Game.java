@@ -44,7 +44,7 @@ public void run(){
 		}
 		
 		if (System.currentTimeMillis() - timer >= 1000){
-			System.out.println("FPS: "+FPS);
+			//System.out.println("FPS: "+FPS);
 			FPS    = 0;
 			timer += 1000;
 		}
@@ -84,12 +84,17 @@ public static int clamp(int var, int min, int max){
 	else if (var < min) return min;
 	else return var;
 }
+public static int clampSwitch(int var, int min, int max){
+	if (var > max) return var - (max - min + 1);
+	else if (var < min) return var + (max - min + 1);
+	else return var;
+}
 public static float clamp(float var, float min, float max){
 	if (var > max) return max;
 	else if (var < min) return min;
 	else return var;
 }
-public static float clampPlus(float var, float limiter1, float limiter2){
+public static float clampAuto(float var, float limiter1, float limiter2){
 	float min = limiter1 > limiter2 ? limiter2 : limiter1;
 	float max = min == limiter1 ? limiter2 : limiter1;
 	if (var > max) return max;

@@ -5,9 +5,10 @@ import java.awt.Graphics;
 
 public class Tile extends GameObject{
 
-	protected Tile(float x, float y, ID id, int wSprite) {
-		super(x, y, id, "/assets.png", 16, 16, wSprite);
+	protected Tile(float x, float y, ID id, int wSprite, String spritesheet) {
+		super(x, y, id, spritesheet, 16, 16, wSprite);
 		if (id == ID.Wall) collision = true;
+		
 	}
 
 	protected void tick(){
