@@ -51,9 +51,7 @@ private InputInt right = new InputInt(){
 						public void OnPressed(){
 							if (UIHandler.uiState == UIStates.Game){
 								if (!GameHandler.player.isRoll() && !GameHandler.player.getBounds().contains(mouseX, mouseY)) {
-									GameHandler.player.mouseX = mouseX;
-									GameHandler.player.mouseY = mouseY;
-									GameHandler.player.setRoll(true);
+									
 									GameHandler.player.newRoll(mouseX, mouseY, 4);
 								}
 								

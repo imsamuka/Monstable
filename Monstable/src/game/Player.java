@@ -16,7 +16,7 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
-public float       mouseX     = 0, mouseY = 0, stamina = 0;
+public float       stamina = 0;
 public int         rollCount  = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
 private GameObject attack;
 private UIObject   StaminaBar, LifeBar;
@@ -35,10 +35,10 @@ public Player(float x, float y){
 	LifeBar = new ObjImage(5, 5, 50, 5, UIStates.Game, null, 0, 0, 0);
 	LifeBar.setFillBar(life, 0, 100, new Color(200,0,0,210), new Color(250,30,30,255), new Color(140,140,140,140));
 	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
-	StaminaBar.setFillBar(stamina, 0, 100, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
+	StaminaBar.setFillBar(stamina, 0, 30, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
 }
 protected void tick(){
-	if (!roll) stamina = Game.clamp( stamina + 0.5f, 0, 100);
+	if (!roll) stamina = Game.clamp( stamina + 1f, 0, 30);
 	
 	// Movement check
 	if (!roll && !knockback){
@@ -166,7 +166,7 @@ public void newRoll(float goX, float goY, int rollQtd){
 	// Search for Direction
 	double diffX = bounds.getCenterX() - goX;
 	double diffY = bounds.getCenterY() - goY;
-	double distance = Math.sqrt(( bounds.getCenterX() - goX ) * ( bounds.getCenterX() - goX ) + ( bounds.getCenterY() - goY ) * ( bounds.getCenterY() - mouseY ));
+	double distance = Math.sqrt(( bounds.getCenterX() - goX ) * ( bounds.getCenterX() - goX ) + ( bounds.getCenterY() - goY ) * ( bounds.getCenterY() - goY ));
 	xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.5 ) );
 	yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.5 ) );
 	// Creating Melee attack
