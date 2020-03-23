@@ -54,6 +54,7 @@ private InputInt right = new InputInt(){
 									GameHandler.player.mouseX = mouseX;
 									GameHandler.player.mouseY = mouseY;
 									GameHandler.player.setRoll(true);
+									GameHandler.player.newRoll(mouseX, mouseY, 4);
 								}
 								
 							}
