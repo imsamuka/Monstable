@@ -15,7 +15,7 @@ public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
 public float       mouseX    = 0, mouseY = 0;
-public int         rollCount = 0, knockbackCount = 0, frame = 0;
+public int         rollCount = 0, knockbackCount = 0, initknockbackCount = 0 , frame = 0;
 private GameObject attack;
 private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime();
 private String     direction = "";
@@ -37,7 +37,7 @@ protected void tick(){
 	if (!roll && !knockback){
 		moving = KeyInput.isAnyKeyPressed(KeyObj.types.movement);
 		
-		if (moving && !jumpAnimation && !rollAnimation){
+		if (moving && !jumpAnimation){
 			frame = 1;
 			timer1 = System.nanoTime();
 			timer2 = System.nanoTime();
@@ -58,16 +58,28 @@ protected void tick(){
 		else yvel = 0;
 	}
 	
+	
+	int t = 3;
+	
 	if (knockback){
 		roll = false;
 		GameHandler.objList.remove(attack);
-		knockbackCount -= rollCount;
+		knockbackCount -= rollCount != 0 && (8/2 * t) >= rollCount ? ( (8/2 * t) - rollCount) : 0 ;
+		initknockbackCount = initknockbackCount == 0 ? knockbackCount : initknockbackCount;
 		rollCount       = 0;
+		rollAnimation = false;
+		jumpAnimation = true;
 		knockbackCount++;
 		
-		if (knockbackCount == 9){
+		if (knockbackCount >= 8){
 			knockbackCount = 0;
+			initknockbackCount = 0;
 			knockback      = false;
+			jumpAnimation = false;
+			frame = 1;
+			timer1 = System.nanoTime();
+			timer2 = System.nanoTime();
+			timer3 = System.nanoTime();
 		}
 	}
 	
@@ -75,8 +87,10 @@ protected void tick(){
 		rollCount++;
 		
 		jumpAnimation = false;
-		frame = (int) Math.ceil(rollCount / 10) + 1;
-		if (rollCount == 8 * 10){
+		
+		
+		frame = (int) Math.ceil(rollCount / t) + 1;
+		if (rollCount == 8 * t){
 			rollCount = 0;
 			roll      = false;
 			rollAnimation = false;
@@ -95,8 +109,8 @@ protected void tick(){
 			double diffX = bounds.getCenterX() - mouseX;
 			double diffY = bounds.getCenterY() - mouseY;
 			double distance = Math.sqrt(( bounds.getCenterX() - mouseX ) * ( bounds.getCenterX() - mouseX ) + ( bounds.getCenterY() - mouseY ) * ( bounds.getCenterY() - mouseY ));
-			//xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.5 ) );
-			//yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.5 ) );
+			xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.5 ) );
+			yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.5 ) );
 			direction = checkForDirection(mouseX, mouseY, 10, false);
 			KeyInput.setFirst(direction);
 			attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(mouseX, mouseY, 10, true));
@@ -116,8 +130,8 @@ protected void tick(){
 	}
 	
 	if (collideX && knockback){ xvel = xvel > 0 ? -Spd : Spd; }
+	else if (collideY && knockback){ yvel = yvel > 0 ? -Spd : Spd; }
 	
-	if (collideY && knockback){ yvel = yvel > 0 ? -Spd : Spd; }
 	// Movement Apply
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
@@ -133,14 +147,33 @@ protected void render(Graphics g){
 			int min = 1;
 			int max = 6;
 			
-			if (frame + 1 > max){
-				frame += 1 - ( max - min + 1 );
+			if (knockback) {
 				
-				if (!moving){
-					jumpAnimation = false;
-					frame        = 0;
-				}
-			}else frame = frame + 1;
+				
+				//knockbackCount
+				if ( initknockbackCount - knockbackCount <= 3 && frame + 1 > max){
+					frame += 1 - ( max - min + 1 );
+					
+					if (!moving){
+						jumpAnimation = false;
+						frame        = 0;
+					}
+				}else frame = frame + 1;
+			}else {
+				if (frame + 1 > max){
+					frame += 1 - ( max - min + 1 );
+					
+					if (!moving){
+						jumpAnimation = false;
+						frame        = 0;
+					}
+				}else frame = frame + 1;
+			}
+			
+			
+			
+			
+			
 			timer2 = System.nanoTime();
 		}
 	
@@ -149,7 +182,8 @@ protected void render(Graphics g){
 		timer1 = System.nanoTime();
 	}
 	if (rollAnimation) wSprite = 16 + frame + 8 * directionToInt(direction);
-	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
+	else if (jumpAnimation && !knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
+	else if (jumpAnimation && knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	g.setColor(new Color(0, 0, 0, 255));
 	g.drawString("f:"+frame, 230, 20);
@@ -158,7 +192,9 @@ protected void render(Graphics g){
 	g.drawString(bounds.x+","+bounds.y, 160, 40);
 	g.drawString("Objects:"+GameHandler.objList.size(), 160, 60);
 	g.drawString("HP:"+life, 160, 80);
-	if (moving) g.drawString("moving", 160, 100);
+	g.drawString("kb:"+(initknockbackCount - (knockbackCount)), 160, 120);
+	
+	if (jumpAnimation) g.drawString("jumpAnimation", 160, 100);
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
