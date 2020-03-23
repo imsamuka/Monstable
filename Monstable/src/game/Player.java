@@ -167,8 +167,8 @@ public void newRoll(float goX, float goY, int rollQtd){
 	double diffX = bounds.getCenterX() - goX;
 	double diffY = bounds.getCenterY() - goY;
 	double distance = Math.sqrt(( bounds.getCenterX() - goX ) * ( bounds.getCenterX() - goX ) + ( bounds.getCenterY() - goY ) * ( bounds.getCenterY() - goY ));
-	xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.5 ) );
-	yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.5 ) );
+	xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.8 ) );
+	yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.8 ) );
 	// Creating Melee attack
 	direction = checkForDirection(goX, goY, 10, false);
 	KeyInput.setFirst(direction);
