@@ -8,16 +8,15 @@ import main.Game;
 import main.Windows;
 
 public class Player extends GameObject{
-protected boolean moving = false, roll = false, rollAnimation = false, jumpAnimation = false;
+protected boolean moving = false, roll = false, rollAnimation = false, jumpAnimation = false , idleAnimation = false;
 
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
 public float       mouseX    = 0, mouseY = 0;
-public int         rollCount = 0, knockbackCount = 0, initknockbackCount = 0 , frame = 0, interval = 0;
+public int         rollCount = 0, knockbackCount = 0, frame = 0, interval = 0;
 private GameObject attack;
-private double     timer1    = System.nanoTime(), timer2 = System.nanoTime();
-double timer3 = System.nanoTime();
+private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime() , timer4 = System.nanoTime();
 
 private String     direction = "";
 
@@ -37,12 +36,11 @@ protected void tick(){
 	if (!roll && !knockback){
 		KeyInput.correctListOrder();
 		moving = KeyInput.isAnyKeyPressed(KeyObj.types.movement);
-		
+		if (moving) timer3 = System.nanoTime();
 		if (moving && !jumpAnimation){
 			frame = 1;
 			timer1 = System.nanoTime();
 			timer2 = System.nanoTime();
-			timer3 = System.nanoTime();
 		}
 		if (moving && !rollAnimation) jumpAnimation = true;
 		if (KeyInput.right.isPressed()
@@ -65,8 +63,7 @@ protected void tick(){
 	if (knockback){
 		roll = false;
 		GameHandler.objList.remove(attack);
-		knockbackCount -= rollCount != 0 && (8/2 * t) >= rollCount ? ( (8/2 * t) - rollCount) : 0 ;
-		//initknockbackCount = initknockbackCount == 0 ? knockbackCount : initknockbackCount;
+		if (rollCount != 0 && (8/2 * t) >= rollCount) knockbackCount -= ( (8/2 * t) - rollCount);
 		rollCount       = 0;
 		rollAnimation = false;
 		jumpAnimation = true;
@@ -75,7 +72,6 @@ protected void tick(){
 		
 		if (knockbackCount >= 8){
 			knockbackCount = 0;
-			//initknockbackCount = 0;
 			knockback      = false;
 			jumpAnimation = false;
 			frame = 1;
@@ -148,9 +144,15 @@ protected void render(Graphics g){
 	
 	
 	
-	//if ( roll ) if (System.nanoTime() - timer3 > ( 0.1 ) * ( 1000000000 )){ frame1 = Game.clampSwitch(frame1 + 1, 1, 8);timer3 = System.nanoTime();}
-	
-	if (jumpAnimation) if (System.nanoTime() - timer2 > ( 0.065 ) * ( 1000000000 )){
+	if (System.nanoTime() - timer3 > ( 14 ) * ( 1000000000 )){
+		idleAnimation = true;
+		if (System.nanoTime() - timer4 > ( 0.2 ) * ( 1000000000 )) {
+			frame = Game.clampSwitch(frame + 1, 1, 8);
+			timer4 = System.nanoTime();
+		}
+	}else idleAnimation = false;
+	if (!idleAnimation) {
+		if (jumpAnimation) if (System.nanoTime() - timer2 > ( 0.065 ) * ( 1000000000 )){
 			int min = 1;
 			int max = 6;
 			
@@ -191,7 +193,12 @@ protected void render(Graphics g){
 		frame = Game.clampSwitch(frame + 1, 1, 4);
 		timer1 = System.nanoTime();
 	}
-	if (rollAnimation) wSprite = 16 + frame + 8 * directionToInt(direction);
+	}
+	
+	
+	
+	if (idleAnimation) wSprite = frame + 8 * directionToInt(direction);
+	else if (rollAnimation) wSprite = 16 + frame + 8 * directionToInt(direction);
 	else if (jumpAnimation && !knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else if (jumpAnimation && knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
