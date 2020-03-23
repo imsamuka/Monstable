@@ -15,7 +15,7 @@ protected ID      id;
 protected Images  image;
 protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
 protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false; 
-protected boolean collideX = false, collideY = false,knockback = false;
+protected boolean collideX = false, collideY = false, waitKnockback = false, knockback = false;
 
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
@@ -199,13 +199,13 @@ protected boolean filterInTiles(GameObject tO){
 	}
 	return false;
 }
-protected boolean[] getCollisionWithWall(GameObject tO){
-	boolean[] collide = new boolean[ ] {false, false};
-	if (tO.id != ID.Wall) return collide;
+protected void getCollisionWithWall(GameObject tO){
+	if (xvel == 0 && yvel == 0) return;
+	if (tO.id != ID.Wall) return;
 	setBounds(xvel, yvel);
-	if (!( bounds.intersects(tO.bounds) )) return collide;
-	float tempXvel = xvel;
-	float tempYvel = yvel;
+	if (!( bounds.intersects(tO.bounds) )) return;
+	boolean cX = false, cY = false;
+	float tempXvel = xvel , tempYvel = yvel;
 	setBounds(xvel, 0);
 	
 	if (tO.bounds.intersects(bounds)){
@@ -220,7 +220,7 @@ protected boolean[] getCollisionWithWall(GameObject tO){
 			int b = (int) tO.bounds.getMaxX();
 			xvel = -( a - b );
 		}
-		collide[0] = true;
+		cX = true;
 	}
 	setBounds(0, yvel);
 	
@@ -236,16 +236,16 @@ protected boolean[] getCollisionWithWall(GameObject tO){
 			int b = (int) tO.bounds.getMaxY();
 			yvel = -( a - b );
 		}
-		collide[1] = true;
+		cY = true;
 	}
 	
 	if (tempXvel == xvel && tempYvel == yvel){
 		if (new Random().nextInt(2) == 1) xvel = 0;
 		else yvel = 0;
-		collide[0] = true;
-		collide[1] = true;
 	}
-	return collide;
+	if (cX) collideX = true;
+	if (cY) collideY = true;
+	return;
 }
 protected abstract void tick();
 protected abstract void render(Graphics g);

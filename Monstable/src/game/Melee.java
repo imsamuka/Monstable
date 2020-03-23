@@ -17,9 +17,13 @@ protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObjec
 		this.direction = directionToPoint(direction);
 		setHitBox(0, 0, parent.bounds.width, parent.bounds.height);
 	}
-		
 }
 protected void tick(){
+	if (death) {
+		autoDestroy();
+		return;
+	}
+	
 	
 	if (direction != null) {
 		x = parent.bounds.x + size * direction.x;
@@ -29,28 +33,28 @@ protected void tick(){
 	
 	refreshBounds();
 	
+	collideX = false;
+	
 	int size = GameHandler.objList.size();
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
-		if (tO == this || tO == parent) continue;
+		if (tO == this) continue;
+		if (tO == parent) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
 			tO.life -= damage;
-			autoDestroy();
+			death = true;
 			return;
 		}
-		if (!parent.knockback) {
-			boolean[] c = tO.getCollisionWithWall(tO);
-			if (c[0] || c[1]) {
-				parent.knockback = true;
-				
-			}
-		}
-			
+		if (tO.id == ID.Wall && tO.bounds.intersects(bounds)) collideX = true;
+		
 	}
+	
+	if (collideX) parent.waitKnockback = true;
+	else parent.waitKnockback = false;
 	
 	
 }
-protected void render(Graphics g){ renderBounds(g);}
+protected void render(Graphics g){renderBounds(g);}
 }

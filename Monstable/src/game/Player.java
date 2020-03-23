@@ -1,7 +1,6 @@
 package game;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import inputs.KeyInput;
 import inputs.KeyObj;
 import inputs.MouseInput;
@@ -15,9 +14,11 @@ public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
 public float       mouseX    = 0, mouseY = 0;
-public int         rollCount = 0, knockbackCount = 0, initknockbackCount = 0 , frame = 0;
+public int         rollCount = 0, knockbackCount = 0, initknockbackCount = 0 , frame = 0, interval = 0;
 private GameObject attack;
-private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime();
+private double     timer1    = System.nanoTime(), timer2 = System.nanoTime();
+double timer3 = System.nanoTime();
+
 private String     direction = "";
 
 public Player(float x, float y){
@@ -30,11 +31,11 @@ public Player(float x, float y){
 	life = 100;
 }
 protected void tick(){
-	collideX = false;
-	collideY = false;
+	
 	
 	// Movement check
 	if (!roll && !knockback){
+		KeyInput.correctListOrder();
 		moving = KeyInput.isAnyKeyPressed(KeyObj.types.movement);
 		
 		if (moving && !jumpAnimation){
@@ -65,15 +66,16 @@ protected void tick(){
 		roll = false;
 		GameHandler.objList.remove(attack);
 		knockbackCount -= rollCount != 0 && (8/2 * t) >= rollCount ? ( (8/2 * t) - rollCount) : 0 ;
-		initknockbackCount = initknockbackCount == 0 ? knockbackCount : initknockbackCount;
+		//initknockbackCount = initknockbackCount == 0 ? knockbackCount : initknockbackCount;
 		rollCount       = 0;
 		rollAnimation = false;
 		jumpAnimation = true;
+		waitKnockback = false;
 		knockbackCount++;
 		
 		if (knockbackCount >= 8){
 			knockbackCount = 0;
-			initknockbackCount = 0;
+			//initknockbackCount = 0;
 			knockback      = false;
 			jumpAnimation = false;
 			frame = 1;
@@ -117,20 +119,25 @@ protected void tick(){
 			GameHandler.objList.add(attack);
 		}
 	}
-	int size = GameHandler.objList.size();
 	
+	
+	collideX = false;
+	collideY = false;
+	int size = GameHandler.objList.size();
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		boolean[] c = getCollisionWithWall(tO);
-		collideX = c[0] ? true : collideX;
-		collideY = c[1] ? true : collideY;
+		getCollisionWithWall(tO);
 	}
 	
-	if (collideX && knockback){ xvel = xvel > 0 ? -Spd : Spd; }
-	else if (collideY && knockback){ yvel = yvel > 0 ? -Spd : Spd; }
+	if (collideX && waitKnockback){
+		knockback = true;
+		xvel = xvel > 0 ? -Spd : Spd; }
+	else if (collideY && waitKnockback){ 
+		knockback = true;
+		yvel = yvel > 0 ? -Spd : Spd; }
 	
 	// Movement Apply
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
@@ -150,15 +157,18 @@ protected void render(Graphics g){
 			if (knockback) {
 				
 				
-				//knockbackCount
-				if ( initknockbackCount - knockbackCount <= 3 && frame + 1 > max){
+				if (frame + 1 > max){
 					frame += 1 - ( max - min + 1 );
 					
 					if (!moving){
 						jumpAnimation = false;
 						frame        = 0;
 					}
-				}else frame = frame + 1;
+				}else if (frame <= 3 || knockbackCount >= 4) frame = frame + 1;
+				
+				
+				
+				
 			}else {
 				if (frame + 1 > max){
 					frame += 1 - ( max - min + 1 );
@@ -189,12 +199,18 @@ protected void render(Graphics g){
 	g.drawString("f:"+frame, 230, 20);
 	//g.drawString("2:"+frame, 230, 40);
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
-	g.drawString(bounds.x+","+bounds.y, 160, 40);
-	g.drawString("Objects:"+GameHandler.objList.size(), 160, 60);
-	g.drawString("HP:"+life, 160, 80);
-	g.drawString("kb:"+(initknockbackCount - (knockbackCount)), 160, 120);
+	g.drawString(bounds.x+","+bounds.y, 185, 20);
+	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
+	g.drawString("HP:"+life, 160, 60);
+	g.drawString("interval:"+interval, 160, 80);
+	
+	
 	
 	if (jumpAnimation) g.drawString("jumpAnimation", 160, 100);
+	if (rollAnimation) g.drawString("rollAnimation", 160, 120);
+	if (knockback) g.drawString("knockback", 160, 140);
+	if (waitKnockback) g.drawString("waitKnockback", 160, 160);
+	
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);

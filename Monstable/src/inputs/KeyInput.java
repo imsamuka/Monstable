@@ -2,8 +2,6 @@ package inputs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
-import game.GameHandler;
-import main.Game;
 
 public class KeyInput extends KeyAdapter{
 // KeyList
@@ -38,12 +36,12 @@ public static boolean isAnyKeyPressed(KeyObj.types type){
 	}
 	return false;
 }
-public boolean isOppositeKeyPressed(KeyObj oKey){
+public static boolean isOppositeKeyPressed(KeyObj oKey){
 	if (oKey.getOppositeKey() != null) for (KeyObj oKey2: KeyList) if (oKey.getOppositeKey() == oKey2.getName()
 	&& oKey2.isPressed()) return true;
 	return false;
 }
-public void correctListOrder(){
+public static void correctListOrder(){
 	boolean again = true;
 	int offset = 0;
 	int size = KeyList.size();
