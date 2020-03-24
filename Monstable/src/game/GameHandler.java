@@ -14,9 +14,6 @@ public GameHandler(){
 	objList.add(new Tile(1 * 16, 1 * 16, ID.Wall, 3, "/assets.png"));
 	objList.add(new Tile(1 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
 	objList.add(new Tile(0 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
-	objList.add(new CommonEnemy(3 * 16, 4 * 16, CommonEnemy.Opt.fastMelee));
-	objList.add(new CommonEnemy(5 * 16, 6 * 16, CommonEnemy.Opt.Melee));
-
 	
 	objList.add(player);
 }
