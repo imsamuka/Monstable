@@ -1,6 +1,7 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import game.GameHandler;
@@ -78,6 +79,13 @@ private void render(){
 	bs.show();
 }
 public static void getNewWindow(){ window = new Windows(); }
+public static Rectangle extendRectangle(Rectangle bounds, int x, int y, int width, int height){
+	return new Rectangle(bounds.x + x, bounds.y + y, bounds.width + width, bounds.height + height);
+}
+public static Rectangle extendRectangle(Rectangle bounds, int value){
+	return new Rectangle(bounds.x - value, bounds.y - value, bounds.width + value*2, bounds.height + value*2);
+}
+
 public static boolean isEven(int num){ return( num % 2 == 0 ); }
 public static int clamp(int var, int min, int max){
 	if (var > max) return max;
@@ -85,8 +93,8 @@ public static int clamp(int var, int min, int max){
 	else return var;
 }
 public static int clampSwitch(int var, int min, int max){
-	if (var > max) return var - (max - min + 1);
-	else if (var < min) return var + (max - min + 1);
+	if (var > max) return var - ( max - min + 1 );
+	else if (var < min) return var + ( max - min + 1 );
 	else return var;
 }
 public static float clamp(float var, float min, float max){

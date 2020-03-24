@@ -1,6 +1,7 @@
 package game;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import inputs.KeyInput;
 import inputs.KeyObj;
 import inputs.MouseInput;
@@ -66,12 +67,11 @@ protected void tick(){
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
 	}
+	
 	checkKnockback();
 	checkRoll();
-	collideX = false;
-	collideY = false;
 	
-	if (StaminaBar.getBounds().createUnion(LifeBar.getBounds()).intersects(bounds)   ) {
+	if (Game.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)   ) {
 		StaminaBar.setTransparency(0.2f);
 		LifeBar.setTransparency(0.2f);
 	}else {
@@ -80,9 +80,11 @@ protected void tick(){
 	}
 	StaminaBar.setFillValue(stamina);
 	LifeBar.setFillValue(life);
+
 	
 	int size = GameHandler.objList.size();
-	
+	collideX = false;
+	collideY = false;
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
@@ -118,6 +120,7 @@ protected void render(Graphics g){
 	g.drawString(bounds.x+","+bounds.y, 185, 20);
 	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
 	//
+	
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
