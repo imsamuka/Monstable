@@ -20,7 +20,7 @@ public void setRoll(boolean roll){ this.roll = roll; }
 public final float rollCost = 15 , goopCost = 12;
 public float       stamina = 0;
 public int         rollCount  = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
-private GameObject attack;
+private Melee attack;
 private UIObject   StaminaBar, LifeBar;
 private double     timer1     = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
 timer4 = System.nanoTime();
@@ -178,7 +178,6 @@ public void newRoll(float toX, float toY, int rollQtd){
 	timer3 = System.nanoTime();
 	// Search for Direction
 	goFromTo((float)bounds.getCenterX(),(float) bounds.getCenterY(), toX, toY, Spd * 1.8f);
-
 	// Creating Melee attack
 	direction = checkForDirection(toX, toY, 10, false);
 	KeyInput.setFirst(direction);
@@ -202,7 +201,7 @@ private void checkRoll(){
 		GameHandler.objList.remove(attack);
 	}
 }
-private void newKnockback(){
+protected void newKnockback(){
 	knockback     = true;
 	waitKnockback = false;
 	
