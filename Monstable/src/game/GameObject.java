@@ -5,12 +5,16 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Random;
 import main.Images;
+import main.MySubject;
 import main.Windows;
 
 public abstract class GameObject{
 protected float     x, y, xvel, yvel, Spd;
+private static int masterNumberID = 0;
+private int NumberID;
 protected Rectangle bounds;
 public Rectangle getBounds(){ return bounds; }
+protected MySubject subject = new MySubject();
 protected ID      id;
 protected Images  image;
 protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
@@ -19,6 +23,9 @@ protected boolean collideX = false, collideY = false, waitKnockback = false, kno
 
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
+	NumberID = masterNumberID;
+	masterNumberID++;
+	
 	this.x  = x;
 	this.y  = y;
 	this.id = id;
@@ -71,7 +78,7 @@ protected int directionToInt(String pos){
 	}
 }
 protected Point directionToPoint(String pos){
-	
+	if (pos == null) return new Point(0,0);
 	switch(pos){
 		case "down":
 			return new Point(0,1);
