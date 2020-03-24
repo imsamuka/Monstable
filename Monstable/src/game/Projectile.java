@@ -40,7 +40,6 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 	//Already in Radians
 	System.out.println("degree: "+( Math.toDegrees(-angle) ));
 	System.out.println("radian: "+( angle ));
-	System.out.println("angle/PI: "+( angle/Math.PI ));
 	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd);
 }
 protected void tick(){
@@ -75,7 +74,7 @@ protected void render(Graphics g){
 	AffineTransform at = AffineTransform.getTranslateInstance(x, y);
 	double value1 = angle/Math.PI;	
 	double value2 = -4*value1*value1*value1 + 3*value1;
-	if (angle < 0) at.rotate(angle,  -angle * bounds.width / 2, (-angle/2) + -angle * bounds.height / 2);
+	if (angle < 0) at.rotate(angle,  -angle * bounds.width / 2,  -angle * bounds.height / 2);
 	else if (angle > 0) at.rotate(angle, value2*bounds.width/1.5 + angle * bounds.width / 2, -(1/(angle/Math.PI)) +  angle * bounds.height / 2);
 	else at.rotate(angle, bounds.width / 2, bounds.height / 2);
 	
