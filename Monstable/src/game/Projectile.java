@@ -21,15 +21,18 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 	}else if (option == Opt.Goop) {
 		GameHandler.player.stamina -= GameHandler.player.goopCost;
 		
-		image = new Images("/Slimesheet.png");
+		image = new Images("/assets.png");
 		sWidth = 16;
 		sHeight = 16;
-		wSprite = 118;
-		Shift = 1;
+		wSprite = 6;
+		Shift = 0;
 		
 		x -= 7 + 2;
 		y -= 6 + 1.5;
 		setHitBox(7, 6, 4, 3);
+		
+		
+		
 	}
 	
 	MainSprite = wSprite;
@@ -38,6 +41,10 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 	
 	collision     = true;
 	//visibleBounds = true;
+	
+	double angle = -Math.atan2(toY - bounds.getCenterY(), toX - bounds.getCenterX());
+	//Already in Radians
+	//System.out.println("angle: "+(angle));
 	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd);
 }
 protected void tick(){
@@ -52,7 +59,7 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		//tO.visibleBounds = true;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
-			tO.life -= damage;
+			tO.takeDamage(damage);
 			autoDestroy();
 			return;
 		}

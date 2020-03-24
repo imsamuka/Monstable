@@ -6,20 +6,17 @@ import main.ObserverInterface;
 
 public class Melee extends GameObject{
 protected GameObject parent;
-protected Point      direction;
+protected Point      direction = directionToPoint(null);
 protected int        size;
 protected MyObserver observer;
 
-protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObject parent, String dir){
+protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObject parent){
 	super(x, y, ID.Melee, null, sWidth, sHeight, 0);
 	this.damage   = damage;
 	this.parent   = parent;
 	visibleBounds = true;
 	size          = 4;
-	direction = directionToPoint(dir);
 	
-	
-		
 		observer = new MyObserver(parent.subject, (ObserverInterface) new ObserverInterface(){
 			public void OnDirectionChange(String dir){
 				direction = directionToPoint(dir); }
@@ -52,9 +49,8 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		
 		if (tO.entitie && tO.bounds.intersects(bounds)){
-			tO.life -= damage;
-			
-			if (parent == GameHandler.player) GameHandler.player.newKnockback();
+			if (parent != GameHandler.player && tO == GameHandler.player) tO.takeDamage(damage);
+			else if (parent == GameHandler.player) GameHandler.player.newKnockback();
 			return;
 		}
 		if (tO.id == ID.Wall && tO.bounds.intersects(bounds)) collideX = true;

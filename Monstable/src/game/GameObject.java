@@ -10,22 +10,22 @@ import main.Windows;
 
 public abstract class GameObject{
 protected float     x, y, xvel, yvel, Spd;
-private static int masterNumberID = 0;
-private int NumberID;
+//private static int masterNumberID = 0;
+//private int NumberID;
 protected Rectangle bounds;
-public Rectangle getBounds(){ return bounds; }
-protected MySubject subject = new MySubject();
-protected ID      id;
-protected Images  image;
-protected int     wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
-protected boolean death = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false; 
-protected boolean collideX = false, collideY = false, waitKnockback = false, knockback = false;
 
+public Rectangle getBounds(){ return bounds; }
+
+protected MySubject subject  = new MySubject();
+protected ID        id;
+protected Images    image;
+protected int       wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
+protected boolean   death    = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false;
+protected boolean   collideX = false, collideY = false, waitKnockback = false, knockback = false, ableToDamage = true;
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
-	NumberID = masterNumberID;
-	masterNumberID++;
-	
+	//NumberID = masterNumberID;
+	//masterNumberID++;
 	this.x  = x;
 	this.y  = y;
 	this.id = id;
@@ -34,8 +34,8 @@ protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, in
 		image = new Images(spritesheet);
 		//image.getEverySprite(sWidth, sHeight);
 	}
-		this.sWidth  = sWidth;
-		this.sHeight = sHeight;
+	this.sWidth  = sWidth;
+	this.sHeight = sHeight;
 	this.wSprite = wSprite;
 	bounds       = new Rectangle((int) x, (int) y, sWidth, sHeight);
 }
@@ -78,26 +78,27 @@ protected int directionToInt(String pos){
 	}
 }
 protected Point directionToPoint(String pos){
-	if (pos == null) return new Point(0,0);
+	if (pos == null) return new Point(0, 0);
+	
 	switch(pos){
 		case "down":
-			return new Point(0,1);
+			return new Point(0, 1);
 		case "up":
-			return new Point(0,-1);
+			return new Point(0, -1);
 		case "left":
-			return new Point(-1,0);
+			return new Point(-1, 0);
 		case "right":
-			return new Point(1,0);
+			return new Point(1, 0);
 		case "down-left":
-			return new Point(-1,1);
+			return new Point(-1, 1);
 		case "down-right":
-			return new Point(1,1);
+			return new Point(1, 1);
 		case "upper-left":
-			return new Point(-1,-1);
+			return new Point(-1, -1);
 		case "upper-right":
-			return new Point(1,-1);
+			return new Point(1, -1);
 		default:
-			return new Point(0,0);
+			return new Point(0, 0);
 	}
 }
 protected String checkForDirection(float posx, float posy, int area, boolean withDiagonals){
@@ -141,17 +142,15 @@ protected String checkForDirection(float posx, float posy, int area, boolean wit
 	return null;
 }
 protected void checkForDeath(){ if (life == 0) death = true; }
+protected void takeDamage(int Damage){ life -= ableToDamage ? Damage : 0; }
 protected void autoDestroy(){ GameHandler.objList.remove(this); }
-
-protected void goFromTo(float fromX, float fromY, float toX, float toY, float Speed) {
+protected void goFromTo(float fromX, float fromY, float toX, float toY, float Speed){
 	double diffX = fromX - toX;
 	double diffY = fromY - toY;
-	double distance = Math.sqrt(( fromX - toX ) * ( fromX - toX ) + ( fromY - toY ) * ( fromY - toY )) ;
+	double distance = Math.sqrt(( fromX - toX ) * ( fromX - toX ) + ( fromY - toY ) * ( fromY - toY ));
 	xvel = (float) ( -1 / ( distance ) * diffX * Speed );
 	yvel = (float) ( -1 / ( distance ) * diffY * Speed );
 }
-
-
 protected void renderBounds(Graphics g){
 	
 	if (visibleBounds){
@@ -222,7 +221,7 @@ protected void getCollisionWithWall(GameObject tO){
 	setBounds(xvel, yvel);
 	if (!( bounds.intersects(tO.bounds) )) return;
 	boolean cX = false, cY = false;
-	float tempXvel = xvel , tempYvel = yvel;
+	float tempXvel = xvel, tempYvel = yvel;
 	setBounds(xvel, 0);
 	
 	if (tO.bounds.intersects(bounds)){
