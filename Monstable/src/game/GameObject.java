@@ -135,6 +135,16 @@ protected String checkForDirection(float posx, float posy, int area, boolean wit
 }
 protected void checkForDeath(){ if (life == 0) death = true; }
 protected void autoDestroy(){ GameHandler.objList.remove(this); }
+
+protected void goFromTo(float fromX, float fromY, float toX, float toY, float Speed) {
+	double diffX = fromX - toX;
+	double diffY = fromY - toY;
+	double distance = Math.sqrt(( fromX - toX ) * ( fromX - toX ) + ( fromY - toY ) * ( fromY - toY )) ;
+	xvel = (float) ( -1 / ( distance ) * diffX * Speed );
+	yvel = (float) ( -1 / ( distance ) * diffY * Speed );
+}
+
+
 protected void renderBounds(Graphics g){
 	
 	if (visibleBounds){

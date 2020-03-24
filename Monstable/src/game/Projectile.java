@@ -38,11 +38,7 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 	
 	collision     = true;
 	//visibleBounds = true;
-	double diffX = bounds.getCenterX() - toX;
-	double diffY = bounds.getCenterY() - toY;
-	double distance = (double) ( Math.sqrt(( bounds.getCenterX() - toX ) * ( bounds.getCenterX() - toX ) + ( bounds.getCenterY() - toY ) * ( bounds.getCenterY() - toY )) );
-	xvel = (float) ( -1 / ( distance ) * diffX * Spd );
-	yvel = (float) ( -1 / ( distance ) * diffY * Spd );
+	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd);
 }
 protected void tick(){
 	if (tempX == x || tempY == y) autoDestroy();
@@ -50,10 +46,11 @@ protected void tick(){
 	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
+		//tO.visibleBounds = false;
 		if (tO == this || tO == GameHandler.player) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		
+		//tO.visibleBounds = true;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
 			tO.life -= damage;
 			autoDestroy();
