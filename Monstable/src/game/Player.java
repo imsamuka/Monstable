@@ -39,7 +39,7 @@ public Player(float x, float y){
 	StaminaBar.setFillBar(stamina, 0, 30, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
 }
 protected void tick(){
-	if (!roll) stamina = Game.clamp( stamina + 1f, 0, 30);
+	if (!roll) stamina = Game.clamp( stamina + 1, 0, 30);
 	
 	// Movement check
 	if (!roll && !knockback){
@@ -70,6 +70,17 @@ protected void tick(){
 	checkRoll();
 	collideX = false;
 	collideY = false;
+	
+	if (StaminaBar.getBounds().createUnion(LifeBar.getBounds()).intersects(bounds)   ) {
+		StaminaBar.setTransparency(0.2f);
+		LifeBar.setTransparency(0.2f);
+	}else {
+		StaminaBar.setTransparency(1);
+		LifeBar.setTransparency(1);
+	}
+	StaminaBar.setFillValue(stamina);
+	LifeBar.setFillValue(life);
+	
 	int size = GameHandler.objList.size();
 	
 	for (int m = 0; m < size; m++){
@@ -111,9 +122,7 @@ protected void render(Graphics g){
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
 	renderBounds(g);
-	StaminaBar.setFillValue(stamina);
 	StaminaBar.render(g);
-	LifeBar.setFillValue(life);
 	LifeBar.render(g);
 }
 private void getAnimations(){

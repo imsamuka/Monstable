@@ -18,12 +18,13 @@ public void setY(float y){ this.y = y; }
 public void setActive(boolean active){ this.active = active; }
 
 //////// Main ////////
-protected float     x, y;
+protected float     x, y, transparency = 1;
 protected int       width, height, boundsX = 0, boundsY = 0;
 protected boolean   hovering = false, active = true;
 protected UIStates  id;
 protected OnClick   onClick;
 protected Rectangle bounds;
+public Rectangle getBounds(){ return bounds; }
 
 protected UIObject(float x, float y, int width, int height, UIStates id, OnClick onClick){
 	this.x       = x;
@@ -61,7 +62,10 @@ public void setHitBox(int x, int y, int width, int height){
 	bounds.height = height;
 	refreshBounds();
 }
+public void setTransparency(float transp){ transparency = Game.clamp(transp, 0, 1); }
 
+//
+////
 //////// Animations ////////
 public static enum animations{
 nothing,
@@ -103,14 +107,10 @@ public void setAnimation(Enum<animations> animation, int frames){
 		finaly  = y;
 		y      += offset;
 	}
-	
-	if (animation == animations.slideLeft || animation == animations.slideRight)
-		if (ftype == ftypes.linear) vel = ( finaly - x ) / frames;
-	
-	
-	if (animation == animations.slideDown || animation == animations.slideUp)
-		if (ftype == ftypes.linear) vel = ( finaly - y ) / frames;
-	
+	if (animation == animations.slideLeft || animation == animations.slideRight) if (ftype
+	== ftypes.linear) vel = ( finaly - x ) / frames;
+	if (animation == animations.slideDown || animation == animations.slideUp) if (ftype
+	== ftypes.linear) vel = ( finaly - y ) / frames;
 }
 protected void getAnimation(){
 	
@@ -130,9 +130,9 @@ protected void getAnimation(){
 }
 
 //////// Images ////////
-protected Images  image;
-protected int     wSprite, spriteWidth, spriteHeight;
-protected boolean fullImage = true;
+protected Images        image;
+protected int           wSprite, spriteWidth, spriteHeight;
+protected boolean       fullImage = true;
 
 public void setImage(String path, int spriteWidth, int spriteHeight){
 	if (path != null) this.image = new Images(path);
@@ -150,6 +150,7 @@ public void setSprite(int wSprite){
 }
 protected BufferedImage getImage(){
 	if (image == null) return null;
+
 	try{
 		if (fullImage) return image.getThisImage();
 		return image.getSprite(wSprite, spriteWidth, spriteHeight);
@@ -160,31 +161,31 @@ protected BufferedImage getImage(){
 }
 
 //////// Fill ////////
-protected float fillValue, min, max;
+protected float   fillValue, min, max;
 protected boolean fill;
-protected Color ffull, fbackground, fdefault;
+protected Color   ffull, fbackground, fdefault;
 
-public void setFillBar(float Value, float Min, float Max, Color Default, Color Full, Color Background) {
+public void setFillBar(float Value, float Min, float Max, Color Default, Color Full, Color Background){
 	fill = true;
-	min = Min;
-	max = Max;
+	min  = Min;
+	max  = Max;
 	setFillValue(Value);
-	ffull = Full;
+	ffull       = Full;
 	fbackground = Background;
-	fdefault = Default;
+	fdefault    = Default;
 }
-public void setFillValue(float Value) { fillValue = Game.clamp(Value, min, max) ; }
-protected void getFillBar(Graphics g) {
+public void setFillValue(float Value){ fillValue = Game.clamp(Value, min, max); }
+protected void getFillBar(Graphics g){
 	if (!fill) return;
-	if (fbackground != null) {
+	
+	if (fbackground != null){
 		g.setColor(fbackground);
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	if (fillValue == max) g.setColor(ffull);
 	else g.setColor(fdefault);
-	g.fillRect(bounds.x, bounds.y,(int) (bounds.width*(fillValue/max)), bounds.height);
+	g.fillRect(bounds.x, bounds.y, (int) ( bounds.width * ( fillValue / max ) ), bounds.height);
 }
-
 
 //////// Text ////////
 protected String text;

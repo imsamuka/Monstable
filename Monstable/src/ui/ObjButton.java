@@ -1,6 +1,8 @@
 package ui;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class ObjButton extends UIObject{
 public ObjButton(float x, float y, int width, int height, UIStates id, OnClick onClick){
@@ -13,6 +15,9 @@ public void tick(){
 	if (animation != animations.nothing) getAnimation();
 }
 public void render(Graphics g){
+	
+	AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency);
+	( (Graphics2D) g ).setComposite(ac);
 	
 	if (image == null){
 		if (!active) g.setColor(Color.gray);
