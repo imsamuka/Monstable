@@ -28,7 +28,7 @@ public Windows(){
 	int width = (int) ( WIDTH * SCALE );
 	int height = (int) ( HEIGHT * SCALE );
 	if (frame != null) frame.dispose();
-	frame = new JFrame("Teste");
+	frame = new JFrame("Monstable");
 	frame.setResizable(false);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setBackground(Color.black);

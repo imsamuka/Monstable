@@ -166,7 +166,7 @@ private void getAnimations(){
 		}
 	}
 }
-public void newRoll(float goX, float goY, int rollQtd){
+public void newRoll(float toX, float toY, int rollQtd){
 	// Checking Stamina
 	if (stamina >= rollCost) stamina -= rollCost;
 	else return;
@@ -177,15 +177,12 @@ public void newRoll(float goX, float goY, int rollQtd){
 	rollCount    = 1;
 	timer3 = System.nanoTime();
 	// Search for Direction
-	double diffX = bounds.getCenterX() - goX;
-	double diffY = bounds.getCenterY() - goY;
-	double distance = Math.sqrt(( bounds.getCenterX() - goX ) * ( bounds.getCenterX() - goX ) + ( bounds.getCenterY() - goY ) * ( bounds.getCenterY() - goY ));
-	xvel      = (float) ( -1 / ( distance ) * diffX * ( Spd * 1.8 ) );
-	yvel      = (float) ( -1 / ( distance ) * diffY * ( Spd * 1.8 ) );
+	goFromTo((float)bounds.getCenterX(),(float) bounds.getCenterY(), toX, toY, Spd * 1.8f);
+
 	// Creating Melee attack
-	direction = checkForDirection(goX, goY, 10, false);
+	direction = checkForDirection(toX, toY, 10, false);
 	KeyInput.setFirst(direction);
-	attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(goX, goY, 10, true));
+	attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(toX, toY, 10, true));
 	GameHandler.objList.add(attack);
 }
 private void checkRoll(){

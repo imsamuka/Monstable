@@ -13,6 +13,7 @@ public GameHandler(){
 	objList.add(new Tile(1 * 16, 1 * 16, ID.Wall, 3, "/assets.png"));
 	objList.add(new Tile(1 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
 	objList.add(new Tile(0 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
+	objList.add(new CommonEnemy(3 * 16, 4 * 16,CommonEnemy.Opt.runner));
 	player = new Player(66 - 16 * 1, 64 - 16 * 1);
 	objList.add(player);
 }
