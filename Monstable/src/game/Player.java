@@ -116,7 +116,7 @@ protected void render(Graphics g){
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	//
 	g.setColor(new Color(0, 0, 0, 255));
-	g.drawString("f:"+frame, 230, 20);
+	g.drawString("f:"+frame, 234, 20);
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
 	g.drawString(bounds.x+","+bounds.y, 185, 20);
 	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);

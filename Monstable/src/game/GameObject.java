@@ -1,8 +1,10 @@
 package game;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.util.Random;
 import main.Images;
 import main.MySubject;
@@ -189,6 +191,10 @@ protected void renderBounds(Graphics g){
 protected void renderSprite(Graphics g){
 	if (invertedSprite) g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x + sWidth ), (int) ( y ), -sWidth, sHeight, null);
 	else g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
+}
+protected void renderSprite(Graphics g, AffineTransform at){
+	Graphics2D g2d = (Graphics2D) g;
+	g2d.drawImage(image.getSprite(wSprite, sWidth, sHeight), at, null);
 }
 public Point getTileUL(int grid){
 	return new Point((int) Math.floor(bounds.x / grid), (int) Math.floor(bounds.y / grid));
