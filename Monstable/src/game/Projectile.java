@@ -52,7 +52,7 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		//tO.visibleBounds = true;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
-			tO.life -= damage;
+			tO.takeDamage(damage);
 			autoDestroy();
 			return;
 		}

@@ -30,6 +30,7 @@ public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
 	collision     = true;
 	entitie       = true;
+	ableToDamage = false;
 	Spd           = 1.5f;
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
@@ -181,7 +182,8 @@ public void newRoll(float toX, float toY, int rollQtd){
 	// Creating Melee attack
 	direction = checkForDirection(toX, toY, 10, false);
 	KeyInput.setFirst(direction);
-	attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this, checkForDirection(toX, toY, 10, true));
+	attack = new Melee(bounds.x + bounds.width, bounds.y, 5, bounds.height, 10, this);
+	subject.setDirection(checkForDirection(toX, toY, 10, true));
 	GameHandler.objList.add(attack);
 }
 private void checkRoll(){
