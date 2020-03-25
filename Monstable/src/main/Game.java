@@ -12,10 +12,10 @@ import ui.UIStates;
 public class Game implements Runnable{
 private static Windows      window      = new Windows();
 private final BufferedImage image       = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
-private final UIHandler     uiHandler   = new UIHandler();
-private final GameHandler   gameHandler = new GameHandler();
-private boolean             isRunning   = false;
 private Thread              thread      = new Thread(this);
+public final UIHandler     uiHandler   = new UIHandler();
+public final GameHandler   gameHandler = new GameHandler();
+public boolean             isRunning   = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){ start(); }
@@ -45,7 +45,7 @@ public void run(){
 		}
 		
 		if (System.currentTimeMillis() - timer >= 1000){
-			//System.out.println("FPS: "+FPS);
+			System.out.println("FPS: "+FPS);
 			FPS    = 0;
 			timer += 1000;
 		}

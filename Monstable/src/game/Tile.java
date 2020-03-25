@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Tile extends GameObject{
 
-	protected Tile(float x, float y, ID id, int wSprite, String spritesheet) {
+	public Tile(float x, float y, ID id, int wSprite, String spritesheet) {
 		super(x, y, id, spritesheet, 16, 16, wSprite);
 		if (id == ID.Wall) collision = true;
 		

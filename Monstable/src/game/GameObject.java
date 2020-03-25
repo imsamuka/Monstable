@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.Random;
 import main.Images;
-import main.MySubject;
 import main.Windows;
+import observer.MySubject;
 
 public abstract class GameObject{
 protected float     x, y, xvel, yvel, Spd;

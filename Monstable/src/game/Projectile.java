@@ -1,6 +1,5 @@
 package game;
 import java.awt.Graphics;
-import java.awt.geom.AffineTransform;
 import main.Game;
 import main.Images;
 import main.Windows;

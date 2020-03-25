@@ -1,8 +1,8 @@
 package game;
 import java.awt.Graphics;
 import java.awt.Point;
-import main.MyObserver;
-import main.ObserverInterface;
+import observer.MyObserver;
+import observer.ObserverInterface;
 
 public class Melee extends GameObject{
 protected GameObject parent;

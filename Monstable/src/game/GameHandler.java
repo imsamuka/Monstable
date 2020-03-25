@@ -1,6 +1,7 @@
 package game;
 import java.awt.Graphics;
 import java.util.LinkedList;
+import main.GameState;
 
 public class GameHandler{
 public static LinkedList<GameObject> objList = new LinkedList<GameObject>();
@@ -9,18 +10,25 @@ private int                          size;
 
 public GameHandler(){
 	player = new Player(16 * 7, 16 * 7);
-	for (int x = 0; x < 16; x++) for (int y = 0; y
-	< 16; y++) objList.add(new Tile(x * 16, y * 16, ID.Floor, main.Game.isEven(x + y) ? 1 : 2, "/Tileset.png"));
-	objList.add(new Tile(1 * 16, 1 * 16, ID.Wall, 3, "/assets.png"));
-	objList.add(new Tile(1 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
-	objList.add(new Tile(0 * 16, 2 * 16, ID.Wall, 3, "/assets.png"));
-	
-	objList.add(player);
+	new GameState();
 }
 public static boolean exists(GameObject o){
 	int size = objList.size();
 	for (int i = 0; i < size; i++) if (objList.get(i) == o) return true;
 	return false;
+}
+public static void setEntitiesOnTail(){
+	
+	for (int i = 0; i < GameHandler.objList.size(); i++){
+		GameObject tO = GameHandler.objList.get(i);
+		
+		if (tO.entitie){
+			objList.offerLast(tO);
+			objList.removeFirstOccurrence(tO);
+		}
+	}
+	objList.offerLast(player);
+	objList.removeFirstOccurrence(player);
 }
 public void tick(){
 	for (int i = 0; i < objList.size(); i++) objList.get(i).tick();

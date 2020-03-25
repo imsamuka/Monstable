@@ -14,5 +14,7 @@ public void tick(){ if (animation != animations.nothing) getAnimation(); }
 public void render(Graphics g){ 
 	
 	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency));
-	drawString(g); }
+	drawString(g); 
+	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1));
+}
 }

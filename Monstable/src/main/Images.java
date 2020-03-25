@@ -31,12 +31,14 @@ public Images(String path){
 	current++;
 }
 public BufferedImage getThisImage(){ return thisImage; }
+public int getWidth(){ return thisImage.getWidth(); }
+public int getHeight(){ return thisImage.getHeight(); }
 public BufferedImage getSubimage(int x, int y, int width, int height){
 	return thisImage == null ? null : thisImage.getSubimage(x, y, width, height);
 }
 public int getPixelRGB(int x, int y){ return thisImage.getRGB(x, y); }
-public int[] getPixelRGBArray(int[] array){
-	return thisImage.getRGB(0, 0, thisImage.getWidth(), thisImage.getHeight(), array, 0, thisImage.getWidth());
+public int[] getPixelRGBArray(){
+	return thisImage.getRGB(0, 0, thisImage.getWidth(), thisImage.getHeight(), new int[thisImage.getHeight()*thisImage.getWidth()], 0, thisImage.getWidth());
 }
 public BufferedImage getSprite(int wSprite, int width, int height){
 	if (thisImage == null) return null;

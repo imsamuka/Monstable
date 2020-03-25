@@ -2,7 +2,6 @@ package game;
 import java.awt.Graphics;
 import main.Game;
 import main.Images;
-import main.MySubject;
 import main.Windows;
 
 public class CommonEnemy extends GameObject{

@@ -22,5 +22,6 @@ public void render(Graphics g){
 	getFillBar(g);
 	g.drawImage(getImage(), (int) ( x ), (int) ( y ), fullWidth ? getImage().getWidth() : width + 1, fullHeight ? getImage().getHeight() : height + 1, null);
 	drawString(g);
+	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1));
 }
 }

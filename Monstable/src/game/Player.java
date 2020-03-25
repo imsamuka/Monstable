@@ -40,6 +40,11 @@ public Player(float x, float y){
 	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
 	StaminaBar.setFillBar(stamina, 0, 30, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
 }
+public void setPosition(float tx, float ty){
+	x = Game.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
+	y = Game.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+}
+
 protected void tick(){
 	if (!roll) stamina = Game.clamp( stamina + 1, 0, 30);
 	

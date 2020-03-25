@@ -16,8 +16,8 @@ public void tick(){
 }
 public void render(Graphics g){
 	
-	AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency);
-	( (Graphics2D) g ).setComposite(ac);
+
+	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency));
 	
 	if (image == null){
 		if (!active) g.setColor(Color.gray);
@@ -28,5 +28,7 @@ public void render(Graphics g){
 	getFillBar(g);
 	g.drawImage(getImage(), (int) ( x ), (int) ( y ), width + 1, height + 1, null);
 	drawString(g);
+
+	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1));
 }
 }
