@@ -76,24 +76,22 @@ protected void tick(){
 	
 	if (!openPath){
 		int MapBase = GameState.MAPBASE;
-		Point MyPoint = getTileDR(MapBase);
-		Rectangle PointBounds = new Rectangle(MyPoint.x*MapBase, MyPoint.y*MapBase,MapBase,MapBase);
+		Rectangle PointBounds = PointToRectangle(getTileUL(MapBase), MapBase);
 		
-		if (herex != PointBounds.getCenterX() || herey != PointBounds.getCenterY()) {
+		if (getTileDR(MapBase) != getTileUL(MapBase)){
+			double distance1 = Math.sqrt(( herex - PointBounds.getCenterX() ) * ( herex - PointBounds.getCenterX() ) + ( herey - PointBounds.getCenterY() ) * ( herey - PointBounds.getCenterY() ));
+			PointBounds = PointToRectangle(getTileDR(MapBase), MapBase);
+			double distance2 = Math.sqrt(( herex - PointBounds.getCenterX() ) * ( herex - PointBounds.getCenterX() ) + ( herey - PointBounds.getCenterY() ) * ( herey - PointBounds.getCenterY() ));
+			PointBounds = distance1 > distance2 ? PointBounds : PointToRectangle(getTileUL(MapBase), MapBase);
+		}
+		
+		if (herex != PointBounds.getCenterX() || herey != PointBounds.getCenterY()){
 			goFromTo(herex, herey, (float) PointBounds.getCenterX(), (float) PointBounds.getCenterY(), Spd);
 			subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-		}else {
+		}else{
 			xvel = 0;
 			yvel = 0;
 		}
-			
-		
-		
-		
-		
-		
-		
-		
 	}
 	
 	for (int m = 0; m < size; m++){

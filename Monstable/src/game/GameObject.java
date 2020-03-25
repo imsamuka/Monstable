@@ -202,6 +202,10 @@ public Point getTileUL(int grid){
 public Point getTileDR(int grid){
 	return new Point((int) Math.floor(( bounds.getMaxX() - 1 ) / grid), (int) Math.floor(( bounds.getMaxY() - 1 ) / grid));
 }
+public Rectangle PointToRectangle(Point p, int grid) {
+	return new Rectangle(p.x*grid, p.y*grid,grid,grid);
+}
+
 protected boolean filterInTiles(GameObject tO){
 	
 	if (getTileUL(16).x != getTileDR(16).x){
