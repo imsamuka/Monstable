@@ -1,20 +1,17 @@
 package main;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import game.GameHandler;
 import game.GameObject;
 import game.ID;
 import game.Tile;
+import observer.MySubject;
 
 public class GameState{
 private static int       currentState = 0;
-private static final int MAPBASE      = 16;
-private final String[]   mapList      = new String[ ] {"/mapdebug.png"};
+public static final int MAPBASE      = 16;
+private static final String[]   mapList      = new String[ ] {"/mapdebug.png"};
 private static Images                   map;
-private static BufferedImage            backgroundTile = null;
+public static final MySubject subject = new MySubject();
+
 
 public GameState(){
 	if (currentState < mapList.length) newMap(mapList[currentState]);
@@ -29,9 +26,8 @@ public void newMap(String path){
 	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy
 	< height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
 	GameHandler.setEntitiesOnTail();
-	backgroundTile = map.getSprite(1, MAPBASE, MAPBASE);
 	//if (!Windows.windowed) 
-	setBackgroundExtension();
+	subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
 }
 public GameObject pixelSwitch(int currentPixel, float x, float y){
 	
@@ -45,32 +41,5 @@ public GameObject pixelSwitch(int currentPixel, float x, float y){
 	}
 	return new Tile(x, y, ID.Floor, 1, "/Tileset.png");
 }
-public static void setBackgroundExtension(){
-	Canvas background = new Canvas();
-	background.setBackground(Color.black);
-	if (backgroundTile != null && false) {
-		int width = (int) ( Windows.WIDTH * Windows.SCALE );
-		int height = (int) ( Windows.HEIGHT * Windows.SCALE );
-		int mapBaseScaled = MAPBASE * Windows.SCALE;
-		Rectangle screen = Windows.getGc().getBounds();
-		Rectangle gameScreen = new Rectangle();
-		gameScreen.setBounds(screen.x + ( screen.width / 2 ) - ( width / 2 ), screen.y + ( screen.height / 2 ) - ( height / 2 ), width, height);
-		
-		double topDiff = gameScreen.y - screen.y;
-		double bottomDiff = screen.getMaxY() - gameScreen.getMaxY();
-		double leftDiff = gameScreen.x - screen.x;
-		double rightDiff = screen.getMaxX() - gameScreen.getMaxX();
-		
-		
-		System.out.println("yAxis: "+( Math.ceil(topDiff / mapBaseScaled )));
-		System.out.println("xAxis: "+( Math.ceil(leftDiff / mapBaseScaled )));
-		
-		Graphics g = background.getGraphics();
-		
-		for (int x = 0; x < screen.width/mapBaseScaled;x++) for (int y = 0; y < screen.height/mapBaseScaled;y++)
-			g.drawImage( new Images("/Tileset.png").getSprite(1, MAPBASE, MAPBASE),x,y,null);
-	}
-	
-	Windows.background = background;
-}
+
 }

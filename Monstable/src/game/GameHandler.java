@@ -2,6 +2,7 @@ package game;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import main.GameState;
+import main.Windows;
 
 public class GameHandler{
 public static LinkedList<GameObject> objList = new LinkedList<GameObject>();
@@ -9,7 +10,7 @@ public static Player                 player;
 private int                          size;
 
 public GameHandler(){
-	player = new Player(16 * 7, 16 * 7);
+	player = new Player(Windows.WIDTH/2, Windows.HEIGHT/2);
 	new GameState();
 }
 public static boolean exists(GameObject o){

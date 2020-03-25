@@ -17,36 +17,35 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
-public final float rollCost = 15 , goopCost = 12;
-public float       stamina = 0;
-public int         rollCount  = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
-private Melee attack;
+public final float rollCost  = 15, goopCost = 12;
+public float       stamina   = 0, xvelRoll, yvelRoll;
+public int         rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
+private Melee      attack;
 private UIObject   StaminaBar, LifeBar;
-private double     timer1     = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
+private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
 timer4 = System.nanoTime();
-private String     direction  = "down";
+private String     direction = "down";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
 	collision     = true;
 	entitie       = true;
-	ableToDamage = false;
+	ableToDamage  = false;
 	Spd           = 1.5f;
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
-	life = 100;
+	life    = 100;
 	LifeBar = new ObjImage(5, 5, 50, 5, UIStates.Game, null, 0, 0, 0);
-	LifeBar.setFillBar(life, 0, 100, new Color(200,0,0,210), new Color(250,30,30,255), new Color(140,140,140,140));
+	LifeBar.setFillBar(life, 0, 100, new Color(200, 0, 0, 210), new Color(250, 30, 30, 255), new Color(140, 140, 140, 140));
 	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
-	StaminaBar.setFillBar(stamina, 0, 30, new Color(0,0,200,210), new Color(30,30,230,255), new Color(140,140,140,140));
+	StaminaBar.setFillBar(stamina, 0, 30, new Color(0, 0, 200, 210), new Color(30, 30, 230, 255), new Color(140, 140, 140, 140));
 }
 public void setPosition(float tx, float ty){
 	x = Game.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 }
-
 protected void tick(){
-	if (!roll) stamina = Game.clamp( stamina + 1, 0, 30);
+	if (!roll) stamina = Game.clamp(stamina + 1, 0, 30);
 	
 	// Movement check
 	if (!roll && !knockback){
@@ -73,24 +72,22 @@ protected void tick(){
 		else if (KeyInput.up.isPressed()) yvel = -Spd;
 		else yvel = 0;
 	}
-	
 	checkKnockback();
 	checkRoll();
 	
-	if (Game.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)   ) {
+	if (Game.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)){
 		StaminaBar.setTransparency(0.2f);
 		LifeBar.setTransparency(0.2f);
-	}else {
+	}else{
 		StaminaBar.setTransparency(1);
 		LifeBar.setTransparency(1);
 	}
 	StaminaBar.setFillValue(stamina);
 	LifeBar.setFillValue(life);
-
-	
 	int size = GameHandler.objList.size();
 	collideX = false;
 	collideY = false;
+	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
@@ -98,14 +95,9 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		getCollisionWithWall(tO);
 	}
-	
-	if (collideX && waitKnockback){
-		newKnockback();
-		xvel = xvel > 0 ? -Spd : Spd;
-	}else if (collideY && waitKnockback){
-		newKnockback();
-		yvel = yvel > 0 ? -Spd : Spd;
-	}
+	if (roll && xvelRoll != xvel) collideX = true;
+	if (roll && yvelRoll != yvel) collideY = true;
+	if (( collideX || collideY ) && waitKnockback) newKnockback();
 	// Movement Apply
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
@@ -125,8 +117,8 @@ protected void render(Graphics g){
 	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
 	g.drawString(bounds.x+","+bounds.y, 185, 20);
 	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
+	if (waitKnockback) g.drawString("waitKnockback", 160, 60);
 	//
-	
 	g.setColor(new Color(255, 255, 255, 130));
 	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 	renderSprite(g);
@@ -181,9 +173,11 @@ public void newRoll(float toX, float toY, int rollQtd){
 	roll         = true;
 	frame        = 1;
 	rollCount    = 1;
-	timer3 = System.nanoTime();
+	timer3       = System.nanoTime();
 	// Search for Direction
-	goFromTo((float)bounds.getCenterX(),(float) bounds.getCenterY(), toX, toY, Spd * 1.8f);
+	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd * 1.8f);
+	xvelRoll  = xvel;
+	yvelRoll  = yvel;
 	// Creating Melee attack
 	direction = checkForDirection(toX, toY, 10, false);
 	KeyInput.setFirst(direction);
@@ -196,15 +190,17 @@ private void checkRoll(){
 	rollCount++;
 	frame = Game.clampSwitch(rollCount / rollQtd + 1, 1, 8);
 	
-	
 	if (rollCount == 8 * rollQtd){
 		// Roll End
-		rollCount = 0;
-		roll      = false;
-		frame     = 1;
-		timer1    = System.nanoTime();
-		timer2    = System.nanoTime();
-		timer3    = System.nanoTime();
+		rollCount     = 0;
+		roll          = false;
+		xvelRoll      = 0;
+		yvelRoll      = 0;
+		waitKnockback = false;
+		frame         = 1;
+		timer1        = System.nanoTime();
+		timer2        = System.nanoTime();
+		timer3        = System.nanoTime();
 		GameHandler.objList.remove(attack);
 	}
 }
@@ -212,12 +208,24 @@ protected void newKnockback(){
 	knockback     = true;
 	waitKnockback = false;
 	
+	if (!collideX && !collideY){
+		if (xvel != 0) collideX = true;
+		if (yvel != 0) collideY = true;
+	}
+	if (collideX && xvel != 0) xvel = xvel > 0 ? -Spd : Spd;
+	else if (collideY && yvel != 0) yvel = yvel > 0 ? -Spd : Spd;
+	
 	if (roll){
 		GameHandler.objList.remove(attack);
 		if (rollCount != 0 && ( 8 / 2 * rollQtd ) >= rollCount) knockbackCount -= ( ( 8 / 2 * rollQtd ) - rollCount );
 		rollCount     = 0;
 		roll          = false;
 		jumpAnimation = true;
+		if (collideX) xvel = xvelRoll > 0 ? -Spd : Spd;
+		else if (collideY) yvel = yvelRoll > 0 ? -Spd : Spd;
+	}else{
+		if (collideX && xvel != 0) xvel = xvel > 0 ? -Spd : Spd;
+		else if (collideY && yvel != 0) yvel = yvel > 0 ? -Spd : Spd;
 	}
 }
 private void checkKnockback(){

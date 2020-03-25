@@ -1,8 +1,9 @@
 package game;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import observer.MyObserver;
-import observer.ObserverInterface;
+import observer.ObsInter;
 
 public class Melee extends GameObject{
 protected GameObject parent;
@@ -16,27 +17,23 @@ protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObjec
 	this.parent   = parent;
 	visibleBounds = true;
 	size          = 4;
-	
-		observer = new MyObserver(parent.subject, (ObserverInterface) new ObserverInterface(){
-			public void OnDirectionChange(String dir){
-				direction = directionToPoint(dir); }
-	});
-		
-		
+	observer      = new MyObserver(parent.subject, (ObsInter) new ObsInter(){
+					public void OnDirectionChange(String dir){ direction = directionToPoint(dir); }
+					public void OnBackgroundChange(BufferedImage newbackgroundTile){}
+					});
 	setHitBox(0, 0, parent.bounds.width, parent.bounds.height);
 }
 protected void tick(){
 	
-	if (death || (!GameHandler.exists(parent) && parent != null)){
+	if (death || ( !GameHandler.exists(parent) && parent != null )){
 		autoDestroy();
 		return;
 	}
 	
-	if (parent != null) {
+	if (parent != null){
 		x = parent.bounds.x + size * direction.x;
 		y = parent.bounds.y + size * direction.y;
 	}
-	
 	refreshBounds();
 	collideX = false;
 	int size = GameHandler.objList.size();
