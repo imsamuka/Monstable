@@ -112,8 +112,13 @@ protected void tick(){
 		
 		if (list != null){
 			
-			if (list.size() <= 0) list = null;
-			else{
+			if (list.size() <= 0) {
+				subject.setDirection(null);
+				if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY())
+					goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
+				else
+					list = null;
+			}else{
 				Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
 				
 				if (herex == (float) nextBounds.getCenterX()
