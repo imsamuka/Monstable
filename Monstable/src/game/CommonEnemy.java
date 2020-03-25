@@ -86,12 +86,11 @@ protected void tick(){
 		}
 		
 		if (list == null){
-			System.out.println("Null");
 			xvel = 0;
 			yvel = 0;
 			@SuppressWarnings("unchecked")
-			ArrayList<Point>[] masterList = (ArrayList<Point>[]) new ArrayList<?>[128];
-			checkWallAndAdjacents(closestPoint, playerx, playery, null, masterList);
+			ArrayList<Point>[] masterList = (ArrayList<Point>[]) new ArrayList<?>[100];
+			checkWallAndAdjacents(closestPoint, playerx, playery, null, masterList, 3);
 			subject.setDirection(null);
 			currentList = 0;
 			
@@ -104,7 +103,10 @@ protected void tick(){
 					SmallestNumberOfSteps = masterList[m].size();
 					listID                = m;
 				}
-				list = masterList[listID];
+				
+				//if (SmallestNumberOfSteps < 20) 
+					list = masterList[listID];
+				
 			}
 		}
 		
@@ -138,8 +140,9 @@ protected void tick(){
 	refreshBounds();
 	checkForDeath();
 }
-public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<Point>[] masterList){
-	Point[] adjacents = new Point[ ] {new Point(p.x, p.y - 1), // up
+public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<Point>[] masterList, int limit){
+	Point[] adjacents = new Point[ ] {
+	new Point(p.x, p.y - 1), // up
 	new Point(p.x, p.y + 1), // down
 	new Point(p.x - 1, p.y), // left
 	new Point(p.x + 1, p.y) // right
@@ -164,7 +167,7 @@ public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point
 			if (list == null){
 				ArrayList<Point> alist = new ArrayList<Point>(256);
 				alist.add(adjacents[i]);
-				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList);
+				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList,limit);
 			}else{
 				for (int m = 0; m < list.size(); m++) if (adjacents[i].x == list.get(m).x
 				&& adjacents[i].y == list.get(m).y){
@@ -172,8 +175,13 @@ public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point
 					break;
 				}
 				if (alreadyGo) continue;
-				list.add(adjacents[i]);
-				checkWallAndAdjacents(adjacents[i], toX, toY, list, masterList);
+				if (list.size() >= limit) continue;
+				
+				
+				ArrayList<Point> alist = new ArrayList<Point>(256);
+				alist.addAll(list);
+				alist.add(adjacents[i]);		
+				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList,limit);
 			}
 		}
 	}
