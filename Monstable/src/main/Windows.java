@@ -1,17 +1,14 @@
 package main;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import inputs.KeyInput;
 import inputs.MouseInput;
-import observer.MyObserver;
 
 public class Windows extends Canvas{
 private static final long            serialVersionUID = -4810618286807932601L;
@@ -26,15 +23,16 @@ private static GraphicsConfiguration Gc               = Gd.getDefaultConfigurati
 private static int                   maxScale         = (int) Math.min(Math.floor(Gc.getBounds().height / HEIGHT), Math.floor(Gc.getBounds().width / WIDTH));
 private static MouseInput            mouseInput       = new MouseInput();
 private static KeyInput              keyInput         = new KeyInput();
-private static BufferedImage         backgroundTile;
 @SuppressWarnings("unused")
-private static final MyObserver      observer         = new MyObserver(GameState.subject, new observer.ObsInter(){
+private static BufferedImage         backgroundTile;
+/*private static final MyObserver      observer         = new MyObserver(GameState.subject, new observer.ObsInter(){
 														public void OnDirectionChange(String direction){}
 														public void OnBackgroundChange(BufferedImage background){
-															backgroundTile = background;
+															backgroundTile = background
+															!= null ? background : backgroundTile;
 															setBackgroundExtension();
 														}
-														});
+														});*/
 
 public static GraphicsConfiguration getGc(){ return Gc; }
 public static int getMaxScale(){ return maxScale; }
@@ -57,7 +55,11 @@ public Windows(){
 		if (Gd.isFullScreenSupported()){
 			Rectangle screen = Gc.getBounds();
 			frame.setUndecorated(true);
-			setBackgroundExtension();
+			background = new Canvas();
+			background.setBackground(Color.black);
+			background.setBounds(new Rectangle(screen.x, screen.y, screen.width, screen.height));
+			frame.add(background);
+			//setBackgroundExtension();
 			Gd.setFullScreenWindow(frame);
 			this.setBounds(screen.x + ( screen.width / 2 ) - ( width / 2 ), screen.y + ( screen.height / 2 ) - ( height / 2 ), width, height);
 		}else{
@@ -77,15 +79,10 @@ public Windows(){
 	this.addMouseListener(mouseInput);
 	this.addMouseMotionListener(mouseInput);
 }
-public static void setBackgroundExtension(){
-	Rectangle screen = Windows.getGc().getBounds();
-	background = new Canvas();
-	background.setBackground(Color.black);
-	background.setBounds(new Rectangle(screen.x, screen.y, screen.width, screen.height));
-	frame.add(background);
+public void setBackgroundExtension(){
+	/*
 	//background.getGraphics().drawImage(new Images("/Tileset.png").getSprite(1, 16, 16),0,0,null);
-	
-	/*if (backgroundTile != null && !windowed){
+	if (backgroundTile != null && !windowed){
 		int MAPBASE = GameState.MAPBASE;
 		Rectangle gameScreen = new Rectangle();
 		int width = (int) ( Windows.WIDTH * Windows.SCALE );

@@ -1,16 +1,16 @@
 package main;
+import game.CommonEnemy;
 import game.GameHandler;
 import game.GameObject;
 import game.ID;
 import game.Tile;
-import observer.MySubject;
 
 public class GameState{
 private static int       currentState = 0;
 public static final int MAPBASE      = 16;
 private static final String[]   mapList      = new String[ ] {"/mapdebug.png"};
 private static Images                   map;
-public static final MySubject subject = new MySubject();
+//public static final MySubject subject = new MySubject();
 
 
 public GameState(){
@@ -26,8 +26,7 @@ public void newMap(String path){
 	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy
 	< height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
 	GameHandler.setEntitiesOnTail();
-	//if (!Windows.windowed) 
-	subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
+	//if (!Windows.windowed) subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
 }
 public GameObject pixelSwitch(int currentPixel, float x, float y){
 	
@@ -35,6 +34,9 @@ public GameObject pixelSwitch(int currentPixel, float x, float y){
 		case 0xFF2DAAFF:
 			GameHandler.player.setPosition(x, y);
 			GameHandler.objList.add(GameHandler.player);
+		break;
+		case 0xFFFF0000:
+			GameHandler.objList.add(new CommonEnemy(x, y, CommonEnemy.Opt.Melee));
 		break;
 		case 0xFFFFFFFF:
 			return new Tile(x, y, ID.Wall, 2, "/Tileset.png");
