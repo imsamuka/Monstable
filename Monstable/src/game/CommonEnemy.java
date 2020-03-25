@@ -114,7 +114,6 @@ protected void tick(){
 			
 			if (list.size() <= 0) list = null;
 			else{
-				System.out.println(list.size());
 				Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
 				
 				if (herex == (float) nextBounds.getCenterX()
