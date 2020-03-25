@@ -78,14 +78,16 @@ public Windows(){
 	this.addMouseMotionListener(mouseInput);
 }
 public static void setBackgroundExtension(){
-	int MAPBASE = GameState.MAPBASE;
 	Rectangle screen = Windows.getGc().getBounds();
-	Rectangle gameScreen = new Rectangle();
 	background = new Canvas();
 	background.setBackground(Color.black);
-	background.setBounds(new Rectangle(screen.x + 10,screen.y + 10,screen.width - 20,screen.height - 20));
+	background.setBounds(new Rectangle(screen.x, screen.y, screen.width, screen.height));
 	frame.add(background);
-	if (backgroundTile != null && !windowed){
+	//background.getGraphics().drawImage(new Images("/Tileset.png").getSprite(1, 16, 16),0,0,null);
+	
+	/*if (backgroundTile != null && !windowed){
+		int MAPBASE = GameState.MAPBASE;
+		Rectangle gameScreen = new Rectangle();
 		int width = (int) ( Windows.WIDTH * Windows.SCALE );
 		int height = (int) ( Windows.HEIGHT * Windows.SCALE );
 		int mapBaseScaled = MAPBASE * Windows.SCALE;
@@ -99,9 +101,10 @@ public static void setBackgroundExtension(){
 		Graphics g = background.getGraphics();
 		//for (int x = 0; x < screen.width / mapBaseScaled; x++) for (int y = 0; y< screen.height / mapBaseScaled; y++) 
 		//background.getGraphics().drawImage(backgroundTile, screen.x, screen.y, mapBaseScaled, mapBaseScaled, null);
-		background.getGraphics().setColor(Color.yellow);
-		background.getGraphics().fillRect(-screen.width/2, -screen.height/2, screen.width, screen.height);
+		g.setColor(Color.yellow);
+		g.fillRect(0,0, 60, 60);
 		
 	}
+	*/
 }
 }
