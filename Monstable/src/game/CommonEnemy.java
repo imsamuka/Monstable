@@ -2,7 +2,12 @@ package game;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Predicate;
+import com.sun.net.httpserver.Filter;
+import com.sun.net.httpserver.HttpExchange;
+import inputs.KeyObj;
 import main.Game;
 import main.GameState;
 import main.Images;
@@ -14,10 +19,10 @@ fastMelee,
 Melee,
 }
 
-private Opt            option;
-private boolean        openPath    = true;
-private static int     currentList = 0;
-private ArrayList<?>[] masterListMaster = null;
+private Opt              option;
+private boolean          openPath    = true;
+private static int       currentList = 0;
+private ArrayList<Point> list;
 
 public CommonEnemy(float x, float y, Opt option){
 	super(x, y, ID.Enemy, null, 16, 16, 1);
@@ -57,23 +62,17 @@ protected void tick(){
 		autoDestroy();
 		return;
 	}
-	
-	
 	float herex = (float) bounds.getCenterX();
 	float herey = (float) bounds.getCenterY();
 	float playerx = (float) GameHandler.player.getBounds().getCenterX();
 	float playery = (float) GameHandler.player.getBounds().getCenterY();
-	
-	
-	
 	openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
 	
-	if (openPath) if (option == Opt.Melee || option == Opt.fastMelee){
+	if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
 		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-		masterListMaster = null;
+		list = null;
 	}else{
-		
 		int MapBase = GameState.MAPBASE;
 		Point closestPoint = getTileUL(MapBase);
 		Rectangle closestBounds = PointToRectangle(closestPoint, MapBase);
@@ -86,30 +85,47 @@ protected void tick(){
 			closestPoint  = distance1 > distance2 ? getTileDR(MapBase) : closestPoint;
 		}
 		
-		//goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
-		//subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-		
-		System.out.println("Teste");
-		
-		if (masterListMaster == null){
+		if (list == null){
 			System.out.println("Null");
 			xvel = 0;
 			yvel = 0;
-			ArrayList<?>[] masterList = new ArrayList<?>[128];
+			@SuppressWarnings("unchecked")
+			ArrayList<Point>[] masterList = (ArrayList<Point>[]) new ArrayList<?>[128];
 			checkWallAndAdjacents(closestPoint, playerx, playery, null, masterList);
 			subject.setDirection(null);
-			currentList      = 0;
-			if ( masterList[0] != null) masterListMaster = masterList;
-		}
-		if (masterListMaster[0] != null) {
+			currentList = 0;
 			
-			System.out.println("Not null");
+			if (masterList[0] != null){
+				int SmallestNumberOfSteps = 255;
+				int listID = 0;
+				for (int m = 0; m < masterList.length; m++) 
+					if (masterList[m] == null) break;
+				else if (masterList[m].size() < SmallestNumberOfSteps){
+					SmallestNumberOfSteps = masterList[m].size();
+					listID                = m;
+				}
+				list = masterList[listID];
+			}
 		}
-			
 		
+		if (list != null){
+			
+			if (list.size() <= 0) list = null;
+			else{
+				System.out.println(list.size());
+				Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
+				
+				if (herex == (float) nextBounds.getCenterX()
+				&& herey == (float) nextBounds.getCenterY()) list.remove(0);
+				else{
+					goFromTo(herex, herey, (float) nextBounds.getCenterX(), (float) nextBounds.getCenterY(), Spd);
+					subject.setDirection(null);
+				}
+			}
+		}
 	}
-	
 	int size = GameHandler.objList.size();
+	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
@@ -122,45 +138,39 @@ protected void tick(){
 	refreshBounds();
 	checkForDeath();
 }
-public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<?>[] masterList){
-	//playerx, playery
-	Point[] adjacents = new Point[ ] {
-	new Point(p.x, p.y - 1), // up
+public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<Point>[] masterList){
+	Point[] adjacents = new Point[ ] {new Point(p.x, p.y - 1), // up
 	new Point(p.x, p.y + 1), // down
 	new Point(p.x - 1, p.y), // left
 	new Point(p.x + 1, p.y) // right
 	};
 	
 	for (int i = 0; i < 4; i++){
-		GameObject tO = GameHandler.getOnPoint(adjacents[i], ID.Tile);
-		if (tO.id.is(ID.Wall)) continue;
-		tO.visibleBounds = true;
+		if (GameHandler.getOnPoint(adjacents[i], ID.Tile).id.is(ID.Wall)) continue;
 		Rectangle tileRect = PointToRectangle(adjacents[i], GameState.MAPBASE);
-		
 		boolean openPath = !GameHandler.LineIntersects(tileRect.getCenterX(), tileRect.getCenterY(), toX, toY, ID.Wall);
 		
 		if (openPath){
+			
 			if (list == null){
 				ArrayList<Point> alist = new ArrayList<Point>(1);
 				alist.add(adjacents[i]);
 				masterList[currentList] = alist;
-			}else
-				masterList[currentList] = list;
+			}else masterList[currentList] = list;
 			currentList++;
 		}else{
 			boolean alreadyGo = false;
 			
 			if (list == null){
-				ArrayList<Point> alist = new ArrayList<Point>(512);
+				ArrayList<Point> alist = new ArrayList<Point>(256);
 				alist.add(adjacents[i]);
 				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList);
 			}else{
-				for (int m = 0; m < list.size(); m++) 
-					if (adjacents[i].x == list.get(m).x 
-					&& adjacents[i].y == list.get(m).y) {
-						alreadyGo = true;
-						break;
-					}
+				for (int m = 0; m < list.size(); m++) if (adjacents[i].x == list.get(m).x
+				&& adjacents[i].y == list.get(m).y){
+					alreadyGo = true;
+					break;
+				}
 				if (alreadyGo) continue;
 				list.add(adjacents[i]);
 				checkWallAndAdjacents(adjacents[i], toX, toY, list, masterList);
