@@ -13,9 +13,9 @@ public class Game implements Runnable{
 private static Windows      window      = new Windows();
 private final BufferedImage image       = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
 private Thread              thread      = new Thread(this);
-public final UIHandler     uiHandler   = new UIHandler();
-public final GameHandler   gameHandler = new GameHandler();
-public boolean             isRunning   = false;
+public final UIHandler      uiHandler   = new UIHandler();
+public final GameHandler    gameHandler = new GameHandler();
+public boolean              isRunning   = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){ start(); }
@@ -83,9 +83,8 @@ public static Rectangle extendRectangle(Rectangle bounds, int x, int y, int widt
 	return new Rectangle(bounds.x + x, bounds.y + y, bounds.width + width, bounds.height + height);
 }
 public static Rectangle extendRectangle(Rectangle bounds, int value){
-	return new Rectangle(bounds.x - value, bounds.y - value, bounds.width + value*2, bounds.height + value*2);
+	return new Rectangle(bounds.x - value, bounds.y - value, bounds.width + value * 2, bounds.height + value * 2);
 }
-
 public static boolean isEven(int num){ return( num % 2 == 0 ); }
 public static int clamp(int var, int min, int max){
 	if (var > max) return max;

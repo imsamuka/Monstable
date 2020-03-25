@@ -4,10 +4,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Images{
-private static BufferedImage[] images   = new BufferedImage[256];
-private static String[]        pathList = new String[256];
+private static BufferedImage[] images   = new BufferedImage[512];
+private static String[]        pathList = new String[512];
 private static int             current  = 0;
-private BufferedImage          thisImage = null;
+private BufferedImage          thisImage;
 private int                    thisImageIndex = 0;
 
 public Images(String path){

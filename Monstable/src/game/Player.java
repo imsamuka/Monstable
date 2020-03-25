@@ -2,6 +2,8 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.HashMap;
+import audio.AudioPlayer;
 import inputs.KeyInput;
 import inputs.KeyObj;
 import inputs.MouseInput;
@@ -24,6 +26,7 @@ private Melee      attack;
 private UIObject   StaminaBar, LifeBar;
 private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
 timer4 = System.nanoTime();
+public HashMap< String , AudioPlayer > sfx = new HashMap< String , AudioPlayer >();
 private String     direction = "down";
 
 public Player(float x, float y){
@@ -39,6 +42,8 @@ public Player(float x, float y){
 	LifeBar.setFillBar(life, 0, 100, new Color(200, 0, 0, 210), new Color(250, 30, 30, 255), new Color(140, 140, 140, 140));
 	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
 	StaminaBar.setFillBar(stamina, 0, 30, new Color(0, 0, 200, 210), new Color(30, 30, 230, 255), new Color(140, 140, 140, 140));
+	
+	sfx.put("goop", new AudioPlayer("/fire.wav"));
 }
 public void setPosition(float tx, float ty){
 	x = Game.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);

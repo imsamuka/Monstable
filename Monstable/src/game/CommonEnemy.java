@@ -1,4 +1,5 @@
 package game;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -97,27 +98,23 @@ protected void tick(){
 			if (masterList[0] != null){
 				int SmallestNumberOfSteps = 255;
 				int listID = 0;
-				for (int m = 0; m < masterList.length; m++) 
-					if (masterList[m] == null) break;
+				for (int m = 0; m < masterList.length; m++) if (masterList[m] == null) break;
 				else if (masterList[m].size() < SmallestNumberOfSteps){
 					SmallestNumberOfSteps = masterList[m].size();
 					listID                = m;
 				}
-				
-				//if (SmallestNumberOfSteps < 20) 
-					list = masterList[listID];
-				
+				list = masterList[listID];
 			}
 		}
 		
 		if (list != null){
 			
-			if (list.size() <= 0) {
+			if (list.size() <= 0){
 				subject.setDirection(null);
-				if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY())
-					goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
-				else
-					list = null;
+				if (herex != (float) closestBounds.getCenterX()
+				&& herey
+				!= (float) closestBounds.getCenterY()) goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
+				else list = null;
 			}else{
 				Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
 				
@@ -131,7 +128,7 @@ protected void tick(){
 		}
 	}
 	int size = GameHandler.objList.size();
-	
+
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
@@ -139,14 +136,19 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		getCollisionWithWall(tO);
 	}
+	
+	
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
 	checkForDeath();
 }
+protected void render(Graphics g){
+	renderSprite(g);
+	renderBounds(g);
+}
 public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<Point>[] masterList, int limit){
-	Point[] adjacents = new Point[ ] {
-	new Point(p.x, p.y - 1), // up
+	Point[] adjacents = new Point[ ] {new Point(p.x, p.y - 1), // up
 	new Point(p.x, p.y + 1), // down
 	new Point(p.x - 1, p.y), // left
 	new Point(p.x + 1, p.y) // right
@@ -171,7 +173,7 @@ public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point
 			if (list == null){
 				ArrayList<Point> alist = new ArrayList<Point>(256);
 				alist.add(adjacents[i]);
-				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList,limit);
+				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList, limit);
 			}else{
 				for (int m = 0; m < list.size(); m++) if (adjacents[i].x == list.get(m).x
 				&& adjacents[i].y == list.get(m).y){
@@ -180,18 +182,12 @@ public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point
 				}
 				if (alreadyGo) continue;
 				if (list.size() >= limit) continue;
-				
-				
 				ArrayList<Point> alist = new ArrayList<Point>(256);
 				alist.addAll(list);
-				alist.add(adjacents[i]);		
-				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList,limit);
+				alist.add(adjacents[i]);
+				checkWallAndAdjacents(adjacents[i], toX, toY, alist, masterList, limit);
 			}
 		}
 	}
-}
-protected void render(Graphics g){
-	renderSprite(g);
-	renderBounds(g);
 }
 }
