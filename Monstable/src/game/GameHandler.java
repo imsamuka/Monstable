@@ -1,5 +1,6 @@
 package game;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.util.LinkedList;
 import main.GameState;
 import main.Windows;
@@ -10,13 +11,44 @@ public static Player                 player;
 private int                          size;
 
 public GameHandler(){
-	player = new Player(Windows.WIDTH/2, Windows.HEIGHT/2);
+	player = new Player(Windows.WIDTH / 2, Windows.HEIGHT / 2);
 	new GameState();
 }
 public static boolean exists(GameObject o){
 	int size = objList.size();
 	for (int i = 0; i < size; i++) if (objList.get(i) == o) return true;
 	return false;
+}
+public static GameObject getOnPoint(Point p){
+	int size = objList.size();
+	float x = p.x * GameState.MAPBASE;
+	float y = p.y * GameState.MAPBASE;
+	
+	for (int i = 0; i < size; i++){
+		GameObject tO = objList.get(i);
+		if (tO.x == x && tO.y == y) return tO;
+	}
+	return null;
+}
+public static boolean LineIntersects(double x1, double y1, double x2, double y2, ID id){
+	int size = objList.size();
+	
+	for (int m = 0; m < size; m++){
+		GameObject tO = objList.get(m);
+		if (tO.id.is(id) && tO.bounds.intersectsLine(x1, y1, x2, y2)) return true;
+	}
+	return false;
+}
+public static GameObject getOnPoint(Point p, ID id){
+	int size = objList.size();
+	float x = p.x * GameState.MAPBASE;
+	float y = p.y * GameState.MAPBASE;
+	
+	for (int i = 0; i < size; i++){
+		GameObject tO = objList.get(i);
+		if (tO.id.is(id) && tO.x == x && tO.y == y) return tO;
+	}
+	return null;
 }
 public static void setEntitiesOnTail(){
 	
