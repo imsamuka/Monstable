@@ -1,14 +1,7 @@
 package game;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.function.Predicate;
-import com.sun.net.httpserver.Filter;
-import com.sun.net.httpserver.HttpExchange;
-import inputs.KeyObj;
 import main.Game;
 import main.GameState;
 import main.Images;
@@ -22,8 +15,7 @@ Melee,
 
 private Opt              option;
 private boolean          openPath    = true;
-private static int       currentList = 0;
-private ArrayList<Point> list;
+
 
 public CommonEnemy(float x, float y, Opt option){
 	super(x, y, ID.Enemy, null, 16, 16, 1);
@@ -72,7 +64,7 @@ protected void tick(){
 	if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
 		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-		list = null;
+		
 	}else{
 		int MapBase = GameState.MAPBASE;
 		Point closestPoint = getTileUL(MapBase);
@@ -86,46 +78,19 @@ protected void tick(){
 			closestPoint  = distance1 > distance2 ? getTileDR(MapBase) : closestPoint;
 		}
 		
-		if (list == null){
+		if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY()) {
+			goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
+			subject.setDirection(checkForDirection((float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(),10,true));
+		}
+		else{
 			xvel = 0;
 			yvel = 0;
-			@SuppressWarnings("unchecked")
-			ArrayList<Point>[] masterList = (ArrayList<Point>[]) new ArrayList<?>[100];
-			checkWallAndAdjacents(closestPoint, playerx, playery, null, masterList, 3);
 			subject.setDirection(null);
-			currentList = 0;
-			
-			if (masterList[0] != null){
-				int SmallestNumberOfSteps = 255;
-				int listID = 0;
-				for (int m = 0; m < masterList.length; m++) if (masterList[m] == null) break;
-				else if (masterList[m].size() < SmallestNumberOfSteps){
-					SmallestNumberOfSteps = masterList[m].size();
-					listID                = m;
-				}
-				list = masterList[listID];
-			}
 		}
 		
-		if (list != null){
-			
-			if (list.size() <= 0){
-				subject.setDirection(null);
-				if (herex != (float) closestBounds.getCenterX()
-				&& herey
-				!= (float) closestBounds.getCenterY()) goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
-				else list = null;
-			}else{
-				Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
-				
-				if (herex == (float) nextBounds.getCenterX()
-				&& herey == (float) nextBounds.getCenterY()) list.remove(0);
-				else{
-					goFromTo(herex, herey, (float) nextBounds.getCenterX(), (float) nextBounds.getCenterY(), Spd);
-					subject.setDirection(null);
-				}
-			}
-		}
+		
+		
+		
 	}
 	int size = GameHandler.objList.size();
 
@@ -146,6 +111,47 @@ protected void tick(){
 protected void render(Graphics g){
 	renderSprite(g);
 	renderBounds(g);
+}
+
+/*
+private static int       currentList = 0;
+private ArrayList<Point> list;
+list = null;
+if (list == null){
+	xvel = 0;
+	yvel = 0;
+	@SuppressWarnings("unchecked")
+	ArrayList<Point>[] masterList = (ArrayList<Point>[]) new ArrayList<?>[100];
+	checkWallAndAdjacents(closestPoint, playerx, playery, null, masterList, 3);
+	subject.setDirection(null);
+	currentList = 0;
+	
+	if (masterList[0] != null){
+		int SmallestNumberOfSteps = 255;
+		int listID = 0;
+		for (int m = 0; m < masterList.length; m++) if (masterList[m] == null) break;
+		else if (masterList[m].size() < SmallestNumberOfSteps){
+			SmallestNumberOfSteps = masterList[m].size();
+			listID                = m;
+		}
+		list = masterList[listID];
+	}
+}else{
+	
+	if (list.size() <= 0){
+		subject.setDirection(null);
+		if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY()) goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
+		else list = null;
+	}else{
+		Rectangle nextBounds = PointToRectangle(list.get(0), MapBase);
+		
+		if (herex == (float) nextBounds.getCenterX()
+		&& herey == (float) nextBounds.getCenterY()) list.remove(0);
+		else{
+			goFromTo(herex, herey, (float) nextBounds.getCenterX(), (float) nextBounds.getCenterY(), Spd);
+			subject.setDirection(null);
+		}
+	}
 }
 public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point> list, ArrayList<Point>[] masterList, int limit){
 	Point[] adjacents = new Point[ ] {new Point(p.x, p.y - 1), // up
@@ -189,5 +195,5 @@ public void checkWallAndAdjacents(Point p, float toX, float toY, ArrayList<Point
 			}
 		}
 	}
-}
+}*/
 }
