@@ -1,9 +1,11 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import game.GameHandler;
 import inputs.MouseInput;
 import ui.UIHandler;
@@ -18,9 +20,9 @@ public final GameHandler    gameHandler = new GameHandler();
 public boolean              isRunning   = false;
 
 public static void main(String[] args){ new Game(); }
-public Game(){ start();
-
-//new MapGenerator("/maptest1.png", "newMap1", "/graphics/Tileset.png");
+public Game(){
+	//new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
+	start();
 }
 public synchronized void start(){
 	isRunning = true;
@@ -110,5 +112,11 @@ public static float clampAuto(float var, float limiter1, float limiter2){
 	if (var > max) return max;
 	else if (var < min) return min;
 	else return var;
+}
+public static boolean checkIntArrayEquality(int[] array1, int[] array2){
+	int size = array1.length;
+	if (size != array2.length) return false;
+	for (int m = 0; m < size; m++) if (array1[m] != array2[m]) return false;
+	return true;
 }
 }

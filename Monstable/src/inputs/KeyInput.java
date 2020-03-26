@@ -44,8 +44,7 @@ public static boolean isOppositeKeyPressed(KeyObj oKey){
 public static void correctListOrder(){
 	boolean again = true;
 	int offset = 0;
-	int size = KeyList.size();
-	while(again) for (int i = size - 1; i > offset - 1; i--){
+	while(again) for (int i = KeyList.size() - 1; i > offset - 1; i--){
 		if (i == offset) again = false;
 		KeyObj oKey = KeyList.get(i);
 		
