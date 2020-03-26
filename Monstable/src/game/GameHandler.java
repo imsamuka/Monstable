@@ -2,7 +2,6 @@ package game;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
-import main.GameState;
 import main.Windows;
 
 public class GameHandler{

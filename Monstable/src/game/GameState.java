@@ -1,10 +1,6 @@
-package main;
+package game;
 import audio.AudioPlayer;
-import game.CommonEnemy;
-import game.GameHandler;
-import game.GameObject;
-import game.ID;
-import game.Tile;
+import main.Images;
 
 public class GameState{
 private static int       currentState = 0;
@@ -17,6 +13,10 @@ public static AudioPlayer              song;
 
 
 public GameState(){
+	
+	
+	
+	
 	if (currentState < mapList.length) {
 		newMap(mapList[currentState]);
 		song = new AudioPlayer(songList[currentState]);

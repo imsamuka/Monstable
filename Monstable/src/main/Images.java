@@ -40,6 +40,9 @@ public int getPixelRGB(int x, int y){ return thisImage.getRGB(x, y); }
 public int[] getPixelRGBArray(){
 	return thisImage.getRGB(0, 0, thisImage.getWidth(), thisImage.getHeight(), new int[thisImage.getHeight()*thisImage.getWidth()], 0, thisImage.getWidth());
 }
+public static int[] getPixelRGBArray(BufferedImage image){
+	return image.getRGB(0, 0, image.getWidth(), image.getHeight(), new int[image.getHeight()*image.getWidth()], 0, image.getWidth());
+}
 public BufferedImage getSprite(int wSprite, int width, int height){
 	if (thisImage == null) return null;
 	int spriteRows = thisImage.getHeight() / (height == 0 ? 1 : height);

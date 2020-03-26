@@ -18,7 +18,10 @@ public final GameHandler    gameHandler = new GameHandler();
 public boolean              isRunning   = false;
 
 public static void main(String[] args){ new Game(); }
-public Game(){ start(); }
+public Game(){ start();
+
+//new MapGenerator("/maptest1.png", "newMap1", "/graphics/Tileset.png");
+}
 public synchronized void start(){
 	isRunning = true;
 	thread.setName("FPS");

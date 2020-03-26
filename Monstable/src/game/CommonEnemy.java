@@ -3,7 +3,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import main.Game;
-import main.GameState;
 import main.Images;
 import main.Windows;
 
