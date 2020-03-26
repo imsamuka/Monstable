@@ -11,6 +11,7 @@ private static final String[] songList     = new String[ ] {"/sound/athleticthem
 private static Images         map;
 public static AudioPlayer     song;
 //public static final MySubject subject = new MySubject();////
+//if (!Windows.windowed) subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
 
 public GameState(){
 	
@@ -29,8 +30,8 @@ public void newMap(String path){
 	int height = map.getHeight();
 	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy
 	< height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
-	GameHandler.setEntitiesOnTail();
-	//if (!Windows.windowed) subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
+	GameHandler.correctOrder();
+	
 }
 public GameObject pixelSwitch(int currentPixel, float x, float y){
 	int wSprite = SpriteAndColor(currentPixel, true);

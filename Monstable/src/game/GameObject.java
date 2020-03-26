@@ -1,10 +1,7 @@
 package game;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 import main.Images;
 import main.Windows;
@@ -192,6 +189,11 @@ protected void renderSprite(Graphics g){
 	if (invertedSprite) g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x + sWidth ), (int) ( y ), -sWidth, sHeight, null);
 	else g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
 }
+protected void renderInverted(BufferedImage img, int x, int y, boolean InvertX, boolean InvertY, Graphics g){
+	int width = img.getWidth();
+	int height = img.getHeight();
+	g.drawImage(img, InvertX ? x + width : x, InvertY ? y + height : y, InvertX ? -width : width, InvertY ? -height : height, null);
+}
 protected void renderSprite(Graphics g, AffineTransform at){
 	Graphics2D g2d = (Graphics2D) g;
 	g2d.drawImage(image.getSprite(wSprite, sWidth, sHeight), at, null);
@@ -202,10 +204,7 @@ public Point getTileUL(int grid){
 public Point getTileDR(int grid){
 	return new Point((int) Math.floor(( bounds.getMaxX() - 1 ) / grid), (int) Math.floor(( bounds.getMaxY() - 1 ) / grid));
 }
-public Rectangle PointToRectangle(Point p, int grid) {
-	return new Rectangle(p.x*grid, p.y*grid,grid,grid);
-}
-
+public Rectangle PointToRectangle(Point p, int grid){ return new Rectangle(p.x * grid, p.y * grid, grid, grid); }
 protected boolean filterInTiles(GameObject tO){
 	
 	if (getTileUL(16).x != getTileDR(16).x){

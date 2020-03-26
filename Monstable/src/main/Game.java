@@ -20,7 +20,7 @@ public boolean              isRunning   = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){
-	//new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
+	new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
 	start();
 }
 public synchronized void start(){

@@ -49,12 +49,43 @@ public static GameObject getOnPoint(Point p, ID id){
 	}
 	return null;
 }
+public void tick(){
+	for (int i = 0; i < objList.size(); i++) objList.get(i).tick();
+	size = objList.size();
+}
+public void render(Graphics g){ for (int i = 0; i < size; i++) objList.get(i).render(g); }
+public static void correctOrder(){
+	setFloorOnHead();
+	setPriorityWallsOnTail();
+	setEntitiesOnTail();
+}
+private static void setPriorityWallsOnTail(){
+	
+	for (int i = 0; i < GameHandler.objList.size(); i++){
+		GameObject tO = GameHandler.objList.get(i);
+		if (tO.id.is(ID.Wall)) if (tO.wSprite == 6 || tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 33){
+			objList.offerLast(tO);
+			objList.removeFirstOccurrence(tO);
+		}
+	}
+}
+public static void setFloorOnHead(){
+	
+	for (int i = 0; i < GameHandler.objList.size(); i++){
+		GameObject tO = GameHandler.objList.get(i);
+		
+		if (tO.id.is(ID.Floor)){
+			objList.offerFirst(tO);
+			objList.removeLastOccurrence(tO);
+		}
+	}
+}
 public static void setEntitiesOnTail(){
 	
 	for (int i = 0; i < GameHandler.objList.size(); i++){
 		GameObject tO = GameHandler.objList.get(i);
 		
-		if (tO.entitie){
+		if (tO.entitie || tO.id.is(ID.Attack)){
 			objList.offerLast(tO);
 			objList.removeFirstOccurrence(tO);
 		}
@@ -62,9 +93,4 @@ public static void setEntitiesOnTail(){
 	objList.offerLast(player);
 	objList.removeFirstOccurrence(player);
 }
-public void tick(){
-	for (int i = 0; i < objList.size(); i++) objList.get(i).tick();
-	size = objList.size();
-}
-public void render(Graphics g){ for (int i = 0; i < size; i++) objList.get(i).render(g); }
 }
