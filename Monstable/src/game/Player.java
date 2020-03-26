@@ -30,7 +30,8 @@ public HashMap< String , AudioPlayer > sfx = new HashMap< String , AudioPlayer >
 private String     direction = "down";
 
 public Player(float x, float y){
-	super(x, y, ID.Player, "/Slimesheet.png", 16, 16, 1);
+	super(x, y, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
+	sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
 	collision     = true;
 	entitie       = true;
 	ableToDamage  = false;
@@ -43,7 +44,7 @@ public Player(float x, float y){
 	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
 	StaminaBar.setFillBar(stamina, 0, 30, new Color(0, 0, 200, 210), new Color(30, 30, 230, 255), new Color(140, 140, 140, 140));
 	
-	sfx.put("goop", new AudioPlayer("/fire.wav"));
+	
 }
 public void setPosition(float tx, float ty){
 	x = Game.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);

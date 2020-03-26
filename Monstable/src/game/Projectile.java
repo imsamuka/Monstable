@@ -20,7 +20,7 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 		return;
 	}else if (option == Opt.Goop){
 		GameHandler.player.stamina -= GameHandler.player.goopCost;
-		image                       = new Images("/Slimesheet.png");
+		image                       = new Images("/graphics/Slimesheet.png");
 		sWidth                      = 16;
 		sHeight                     = 16;
 		wSprite                     = 119;

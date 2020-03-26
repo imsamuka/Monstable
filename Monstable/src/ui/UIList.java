@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.LinkedList;
 import java.util.Vector;
 import main.Game;
+import main.GameState;
 import main.Windows;
 import ui.UIObject.animations;
 
@@ -29,7 +30,9 @@ public UIList(){
 	//
 	// MAIN MENU
 	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
-	public void onClick(){ UIHandler.uiState = UIStates.Game; }
+	public void onClick(){ UIHandler.uiState = UIStates.Game;
+	GameState.song.play();
+	}
 	});
 	obj.setText("Play", Color.black, Color.red, Color.GRAY, font1);
 	obj.setAnimation(animations.slideUp, 60);

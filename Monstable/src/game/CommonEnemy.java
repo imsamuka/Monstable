@@ -32,7 +32,7 @@ public CommonEnemy(float x, float y, Opt option){
 		autoDestroy();
 		return;
 	}else if (option == Opt.Melee){
-		image   = new Images("/assets.png");
+		image   = new Images("/graphics/assets.png");
 		sWidth  = 16;
 		sHeight = 16;
 		wSprite = 8;
@@ -42,7 +42,7 @@ public CommonEnemy(float x, float y, Opt option){
 		damage = 10;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.fastMelee){
-		image   = new Images("/assets.png");
+		image   = new Images("/graphics/assets.png");
 		sWidth  = 16;
 		sHeight = 16;
 		wSprite = 9;
