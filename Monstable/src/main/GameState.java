@@ -10,7 +10,7 @@ public class GameState{
 private static int       currentState = 0;
 public static final int MAPBASE      = 16;
 private static final String[]   mapList      = new String[ ] {"/maps/mapdebug.png"};
-private static final String[]   songList      = new String[ ] {"/sound/theworld.mp3"};
+private static final String[]   songList      = new String[ ] {"/sound/everytimesweet.mp3"};
 private static Images                   map;
 public static AudioPlayer              song;
 //public static final MySubject subject = new MySubject();//
@@ -20,6 +20,7 @@ public GameState(){
 	if (currentState < mapList.length) {
 		newMap(mapList[currentState]);
 		song = new AudioPlayer(songList[currentState]);
+		//song.setVolume(-10);
 	}
 	
 	currentState++;
