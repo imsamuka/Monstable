@@ -10,6 +10,7 @@ import inputs.MouseInput;
 import main.Game;
 import main.Windows;
 import ui.ObjImage;
+import ui.UIHandler;
 import ui.UIObject;
 import ui.UIStates;
 
@@ -81,6 +82,7 @@ protected void tick(){
 	checkKnockback();
 	checkRoll();
 	
+	
 	if (Game.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)){
 		StaminaBar.setTransparency(0.2f);
 		LifeBar.setTransparency(0.2f);
@@ -90,6 +92,7 @@ protected void tick(){
 	}
 	StaminaBar.setFillValue(stamina);
 	LifeBar.setFillValue(life);
+	
 	int size = GameHandler.objList.size();
 	collideX = false;
 	collideY = false;
@@ -108,28 +111,30 @@ protected void tick(){
 	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
+	getAnimations();
 }
 protected void render(Graphics g){
-	getAnimations();
 	// Sprite Choosing
 	if (idleAnimation && !roll && !knockback) wSprite = 128 + frame;
 	else if (roll) wSprite = 16 + frame + 8 * directionToInt(direction);
 	else if (knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
-	//
-	g.setColor(new Color(0, 0, 0, 255));
-	g.drawString("f:"+frame, 234, 20);
-	g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
-	g.drawString(bounds.x+","+bounds.y, 185, 20);
-	g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
-	//
-	g.setColor(new Color(255, 255, 255, 130));
-	if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
+	
 	renderSprite(g);
 	renderBounds(g);
-	StaminaBar.render(g);
-	LifeBar.render(g);
+	
+	if (UIHandler.uiState == UIStates.Game) {
+		g.setColor(new Color(0, 0, 0, 255));
+		g.drawString("f:"+frame, 234, 20);
+		g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
+		g.drawString(bounds.x+","+bounds.y, 185, 20);
+		g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
+		g.setColor(new Color(255, 255, 255, 130));
+		if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
+		StaminaBar.render(g);
+		LifeBar.render(g);
+	}
 }
 private void getAnimations(){
 	

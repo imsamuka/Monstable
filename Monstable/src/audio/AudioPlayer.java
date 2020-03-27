@@ -11,6 +11,7 @@ private static String[] pathList = new String[16];
 private static int      current  = 0;
 private Clip            thisClip = null;
 private FloatControl    gainControl;
+private boolean         looping;
 
 public AudioPlayer(String path){
 	if (path == null) return;
@@ -31,7 +32,7 @@ public AudioPlayer(String path){
 	catch(Exception e){
 		e.printStackTrace();
 	}
-	gainControl       = (FloatControl) thisClip.getControl(FloatControl.Type.MASTER_GAIN);
+	gainControl = (FloatControl) thisClip.getControl(FloatControl.Type.MASTER_GAIN);
 	gainControl.setValue(-10);
 	clips[current]    = thisClip;
 	pathList[current] = path;
@@ -43,8 +44,22 @@ public void play(){
 	thisClip.setFramePosition(0);
 	thisClip.start();
 }
+public void setBeginning() {
+	if (thisClip == null) return;
+	thisClip.setFramePosition(0);
+}
+public void continueSong() {
+	if (thisClip == null) return;
+	thisClip.start();
+}
 public void stop(){ if (thisClip.isRunning()) thisClip.stop(); }
-public void loop(){ thisClip.loop(Clip.LOOP_CONTINUOUSLY); }
+public void loop(){
+	looping = true;
+	thisClip.loop(Clip.LOOP_CONTINUOUSLY);
+}
+public boolean isRunning() {
+	return thisClip.isRunning();
+}
 public void setVolume(float f){
 	gainControl.setValue(f); // -10.0f Reduce volume by 10 decibels.
 	//6.0206

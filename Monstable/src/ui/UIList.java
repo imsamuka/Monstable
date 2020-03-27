@@ -12,7 +12,6 @@ public class UIList{
 private static Vector<UIObject> masterlist;
 private static Font             font1 = new Font("Arial", Font.PLAIN, 18);
 
-
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();
 	int size = masterlist.size();
@@ -28,10 +27,18 @@ public UIList(){
 	UIObject obj;
 	// Add Buttons and UI Elements Here
 	//
+	//
+	//
+	//
+	//
+	//
+	//
 	// MAIN MENU
 	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
-	public void onClick(){ UIHandler.uiState = UIStates.Game;
-	GameState.song.play();
+	public void onClick(){
+		UIHandler.uiState = UIStates.Game;
+		UIHandler.menuSong.stop();
+		GameState.song.loop();
 	}
 	});
 	obj.setText("Play", Color.black, Color.red, Color.GRAY, font1);
@@ -53,6 +60,14 @@ public UIList(){
 	obj.setText("Exit", Color.black, Color.red, Color.GRAY, font1);
 	obj.setAnimation(animations.slideDown, 60);
 	masterlist.add(obj);
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	// OPTIONS
 	obj = new ObjButton(20, 20, 80, 30, UIStates.Options, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.MainMenu; }
@@ -73,14 +88,15 @@ public UIList(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
 		Windows.SCALE = Game.clamp(Windows.SCALE + 1, 1, Windows.getMaxScale());
-		if (tempScale != Windows.SCALE)  Game.getNewWindow();
+		if (tempScale != Windows.SCALE) Game.getNewWindow();
 	}
 	});
 	obj.setText("+", Color.black, Color.red, Color.GRAY, font1);
 	masterlist.add(obj);
 	obj = new ObjButton(100, 80, 40, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
-		if (Windows.SCALE != Windows.getMaxScale()) {
+		
+		if (Windows.SCALE != Windows.getMaxScale()){
 			Windows.SCALE = Windows.getMaxScale();
 			Game.getNewWindow();
 		}
@@ -105,27 +121,37 @@ public UIList(){
 	});
 	obj.setText("On", Color.black, Color.red, Color.GRAY, font1);
 	masterlist.add(obj);
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	// PAUSE SCREEN
+	/*
 	
+	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0);
+	obj.setFillBar(1, 0, 1, Color.black, Color.black, Color.black);
+	obj.setTransparency(0.5f);
+	masterlist.add(obj);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	*/
+	obj = new ObjButton(20, 20, 80, 30, UIStates.Pause, new OnClick(){
+	public void onClick(){
+		UIHandler.uiState = UIStates.Game;
+		GameState.song.continueSong();
+	}
+	});
+	obj.setText("Continue", Color.black, Color.red, Color.GRAY, font1);
+	masterlist.add(obj);
+	obj = new ObjButton(20, 60, 80, 30, UIStates.Pause, new OnClick(){
+	public void onClick(){ 
+		UIHandler.menuSong.setBeginning();
+		UIHandler.menuSong.loop();
+		UIHandler.uiState = UIStates.MainMenu; }
+	});
+	obj.setText("Return to Main Screen", Color.black, Color.red, Color.GRAY, font1);
+	masterlist.add(obj);
 }
 }

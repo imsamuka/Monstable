@@ -18,7 +18,7 @@ public GameState(){
 	if (currentState < mapList.length){
 		newMap(mapList[currentState]);
 		song = new AudioPlayer(songList[currentState]);
-	
+		
 	
 	}
 	currentState++;
