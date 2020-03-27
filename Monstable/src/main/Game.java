@@ -71,8 +71,10 @@ private void render(){
 	g.setColor(Color.white);
 	g.fillRect(0, 0, Windows.WIDTH, Windows.HEIGHT);
 	//
+	gameHandler.render(g);
 	uiHandler.render(g);
-	if (UIHandler.uiState == UIStates.Game) gameHandler.render(g);
+	if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause) if (!UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();
+	
 	//
 	g.setColor(Color.black);
 	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);

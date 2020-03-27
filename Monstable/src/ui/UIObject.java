@@ -18,6 +18,7 @@ public void setY(float y){ this.y = y; }
 public void setActive(boolean active){ this.active = active; }
 
 //////// Main ////////
+
 protected float     x, y, transparency = 1;
 protected int       width, height, boundsX = 0, boundsY = 0;
 protected boolean   hovering = false, active = true;
@@ -25,6 +26,7 @@ protected UIStates  id;
 protected OnClick   onClick;
 protected Rectangle bounds;
 public Rectangle getBounds(){ return bounds; }
+
 
 protected UIObject(float x, float y, int width, int height, UIStates id, OnClick onClick){
 	this.x       = x;
@@ -42,6 +44,7 @@ protected UIObject(float x, float y, int width, int height, UIStates id){
 	this.height = height;
 	this.id     = id;
 	bounds      = new Rectangle((int) x, (int) y, width + 1, height + 1);
+
 }
 // Methods:
 public abstract void tick();

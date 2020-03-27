@@ -2,6 +2,9 @@ package inputs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
+import game.GameState;
+import ui.UIHandler;
+import ui.UIStates;
 
 public class KeyInput extends KeyAdapter{
 // KeyList
@@ -12,9 +15,9 @@ public static KeyObj getFirst(KeyObj.types type){
 	for (int i = 0; i < size; i++) if (KeyList.get(i).getType() == type) return KeyList.get(i);
 	return null;
 }
-public static void setFirst(String name) {
+public static void setFirst(String name){
 	int size = KeyList.size();
-	for (int i = 0; i < size; i++) if (KeyList.get(i).getName() == name) {
+	for (int i = 0; i < size; i++) if (KeyList.get(i).getName() == name){
 		KeyObj oKey = KeyList.get(i);
 		KeyList.offerFirst(oKey);
 		KeyList.removeLastOccurrence(oKey);
@@ -63,12 +66,21 @@ public static KeyObj up    = new KeyObj(new int[ ] {KeyEvent.VK_UP, KeyEvent.VK_
 public static KeyObj left  = new KeyObj(new int[ ] {KeyEvent.VK_LEFT, KeyEvent.VK_A}, "left", "right");
 public static KeyObj right = new KeyObj(new int[ ] {KeyEvent.VK_RIGHT, KeyEvent.VK_D}, "right", "left");
 public static KeyObj x     = new KeyObj(new int[ ] {KeyEvent.VK_X}, "x", new InputInt(){
-							public void OnSinglePressed(){ System.out.println("Power");}
+							public void OnSinglePressed(){ System.out.println("Power"); }
 							public void OnPressed(){}
 							public void OnReleased(){}
 							});
 public static KeyObj esc   = new KeyObj(new int[ ] {KeyEvent.VK_ESCAPE}, "esc", new InputInt(){
-							public void OnSinglePressed(){ System.exit(1); }
+							public void OnSinglePressed(){
+								if (UIHandler.uiState == UIStates.Game) {
+									UIHandler.uiState = UIStates.Pause;
+									GameState.song.stop();
+								}
+								else if (UIHandler.uiState == UIStates.Pause) {
+									UIHandler.uiState = UIStates.Game;
+									GameState.song.continueSong();
+								}
+							}
 							public void OnPressed(){}
 							public void OnReleased(){}
 							});

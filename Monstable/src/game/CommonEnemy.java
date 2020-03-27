@@ -12,6 +12,7 @@ fastMelee,
 Melee,
 }
 
+@SuppressWarnings("unused")
 private Opt              option;
 private boolean          openPath    = true;
 
