@@ -1,5 +1,6 @@
 package game;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Tile extends GameObject{
@@ -44,7 +45,49 @@ private void spriteToBounds(int wSprite){
 }
 protected void tick(){ refreshBounds(); }
 protected void render(Graphics g){
-	g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) ( x ), (int) ( y ), null);
+	g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) x, (int) y, null);
+	Point p = getTileDR(GameState.MAPBASE);
+	
+	if (wSprite == 13 || wSprite == 18){
+		p = new Point(p.x, p.y + 1);
+		int FadeSprite = 14;
+		
+		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
+			GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
+			//tO.visibleBounds = true;
+			if (wSprite == 13) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, null);
+			else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, true, false, g);
+			p = new Point(p.x, p.y + 1);
+		}
+		GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
+		
+		if (tO.id.is(ID.Wall)){
+			if (wSprite
+			== 13) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, 0, sHeight - tO.bounds.height)), (int) tO.x, (int) tO.y, null);
+			else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, 0, sHeight - tO.bounds.height)), (int) tO.x, (int) tO.y, true, false, g);
+		}
+	}else if (wSprite == 6 || wSprite == 33){
+		int FadeSprite = 25;
+		if (wSprite
+		== 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(bounds.width, 0, 0, 0)), (int) x + bounds.width, (int) y, null);
+		else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(bounds.width, 0, 0, 0)), (int) x + bounds.width, (int) y, false, true, g);
+		p = new Point(p.x + 1, p.y);
+		
+		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
+			GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
+			//tO.visibleBounds = true;
+			if (wSprite == 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, null);
+			else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, false, true, g);
+			p = new Point(p.x + 1, p.y);
+		}
+		GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
+		
+		if (tO.id.is(ID.Wall)){
+			if (wSprite
+			== 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, sWidth - tO.bounds.width, 0)), (int) tO.x, (int) tO.y, null);
+			else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, sWidth - tO.bounds.width, 0)), (int) tO.x, (int) tO.y, false, true, g);
+		}
+	}
 	renderBounds(g);
 }
 }
