@@ -3,7 +3,7 @@ import audio.AudioPlayer;
 import main.Images;
 
 public class GameState{
-private static int            currentState = 0;
+protected static int            currentState = 0;
 public static final int       MAPBASE      = 16;
 private static final String[] mapList      = new String[ ] {"/maps/newMap.png"};
 private static final String[] tilesetList  = new String[ ] {"/graphics/Tileset.png"};
@@ -18,8 +18,8 @@ public GameState(){
 	if (currentState < mapList.length){
 		newMap(mapList[currentState]);
 		song = new AudioPlayer(songList[currentState]);
+		song.setBeginning();
 		
-	
 	}
 	currentState++;
 }

@@ -36,6 +36,7 @@ public UIList(){
 	// MAIN MENU
 	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
 	public void onClick(){
+		Game.getNewGameHandler();
 		UIHandler.uiState = UIStates.Game;
 		UIHandler.menuSong.stop();
 		GameState.song.loop();
