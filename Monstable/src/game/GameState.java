@@ -18,7 +18,8 @@ public GameState(){
 	if (currentState < mapList.length){
 		newMap(mapList[currentState]);
 		song = new AudioPlayer(songList[currentState]);
-		song.setVolume(-10);
+	
+	
 	}
 	currentState++;
 }
@@ -28,8 +29,7 @@ public void newMap(String path){
 	int[] rgbArray = map.getPixelRGBArray();
 	int width = map.getWidth();
 	int height = map.getHeight();
-	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy
-	< height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
+	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy < height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
 	GameHandler.correctOrder();
 	
 }

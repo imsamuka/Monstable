@@ -34,4 +34,9 @@ protected void notifyListeners(String propertie, BufferedImage newValue){
 	for (int i = 0; i
 	< size; i++) listener.get(i).propertyChange(new PropertyChangeEvent(this, propertie, null, newValue));
 }
+protected void notifyListeners(String propertie, Float newValue){
+	int size = listener.size();
+	for (int i = 0; i
+	< size; i++) listener.get(i).propertyChange(new PropertyChangeEvent(this, propertie, null, newValue));
+}
 }
