@@ -178,6 +178,9 @@ public void setFillBar(float Value, float Min, float Max, Color Default, Color F
 	fdefault    = Default;
 }
 public void setFillValue(float Value){ fillValue = Game.clamp(Value, min, max); }
+public boolean isFull(){ return fillValue == max; }
+public void moreFillValue(float Value){ fillValue = Game.clamp(fillValue+Value, min, max); }
+
 protected void getFillBar(Graphics g){
 	if (!fill) return;
 	

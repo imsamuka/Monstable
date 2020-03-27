@@ -26,6 +26,11 @@ public static boolean exists(GameObject o){
 	for (int i = 0; i < size; i++) if (objList.get(i) == o) return true;
 	return false;
 }
+public static boolean exists(ID id){
+	int size = objList.size();
+	for (int i = 0; i < size; i++) if (objList.get(i).id.is(id)) return true;
+	return false;
+}
 public static GameObject getOnPoint(Point p){
 	int size = objList.size();
 	float x = p.x * GameState.MAPBASE;

@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import game.GameHandler;
+import game.GameWaves;
 import inputs.MouseInput;
 import ui.UIHandler;
 import ui.UIStates;
@@ -58,7 +59,10 @@ public void run(){
 }
 private void tick(){
 	uiHandler.tick();
-	if (UIHandler.uiState == UIStates.Game) gameHandler.tick();
+	if (UIHandler.uiState == UIStates.Game) {
+		gameHandler.tick();
+		GameWaves.tick();
+	}
 }
 private void render(){
 	BufferStrategy bs = window.getBufferStrategy();
@@ -72,7 +76,10 @@ private void render(){
 	g.setColor(Color.white);
 	g.fillRect(0, 0, Windows.WIDTH, Windows.HEIGHT);
 	// Render the game
-	if (gameHandler != null) gameHandler.render(g);
+	if (gameHandler != null) {
+		gameHandler.render(g);
+		GameWaves.render(g);
+	}
 	
 	// Blur if the main menu comes from the game
 	if (gameHandler != null && UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
@@ -80,7 +87,10 @@ private void render(){
 		g = image.getGraphics();
 	}
 	// Render de UI
+	
 	uiHandler.render(g);
+	//
+	
 	// Setting music main menu music do loop again
 	if (UIHandler.uiState != UIStates.Game
 	&& UIHandler.uiState != UIStates.Pause && !UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();

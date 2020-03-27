@@ -32,7 +32,7 @@ private String     direction = "down";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
-	sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
+	//sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
 	collision     = true;
 	entitie       = true;
 	ableToDamage  = false;
