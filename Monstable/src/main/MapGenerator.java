@@ -7,7 +7,17 @@ import javax.imageio.ImageIO;
 import game.GameState;
 
 public class MapGenerator{
-public MapGenerator(String inputPath, String output, String tilesetPath, Point playerPoint){
+private static Point   playerPoint;
+private static boolean insertingPoint;
+
+public MapGenerator(String inputPath, String output, String tilesetPath, Point aPlayerPoint){
+	insertingPoint = true;
+	playerPoint    = aPlayerPoint;
+	new MapGenerator(inputPath, output, tilesetPath);
+}
+public MapGenerator(String inputPath, String output, String tilesetPath){
+	if (playerPoint != null && !insertingPoint) playerPoint = null;
+	insertingPoint = false;
 	Images inputImage = new Images(inputPath);
 	int size = GameState.MAPBASE * GameState.MAPBASE;
 	if (inputImage.getWidth() != size) throw new IllegalArgumentException("Width size is not Correct.");
@@ -20,10 +30,9 @@ public MapGenerator(String inputPath, String output, String tilesetPath, Point p
 		int y = yy * GameState.MAPBASE;
 		outputImage.setRGB(xx, yy, GameState.SpriteAndColor(1, false));
 		
-		if (xx == playerPoint.x && yy == playerPoint.y ) {
+		if (playerPoint != null && xx == playerPoint.x && yy == playerPoint.y){
 			outputImage.setRGB(xx, yy, GameState.SpriteAndColor(37, false));
 			continue;
-			
 		}
 		
 		for (int wSprite = 0; wSprite < tilesetSize; wSprite++){
@@ -40,7 +49,7 @@ public MapGenerator(String inputPath, String output, String tilesetPath, Point p
 	
 	try{
 		ImageIO.write(outputImage, "png", new File("res/maps/"+output+".png"));
-		System.out.println("Novo mapa "+output+".png baseado em "+ inputPath);
+		System.out.println("Novo mapa "+output+".png baseado em "+inputPath);
 	}
 	catch(IOException e){
 		e.printStackTrace();

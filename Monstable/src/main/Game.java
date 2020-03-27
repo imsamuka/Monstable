@@ -5,22 +5,25 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import game.GameHandler;
 import inputs.MouseInput;
 import ui.UIHandler;
 import ui.UIStates;
 
 public class Game implements Runnable{
-private static Windows      window      = new Windows();
-private final BufferedImage image       = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
-private Thread              thread      = new Thread(this);
-public final UIHandler      uiHandler   = new UIHandler();
-public final GameHandler    gameHandler = new GameHandler();
-public boolean              isRunning   = false;
+private static Windows     window    = new Windows();
+private static GameHandler gameHandler;
+private BufferedImage      image     = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
+private Thread             thread    = new Thread(this);
+public final UIHandler     uiHandler = new UIHandler();
+public boolean             isRunning = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){
-	new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
+	//new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
 	start();
 }
 public synchronized void start(){
@@ -67,15 +70,23 @@ private void render(){
 		return;
 	}
 	Graphics g = image.getGraphics();
-	//
+	// Background Color
 	g.setColor(Color.white);
 	g.fillRect(0, 0, Windows.WIDTH, Windows.HEIGHT);
-	//
-	gameHandler.render(g);
-	uiHandler.render(g);
-	if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause) if (!UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();
+	// Render the game
+	if (gameHandler != null) gameHandler.render(g);
 	
-	//
+	// Blur if the main menu comes from the game
+	if (gameHandler != null && UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
+		image = blurImage(3, image);
+		g = image.getGraphics();
+	}
+	// Render de UI
+	uiHandler.render(g);
+	// Setting music main menu music do loop again
+	if (UIHandler.uiState != UIStates.Game
+	&& UIHandler.uiState != UIStates.Pause && !UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();
+	// Mouse Point
 	g.setColor(Color.black);
 	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
 	//
@@ -85,6 +96,7 @@ private void render(){
 	bs.show();
 }
 public static void getNewWindow(){ window = new Windows(); }
+public static void getNewGameHandler(){ gameHandler = new GameHandler(); }
 public static Rectangle extendRectangle(Rectangle bounds, int x, int y, int width, int height){
 	return new Rectangle(bounds.x + x, bounds.y + y, bounds.width + width, bounds.height + height);
 }
@@ -120,4 +132,15 @@ public static boolean checkIntArrayEquality(int[] array1, int[] array2){
 	for (int m = 0; m < size; m++) if (array1[m] != array2[m]) return false;
 	return true;
 }
+private static BufferedImage blurImage(int radius, BufferedImage image){
+	int size = radius * radius;
+	float[] matrix = new float[size];
+	for (int i = 0; i < size; i++) matrix[i] = 1.0f / size;
+	return new ConvolveOp(new Kernel(radius, radius, matrix)).filter(image, new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB));
+}
+
+
+
+
+
 }
