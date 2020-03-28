@@ -56,7 +56,7 @@ protected void render(Graphics g){
 		p = new Point(p.x, p.y + 1); 
 		
 		
-		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
+		while(GameHandler.getOnPoint(p, ID.Tile) != null && GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
 			GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
 			//tO.visibleBounds = true;
 			if (wSprite == 13) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, null);
@@ -78,7 +78,7 @@ protected void render(Graphics g){
 		else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(bounds.width, 0, 0, 0)), (int) x + bounds.width, (int) y, false, true, g);
 		p = new Point(p.x + 1, p.y);
 		
-		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
+		while(GameHandler.getOnPoint(p, ID.Tile) != null && GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
 			GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
 			
 			if (wSprite == 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight), (int) tO.x, (int) tO.y, null);
@@ -86,7 +86,7 @@ protected void render(Graphics g){
 			p = new Point(p.x + 1, p.y);
 		}
 		GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
-		
+		if (tO == null) return;
 		
 		if (tO.id.is(ID.Wall)){
 			if (wSprite == 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, sWidth - tO.bounds.width, 0)), (int) tO.x, (int) tO.y, null);
