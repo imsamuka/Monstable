@@ -10,7 +10,7 @@ public static UIObject WaveBar;
 public static double   time           = System.nanoTime(), timeBackup = System.nanoTime();
 public static int      thisState      = 0;
 public static Waves[]  WavesfromState = newWaves();
-private static Waves[] newWaves(){ return new Waves[ ] {new Waves(13, 0, 0), new Waves(1, 0, 0)}; }
+private static Waves[] newWaves(){ return new Waves[ ] {new Waves(10, 0, 0), new Waves(5, 0, 0)}; }
 
 public static void resetGameWaves(){
 	WavesfromState = newWaves();

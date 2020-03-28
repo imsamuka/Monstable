@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Point;
+import java.util.Random;
 import main.Utilities;
 
 public class Waves{
@@ -14,6 +15,8 @@ public double[]  difficulties;
 public boolean[] enemiesG;
 public int       currentWave = -1;
 public boolean   hasInitied  = false;
+public Random r = new Random();
+
 
 public Waves(int Quantity, double initialDificculties, float dificcultyMultiplier){
 	quantity             = Quantity;
@@ -42,11 +45,33 @@ public void tick(){
 	}
 	
 	if (!enemiesG[currentWave]){
-		GameHandler.objList.add(new CommonEnemy(up.x, up.y, CommonEnemy.Opt.fastMelee));
-		GameHandler.objList.add(new CommonEnemy(down.x, down.y, CommonEnemy.Opt.Melee));
-		GameHandler.objList.add(new CommonEnemy(left.x, left.y, CommonEnemy.Opt.fastMelee));
-		GameHandler.objList.add(new CommonEnemy(right.x, right.y, CommonEnemy.Opt.Melee));
 		enemiesG[currentWave] = true;
+		
+		int value1 = (int) ((r.nextInt((int) ( 49 )) + 51)*difficulties[currentWave]);
+		int spawnQtd = 1;
+		
+		if (value1 > 10) spawnQtd++;
+		if (value1 > 40) spawnQtd++;
+		if (value1 > 70) spawnQtd++;
+		if (value1 > 100) spawnQtd++;
+		if (value1 > 150) spawnQtd++;
+		if (value1 > 300) spawnQtd++;
+		
+		for (int i = spawnQtd; i > 0; i--) {
+			int w = r.nextInt(4);
+			Point p = down;
+			if (w == 1) p = up;
+			else if (w == 2) p = left;
+			else if (w == 3) p = right;
+			
+			
+			int value2 = (int) ((r.nextInt((int) ( 30 )) + 1)*difficulties[currentWave]);
+			CommonEnemy.Opt option = CommonEnemy.Opt.Melee;
+		
+			if (value2 > 20) option = CommonEnemy.Opt.fastMelee;	
+			
+			GameHandler.objList.add(new CommonEnemy(p.x, p.y, option));
+		}
 	}
 	
 	if (GameWaves.WaveBar.isFull() || !GameHandler.exists(ID.Enemy)){
