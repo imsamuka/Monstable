@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import main.Images;
+import main.Windows;
 
 public class CommonEnemy extends GameObject{
 public static enum Opt{
@@ -12,7 +13,7 @@ Melee,
 
 @SuppressWarnings("unused")
 private Opt              option;
-private boolean          openPath    = true;
+private boolean          openPath    = true, entered = false;
 
 
 public CommonEnemy(float x, float y, Opt option){
@@ -57,11 +58,15 @@ protected void tick(){
 	float herey = (float) bounds.getCenterY();
 	float playerx = (float) GameHandler.player.getBounds().getCenterX();
 	float playery = (float) GameHandler.player.getBounds().getCenterY();
-	//openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
 	
-	openPath = true;
-	
-	if (openPath){
+	if (!entered) {
+		if (x < -hitboxX + 1*GameState.MAPBASE) xvel = Spd;
+		else if (y < -hitboxY + 1*GameState.MAPBASE) yvel = Spd;
+		else if (x > Windows.WIDTH - bounds.width - hitboxX - 1*GameState.MAPBASE) xvel = -Spd;
+		else if (y > Windows.HEIGHT - bounds.height - hitboxY - 1*GameState.MAPBASE)   yvel = -Spd;
+		else entered = true;
+	}else if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
 		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
 		

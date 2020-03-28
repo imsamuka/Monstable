@@ -6,13 +6,11 @@ public class GameState{
 protected static int            currentState = 0;
 
 public static final int       MAPBASE      = 16;
-private static final String[] mapList      = new String[ ] {"/maps/newMap.png","/maps/newMap2.png"};
+private static final String[] mapList      = new String[ ] {"/maps/newMap2.png","/maps/newMap1.png"};
 private static final String[] tilesetList  = new String[ ] {"/graphics/Tileset.png","/graphics/Tileset.png"};
 private static final String[] songList     = new String[ ] {"/sound/athletictheme.mp3","/sound/athletictheme.mp3"};
 private static Images         map;
 public static AudioPlayer     song;
-//public static final MySubject subject = new MySubject();////
-//if (!Windows.windowed) subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
 
 public GameState(){
 	
@@ -21,7 +19,6 @@ public GameState(){
 		new GameWaves(currentState);
 		song = new AudioPlayer(songList[currentState]);
 		song.setBeginning();
-		
 	}
 	currentState++;
 }
@@ -69,7 +66,7 @@ public static int SpriteAndColor(int wSpriteOrHex, boolean wHexToSprite){
 	colorsArray[11] = 0xFF787A86;
 	colorsArray[12] = 0xFFEE0D3F;
 	colorsArray[13] = 0xFF0A18B9;
-	colorsArray[14] = defaultColor;
+	colorsArray[14] = 0xFFDF0AB9;
 	colorsArray[15] = 0xFFBC51D2;
 	colorsArray[16] = 0xFFB60F5E;
 	colorsArray[17] = defaultColor;
@@ -77,20 +74,20 @@ public static int SpriteAndColor(int wSpriteOrHex, boolean wHexToSprite){
 	colorsArray[19] = 0xFF2CE82A;
 	colorsArray[20] = 0xFFF8AD69;
 	colorsArray[21] = 0xFF50495F;
-	colorsArray[22] = 0xFFF55143;
-	colorsArray[23] = 0xFF4375EC;
+	colorsArray[22] = 0xFF4375EC;
+	colorsArray[23] = defaultColor;
 	colorsArray[24] = defaultColor;
 	colorsArray[25] = defaultColor;
-	colorsArray[26] = 0xFF150F4D;
-	colorsArray[27] = 0xFF8BBEEE;
+	colorsArray[26] = defaultColor;
+	colorsArray[27] = 0xFF150F4D;
 	colorsArray[28] = 0xFF697536;
 	colorsArray[29] = 0xFFEA4CC4;
 	colorsArray[30] = 0xFF697535;
 	colorsArray[31] = 0xFFB97A42;
 	colorsArray[32] = 0xFFDE6DEB;
 	colorsArray[33] = 0xFF44F6E2;
-	colorsArray[34] = 0xFFFC0A59;
-	colorsArray[35] = 0xFF44F6E1;
+	colorsArray[34] = defaultColor;
+	colorsArray[35] = 0xFF44F600;
 	colorsArray[36] = 0xFFC15938;
 	colorsArray[37] = 0xFF2DAAFF;  // Player
 	colorsArray[38] = 0xFFFF0000;  // Enemy

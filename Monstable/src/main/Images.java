@@ -49,7 +49,7 @@ public BufferedImage getSprite(int wSprite, int width, int height){
 	int spriteCols = thisImage.getWidth() / ( width == 0 ? 1 : width );
 	height  = height == 0 ? thisImage.getHeight() : height;
 	width   = width == 0 ? thisImage.getWidth() : width;
-	wSprite = Game.clamp(( wSprite - 1 ), 0, ( ( spriteRows * spriteCols ) - 1 ));
+	wSprite = Utilities.clamp(( wSprite - 1 ), 0, ( ( spriteRows * spriteCols ) - 1 ));
 	// Save Processing pt1
 	String path = pathList[thisImageIndex]+"."+( wSprite + 1 );
 	for (int i = thisImageIndex; i < current; i++) if (path.equals(pathList[i])) return images[i];
@@ -69,7 +69,7 @@ public BufferedImage getSprite(int wSprite, int width, int height, Rectangle bou
 	int spriteCols = thisImage.getWidth() / ( width == 0 ? 1 : width );
 	height  = height == 0 ? thisImage.getHeight() : height;
 	width   = width == 0 ? thisImage.getWidth() : width;
-	wSprite = Game.clamp(( wSprite - 1 ), 0, ( ( spriteRows * spriteCols ) - 1 ));
+	wSprite = Utilities.clamp(( wSprite - 1 ), 0, ( ( spriteRows * spriteCols ) - 1 ));
 	// Bounds correction
 	if (bounds.width == 0) bounds.width = width;
 	if (bounds.height == 0) bounds.height = height;

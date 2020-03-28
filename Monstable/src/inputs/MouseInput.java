@@ -26,6 +26,17 @@ public static boolean isOnScreen(){ return onScreen; }
 private InputInt left  = new InputInt(){
 						public void OnSinglePressed(){}                                                                                                                                                                                                               // Mouse n tem Singlepressed
 						public void OnPressed(){
+							
+							if (UIHandler.uiState == UIStates.Game){
+								if (!GameHandler.player.getBounds().contains(mouseX, mouseY)
+								&& GameHandler.player.stamina
+								>= GameHandler.player.goopCost) {
+									//GameHandler.player.sfx.get("goop").play();
+									GameHandler.objList.add(new Projectile((float) ( GameHandler.player.getBounds().getCenterX() ), (float) ( GameHandler.player.getBounds().getCenterY() ), mouseX, mouseY, Projectile.Opt.Goop, 3, 10));
+								}
+							}
+							
+							
 							int size = UIHandler.objList.size();
 							
 							for (int i = 0; i < size; i++){
@@ -38,14 +49,7 @@ private InputInt left  = new InputInt(){
 								}
 							}
 							
-							if (UIHandler.uiState == UIStates.Game){
-								if (!GameHandler.player.getBounds().contains(mouseX, mouseY)
-								&& GameHandler.player.stamina
-								>= GameHandler.player.goopCost) {
-									//GameHandler.player.sfx.get("goop").play();
-									GameHandler.objList.add(new Projectile((float) ( GameHandler.player.getBounds().getCenterX() ), (float) ( GameHandler.player.getBounds().getCenterY() ), mouseX, mouseY, Projectile.Opt.Goop, 3, 10));
-								}
-							}
+							
 						}
 						public void OnReleased(){}
 						};

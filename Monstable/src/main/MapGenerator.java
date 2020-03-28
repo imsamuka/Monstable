@@ -39,7 +39,7 @@ public MapGenerator(String inputPath, String output, String tilesetPath){
 			int[] array1 = Images.getPixelRGBArray(inputImage.getSubimage(x, y, GameState.MAPBASE, GameState.MAPBASE));
 			int[] array2 = Images.getPixelRGBArray(tileset.getSprite(wSprite, GameState.MAPBASE, GameState.MAPBASE));
 			
-			if (Game.checkIntArrayEquality(array1, array2)){
+			if (Utilities.checkIntArrayEquality(array1, array2)){
 				int color = GameState.SpriteAndColor(wSprite, false);
 				outputImage.setRGB(xx, yy, color);
 				break;

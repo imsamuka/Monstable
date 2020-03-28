@@ -1,7 +1,7 @@
 package game;
 import java.awt.Graphics;
-import main.Game;
 import main.Images;
+import main.Utilities;
 import main.Windows;
 
 public class Projectile extends GameObject{
@@ -74,7 +74,7 @@ protected void tick(){
 	refreshBounds();
 	
 
-	wSprite = Game.clampSwitch(++wSprite, MainSprite, MainSprite + Shift);
+	wSprite = Utilities.clampSwitch(++wSprite, MainSprite, MainSprite + Shift);
 }
 protected void render(Graphics g){
 	//private double angle;

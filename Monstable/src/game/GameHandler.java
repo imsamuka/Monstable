@@ -2,13 +2,12 @@ package game;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
-import main.Windows;
 
 public class GameHandler{
 public static LinkedList<GameObject> objList = new LinkedList<GameObject>();
 public static Player                 player;
 public GameHandler(){
-	player  = new Player(Windows.WIDTH / 2, Windows.HEIGHT / 2);
+	player  = new Player();
 	objList.clear();
 	if(GameState.currentState > 0) GameState.currentState = 0;
 	new GameState();
@@ -57,7 +56,6 @@ public static GameObject getOnPoint(Point p, ID id){
 	return null;
 }
 public static void correctOrder(){
-	setFloorOnHead();
 	setPriorityWallsOnTail();
 	setEntitiesOnTail();
 }
@@ -65,18 +63,10 @@ private static void setPriorityWallsOnTail(){
 	
 	for (int i = 0; i < GameHandler.objList.size(); i++){
 		GameObject tO = GameHandler.objList.get(i);
-		if (tO.id.is(ID.Wall)) if (tO.wSprite == 6 || tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 33){
+		if ((tO.id.is(ID.Wall)) && (tO.wSprite == 6 || tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 33)) {
 			objList.offerLast(tO);
 			objList.removeFirstOccurrence(tO);
-		}
-	}
-}
-public static void setFloorOnHead(){
-	
-	for (int i = 0; i < GameHandler.objList.size(); i++){
-		GameObject tO = GameHandler.objList.get(i);
-		
-		if (tO.id.is(ID.Floor)){
+		}else{
 			objList.offerFirst(tO);
 			objList.removeLastOccurrence(tO);
 		}
