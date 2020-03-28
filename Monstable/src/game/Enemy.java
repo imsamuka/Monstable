@@ -100,6 +100,12 @@ protected void tick(){
 			yvel      = -Spd;
 			direction = "up";
 		}else entered = true;
+		
+	
+		x += xvel;
+		y += yvel;
+		refreshBounds();
+		return;
 	}else if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
 		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
@@ -118,7 +124,7 @@ protected void tick(){
 				yvel = 0;
 			}
 			
-			if (System.nanoTime() - timer2 > ( 0.01 ) * ( 1000000000 )){
+			if (System.nanoTime() - timer2 > ( 1 ) * ( Math.pow(10,9) )){
 				timer2 = System.nanoTime();
 				GameHandler.objList.add(new Projectile((float)  herex , (float) herey , (float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), Projectile.Opt.Fire));
 				
@@ -158,7 +164,9 @@ protected void tick(){
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		getCollisionWithWall(tO);
+		getCollisionWith(tO, ID.Enemy);
+		getCollisionWith(tO, ID.Wall);
+		
 	}
 	
 	if (herex == playerx && herey == playery){
@@ -168,13 +176,10 @@ protected void tick(){
 	}
 	isMoving = xvel != 0 && yvel != 0 ? true : false;
 	
-	if (!entered){
-		x += xvel;
-		y += yvel;
-	}else{
-		x = Utilities.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-		y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
-	}
+	
+	x = Utilities.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
+	y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	
 	refreshBounds();
 	checkForDeath();
 	

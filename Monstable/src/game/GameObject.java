@@ -224,9 +224,9 @@ protected boolean filterInTiles(GameObject tO){
 	}
 	return false;
 }
-protected void getCollisionWithWall(GameObject tO){
+protected void getCollisionWith(GameObject tO, ID id){
 	if (xvel == 0 && yvel == 0) return;
-	if (tO.id != ID.Wall) return;
+	if (!tO.id.is(id)) return;
 	setBounds(xvel, yvel);
 	if (!( bounds.intersects(tO.bounds) )) return;
 	boolean cX = false, cY = false;

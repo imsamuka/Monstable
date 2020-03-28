@@ -73,7 +73,7 @@ protected void tick(){
 			autoDestroy();
 			return;
 		}
-		getCollisionWithWall(tO);
+		getCollisionWith(tO, ID.Wall);
 	}
 	x += tempXvel;
 	y += tempYvel;

@@ -103,7 +103,7 @@ protected void tick(){
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		getCollisionWithWall(tO);
+		getCollisionWith(tO, ID.Wall);
 	}
 	if (roll && xvelRoll != xvel) collideX = true;
 	if (roll && yvelRoll != yvel) collideY = true;

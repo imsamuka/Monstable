@@ -57,13 +57,29 @@ public void tick(){
 		if (value1 > 150) spawnQtd++;
 		if (value1 > 300) spawnQtd++;
 		
+		int[] quantityInPos = { 0,0,0,0 };
+		int off = 1;
+		
 		for (int i = spawnQtd; i > 0; i--) {
 			int w = r.nextInt(4);
-			Point p = down;
-			if (w == 1) p = up;
-			else if (w == 2) p = left;
-			else if (w == 3) p = right;
-			
+			Point p = new Point(0,0);
+			if (w == 0) {
+				p = down;
+				p.x += quantityInPos[w]*off;
+			}
+			else if (w == 1) { 
+				p = up;
+				p.x += quantityInPos[w]*off;
+			}
+			else if (w == 2) {
+				p = left;
+				p.y += quantityInPos[w]*off;
+			}
+			else if (w == 3) {
+				p = right;
+				p.y += quantityInPos[w]*off;
+			}
+			quantityInPos[w]++;
 			
 			int value2 = (int) ((r.nextInt((int) ( 30 )) + 1)*difficulties[currentWave]);
 			Enemy.Opt option = Enemy.Opt.melee;
@@ -71,8 +87,7 @@ public void tick(){
 			
 			if (value2 > 20) option = Enemy.Opt.fastMelee;	
 			if (value2 > 40) option = Enemy.Opt.zombie;
-
-			if (value2 > 0) option = Enemy.Opt.mage;	
+			if (value2 > 60) option = Enemy.Opt.mage;	
 			
 			
 			GameHandler.objList.add(new Enemy(p.x, p.y, option));
