@@ -1,6 +1,7 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -22,7 +23,7 @@ public boolean             isRunning = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){
-	//new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
+	//new MapGenerator("/maps/mockup 1.png", "newMap2" , "/graphics/Tileset.png", new Point(3,5));
 	start();
 }
 public synchronized void start(){
@@ -78,7 +79,7 @@ private void render(){
 	// Render the game
 	if (gameHandler != null) {
 		gameHandler.render(g);
-		GameWaves.render(g);
+		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
 	}
 	
 	// Blur if the main menu comes from the game

@@ -13,6 +13,7 @@ import main.Windows;
 public abstract class UIObject{
 //Getters:
 public boolean isHovering(){ return hovering; }
+public boolean isOnClickNull(){ return onClick == null; }
 public void setX(float x){ this.x = x; }
 public void setY(float y){ this.y = y; }
 public void setActive(boolean active){ this.active = active; }

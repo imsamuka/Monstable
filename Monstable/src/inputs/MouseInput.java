@@ -32,7 +32,7 @@ private InputInt left  = new InputInt(){
 								UIObject tO = UIHandler.objList.get(i);
 								tO.hoveringCheck();
 								
-								if (tO.isHovering()){
+								if (tO.isHovering() && !tO.isOnClickNull()){
 									tO.onClick();
 									break;
 								}

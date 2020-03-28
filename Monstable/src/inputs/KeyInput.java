@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import game.GameState;
+import game.GameWaves;
 import ui.UIHandler;
 import ui.UIStates;
 
@@ -74,10 +75,12 @@ public static KeyObj esc   = new KeyObj(new int[ ] {KeyEvent.VK_ESCAPE}, "esc", 
 							public void OnSinglePressed(){
 								if (UIHandler.uiState == UIStates.Game) {
 									UIHandler.uiState = UIStates.Pause;
+									GameWaves.timeBackup = System.nanoTime();
 									GameState.song.stop();
 								}
 								else if (UIHandler.uiState == UIStates.Pause) {
 									UIHandler.uiState = UIStates.Game;
+									GameWaves.time += System.nanoTime() - GameWaves.timeBackup;
 									GameState.song.continueSong();
 								}
 							}

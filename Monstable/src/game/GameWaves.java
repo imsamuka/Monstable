@@ -1,17 +1,24 @@
 package game;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import main.Game;
 import ui.ObjImage;
 import ui.UIObject;
 import ui.UIStates;
 
 public class GameWaves{
-public static final Waves[] WavesfromState = new Waves[ ] {new Waves(1, 0, 0)};
+public static Waves[] WavesfromState = new Waves[ ] {new Waves(13, 0, 0),new Waves(1, 0, 0)}, backup = WavesfromState; 
+public static void resetWaves() {
+	WavesfromState = backup;
+}
 public final static int            waveSeconds    = 10;
 public static UIObject      WaveBar;
-public static double        time           = System.nanoTime();
+public static double        time           = System.nanoTime(),  timeBackup           = System.nanoTime();
 private static int currentState = 0;
+public static final Point up = new Point (7*GameState.MAPBASE, -1*GameState.MAPBASE ), down = new Point (7*GameState.MAPBASE, 16*GameState.MAPBASE ), left = new Point (-1*GameState.MAPBASE, 7*GameState.MAPBASE ), right = new Point (16*GameState.MAPBASE, 7*GameState.MAPBASE );
+
+
 
 public GameWaves(int state){
 	currentState = state;
@@ -21,6 +28,8 @@ public GameWaves(int state){
 	}
 	WavesfromState[currentState].init();
 }
+
+
 public static void tick(){ WavesfromState[currentState].tick(); }
 public static void render(Graphics g){ if(WaveBar != null) WaveBar.render(g); }
 
@@ -55,14 +64,21 @@ if (currentWave == -1){
 }
 if (!enemiesG[currentWave]) {
 	
+	GameHandler.objList.add(new CommonEnemy(up.x, up.y, CommonEnemy.Opt.fastMelee));
+	GameHandler.objList.add(new CommonEnemy(down.x, down.y, CommonEnemy.Opt.Melee));
+	GameHandler.objList.add(new CommonEnemy(left.x, left.y, CommonEnemy.Opt.fastMelee));
+	GameHandler.objList.add(new CommonEnemy(right.x, right.y, CommonEnemy.Opt.Melee));
+	
+	
+	
 	enemiesG[currentWave] = true;
 }
-if (   (WaveBar.isFull() || GameHandler.exists(ID.Enemy) ) && currentWave + 1 < quantity) {
+if (   (WaveBar.isFull() || !GameHandler.exists(ID.Enemy) ) && currentWave + 1 < quantity) {
 	WaveBar.setFillValue(0);
 	time           = System.nanoTime();
 	currentWave++;
 	return;
-}else if(   (WaveBar.isFull() || GameHandler.exists(ID.Enemy) ) && currentWave + 1 == quantity){
+}else if(   (WaveBar.isFull() || !GameHandler.exists(ID.Enemy) ) && currentWave + 1 == quantity){
 	WaveBar.setFillValue(100);
 	System.out.println("Waves for this state end");
 	new GameState();

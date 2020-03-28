@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.util.LinkedList;
 import java.util.Vector;
 import game.GameState;
+import game.GameWaves;
 import main.Game;
 import main.Windows;
 import ui.UIObject.animations;
@@ -130,14 +131,12 @@ public UIList(){
 	//
 	//
 	// PAUSE SCREEN
-	/*
 	
 	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0);
 	obj.setFillBar(1, 0, 1, Color.black, Color.black, Color.black);
-	obj.setTransparency(0.5f);
+	obj.setTransparency(0.2f);
 	masterlist.add(obj);
 	
-	*/
 	obj = new ObjButton(20, 20, 80, 30, UIStates.Pause, new OnClick(){
 	public void onClick(){
 		UIHandler.uiState = UIStates.Game;
@@ -150,6 +149,8 @@ public UIList(){
 	public void onClick(){ 
 		UIHandler.menuSong.setBeginning();
 		UIHandler.menuSong.loop();
+		GameWaves.time += System.nanoTime() - GameWaves.timeBackup;
+		GameWaves.resetWaves();
 		UIHandler.uiState = UIStates.MainMenu; }
 	});
 	obj.setText("Return to Main Screen", Color.black, Color.red, Color.GRAY, font1);
