@@ -98,7 +98,7 @@ public static void getNewGameHandler(){ gameHandler = new GameHandler(); }
 protected static void renderMousePoint(Graphics g) {
 	g.setColor(Color.black);
 	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
-	
+
 }
 
 

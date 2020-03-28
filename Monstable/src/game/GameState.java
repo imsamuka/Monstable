@@ -41,7 +41,7 @@ public GameObject pixelSwitch(int currentPixel, float x, float y){
 			GameHandler.objList.add(GameHandler.player);
 		break;
 		case 38:
-			GameHandler.objList.add(new CommonEnemy(x, y, CommonEnemy.Opt.Melee));
+			GameHandler.objList.add(new Enemy(x, y, Enemy.Opt.melee));
 		break;
 		default:
 			return new Tile(x, y, wSprite, tilesetList[currentState]);
