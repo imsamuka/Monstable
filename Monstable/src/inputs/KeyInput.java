@@ -108,9 +108,15 @@ public void keyPressed(KeyEvent e){
 			}
 			// Key Unique OnPressed()
 			if (oKey.getInputs() != null) oKey.getInputs().OnPressed();
+			
+			
+			System.out.println("--------------");
+			for (int l = 0; l < KeyList.size(); l++) if (KeyList.get(l).getType() == KeyObj.types.movement) System.out.println(KeyList.get(l).getName());
+			
 			return;
 		}
 	}
+
 }
 //Key Releasing
 public void keyReleased(KeyEvent e){
@@ -127,5 +133,7 @@ public void keyReleased(KeyEvent e){
 			if (oKey.getInputs() != null) oKey.getInputs().OnReleased();
 		}
 	}
+	for (int l = 0; l < KeyList.size(); l++) if (KeyList.get(l).getType() == KeyObj.types.movement) System.out.println(l+":"+(KeyList.get(l).getName()));
+	
 }
 }

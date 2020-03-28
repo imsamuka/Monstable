@@ -28,21 +28,21 @@ public CommonEnemy(float x, float y, Opt option){
 		return;
 	}else if (option == Opt.Melee){
 		image   = new Images("/graphics/Enemysheet.png");
-		Human   = 0;
-		wSprite = 1;
-		setHitBox(2, 7, 8, 9);
-		life   = 40;
-		Spd    = 1;
-		damage = 10;
-		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
-	}else if (option == Opt.fastMelee){
-		image   = new Images("/graphics/Enemysheet.png");
 		Human   = 1;
 		wSprite = 17;
 		setHitBox(2, 7, 8, 9);
+		life   = 40;
+		Spd    = 1;
+		damage = 20;
+		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
+	}else if (option == Opt.fastMelee){
+		image   = new Images("/graphics/Enemysheet.png");
+		Human   = 0;
+		wSprite = 1;
+		setHitBox(2, 7, 8, 9);
 		life   = 20;
 		Spd    = 1.5f;
-		damage = 7;
+		damage = 10;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}
 	//visibleBounds = true;
