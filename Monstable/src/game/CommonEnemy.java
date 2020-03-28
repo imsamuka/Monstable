@@ -14,7 +14,7 @@ Melee,
 @SuppressWarnings("unused")
 private Opt              option;
 private boolean          openPath    = true, entered = false;
-
+private int Human;
 
 public CommonEnemy(float x, float y, Opt option){
 	super(x, y, ID.Enemy, null, 16, 16, 1);
@@ -23,21 +23,19 @@ public CommonEnemy(float x, float y, Opt option){
 		autoDestroy();
 		return;
 	}else if (option == Opt.Melee){
-		image   = new Images("/graphics/assets.png");
-		sWidth  = 16;
-		sHeight = 16;
-		wSprite = 8;
-		setHitBox(2, 2, 12, 12);
+		image   = new Images("/graphics/Enemysheet.png");
+		Human = 1;
+		wSprite = 1;
+		setHitBox(2, 7, 8, 9);
 		life   = 40;
 		Spd    = 1;
 		damage = 10;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.fastMelee){
-		image   = new Images("/graphics/assets.png");
-		sWidth  = 16;
-		sHeight = 16;
-		wSprite = 9;
-		setHitBox(2, 2, 12, 12);
+		image   = new Images("/graphics/Enemysheet.png");
+		Human = 2; 
+		wSprite = 17;
+		setHitBox(2, 7, 8, 9);
 		life   = 20;
 		Spd    = 1.5f;
 		damage = 7;
