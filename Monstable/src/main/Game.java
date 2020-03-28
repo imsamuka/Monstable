@@ -5,10 +5,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import game.GameHandler;
+import game.GameWaves;
 import inputs.MouseInput;
 import ui.UIHandler;
 import ui.UIStates;
@@ -23,7 +23,7 @@ public boolean             isRunning = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){
-	//new MapGenerator("/maps/mockup 1.png", "newMap" , "/graphics/Tileset.png", new Point(5,5));
+	//new MapGenerator("/maps/mockup 1.png", "newMap2" , "/graphics/Tileset.png", new Point(3,5));
 	start();
 }
 public synchronized void start(){
@@ -60,7 +60,10 @@ public void run(){
 }
 private void tick(){
 	uiHandler.tick();
-	if (UIHandler.uiState == UIStates.Game) gameHandler.tick();
+	if (UIHandler.uiState == UIStates.Game) {
+		gameHandler.tick();
+		GameWaves.tick();
+	}
 }
 private void render(){
 	BufferStrategy bs = window.getBufferStrategy();
@@ -74,7 +77,10 @@ private void render(){
 	g.setColor(Color.white);
 	g.fillRect(0, 0, Windows.WIDTH, Windows.HEIGHT);
 	// Render the game
-	if (gameHandler != null) gameHandler.render(g);
+	if (gameHandler != null) {
+		gameHandler.render(g);
+		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
+	}
 	
 	// Blur if the main menu comes from the game
 	if (gameHandler != null && UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
@@ -82,7 +88,10 @@ private void render(){
 		g = image.getGraphics();
 	}
 	// Render de UI
+	
 	uiHandler.render(g);
+	//
+	
 	// Setting music main menu music do loop again
 	if (UIHandler.uiState != UIStates.Game
 	&& UIHandler.uiState != UIStates.Pause && !UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();

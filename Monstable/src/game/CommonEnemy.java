@@ -2,9 +2,7 @@ package game;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import main.Game;
 import main.Images;
-import main.Windows;
 
 public class CommonEnemy extends GameObject{
 public static enum Opt{
@@ -59,7 +57,9 @@ protected void tick(){
 	float herey = (float) bounds.getCenterY();
 	float playerx = (float) GameHandler.player.getBounds().getCenterX();
 	float playery = (float) GameHandler.player.getBounds().getCenterY();
-	openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	//openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	
+	openPath = true;
 	
 	if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
@@ -102,9 +102,9 @@ protected void tick(){
 		getCollisionWithWall(tO);
 	}
 	
+	x += xvel;
+	y += yvel;
 	
-	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
 	checkForDeath();
 }

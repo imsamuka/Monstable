@@ -9,7 +9,6 @@ public static enum Opt{
 Goop,
 }
 
-private float tempX, tempY;
 private int   Shift = 0, MainSprite;
 
 public Projectile(float fromX, float fromY, float toX, float toY, Opt option, float Speed, int Damage){
@@ -37,15 +36,20 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd);
 }
 protected void tick(){
-	if (( tempX == x && tempY == y ) || collideX || collideY) autoDestroy();
+	if (collideX || collideY || death) {
+		autoDestroy();
+		return;
+	}
 	int size = GameHandler.objList.size();
+	
+	float tempXvel = xvel, tempYvel = yvel;
 	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this || tO == GameHandler.player) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		
+		if (tO.id.is(ID.Wall) && tO.bounds.intersects(bounds))  death = true;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
 			tO.takeDamage(damage);
 			autoDestroy();
@@ -53,11 +57,23 @@ protected void tick(){
 		}
 		getCollisionWithWall(tO);
 	}
-	tempX = x;
-	tempY = y;
-	x     = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-	y     = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	
+	x     += tempXvel;
+	y     += tempYvel;
+	
+	if (x >= Windows.WIDTH - bounds.width - hitboxX) death = true;
+	else if (x <= -hitboxX) death = true;
+	if (y >= Windows.HEIGHT - bounds.height - hitboxY) death = true;
+	else if (y <= -hitboxY) death = true;
+	
+	x     -= tempXvel;
+	y     -= tempYvel;
+	
+	x     += xvel;
+	y     += yvel;
 	refreshBounds();
+	
+
 	wSprite = Game.clampSwitch(++wSprite, MainSprite, MainSprite + Shift);
 }
 protected void render(Graphics g){

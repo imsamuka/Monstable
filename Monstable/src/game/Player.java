@@ -20,9 +20,9 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
-public final float rollCost  = 15, goopCost = 12;
+public final float rollCost  = 15, goopCost = 12, damageCooldownFrames = 40;
 public float       stamina   = 0, xvelRoll, yvelRoll;
-public int         rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1;
+public int         rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1, damageCooldown = 0;
 private Melee      attack;
 private UIObject   StaminaBar, LifeBar;
 private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
@@ -32,10 +32,9 @@ private String     direction = "down";
 
 public Player(float x, float y){
 	super(x, y, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
-	sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
+	//sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
 	collision     = true;
 	entitie       = true;
-	ableToDamage  = false;
 	Spd           = 1.5f;
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
@@ -92,6 +91,8 @@ protected void tick(){
 	}
 	StaminaBar.setFillValue(stamina);
 	LifeBar.setFillValue(life);
+	damageCooldown -= damageCooldown > 0 ? 1 : 0 ;
+	ableToDamage = damageCooldown > 0 ? false : true;
 	
 	int size = GameHandler.objList.size();
 	collideX = false;
@@ -121,7 +122,7 @@ protected void render(Graphics g){
 	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	
-	renderSprite(g);
+	if (Game.isEven(damageCooldown)) renderSprite(g);
 	renderBounds(g);
 	
 	if (UIHandler.uiState == UIStates.Game) {

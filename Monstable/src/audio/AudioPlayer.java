@@ -42,6 +42,7 @@ public void play(){
 	if (thisClip == null) return;
 	stop();
 	thisClip.setFramePosition(0);
+	looping = false;
 	thisClip.start();
 }
 public void setBeginning() {
@@ -50,7 +51,8 @@ public void setBeginning() {
 }
 public void continueSong() {
 	if (thisClip == null) return;
-	thisClip.start();
+	if (looping) loop();
+	else thisClip.start();
 }
 public void stop(){ if (thisClip.isRunning()) thisClip.stop(); }
 public void loop(){

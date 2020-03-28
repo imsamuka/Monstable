@@ -46,7 +46,11 @@ protected void tick(){
 		if (filterInTiles(tO)) continue;
 		
 		if (tO.entitie && tO.bounds.intersects(bounds)){
-			if (parent != GameHandler.player && tO == GameHandler.player) tO.takeDamage(damage);
+			if (parent != GameHandler.player && tO == GameHandler.player) {
+				tO.takeDamage(damage);
+				if (GameHandler.player.damageCooldown == 0)	GameHandler.player.damageCooldown = (int) GameHandler.player.damageCooldownFrames;
+				
+			}
 			else if (parent == GameHandler.player) GameHandler.player.newKnockback();
 			return;
 		}
