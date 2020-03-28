@@ -15,7 +15,7 @@ protected Melee(float x, float y, int sWidth, int sHeight, int damage, GameObjec
 	super(x, y, ID.Melee, null, sWidth, sHeight, 0);
 	this.damage   = damage;
 	this.parent   = parent;
-	visibleBounds = true;
+	//visibleBounds = true;
 	size          = 4;
 	observer      = new MyObserver(parent.subject, (ObsInter) new ObsInter(){
 					public void OnDirectionChange(String dir){ direction = directionToPoint(dir); }
@@ -47,6 +47,7 @@ protected void tick(){
 		
 		if (tO.entitie && tO.bounds.intersects(bounds)){
 			if (parent != GameHandler.player && tO == GameHandler.player) {
+				parent.attacked = true;
 				tO.takeDamage(damage);
 				if (GameHandler.player.damageCooldown == 0)	GameHandler.player.damageCooldown = (int) GameHandler.player.damageCooldownFrames;
 				
