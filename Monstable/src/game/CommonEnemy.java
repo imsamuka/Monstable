@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import main.Images;
+import main.Utilities;
 import main.Windows;
 
 public class CommonEnemy extends GameObject{
@@ -12,9 +13,11 @@ Melee,
 }
 
 @SuppressWarnings("unused")
-private Opt              option;
-private boolean          openPath    = true, entered = false;
-private int Human;
+private Opt     option;
+private boolean openPath = true, entered = false, isMoving = false, attackAnimation = false;
+private int     Human, frame = 0;
+private double timer1 = System.nanoTime();
+private String  direction;
 
 public CommonEnemy(float x, float y, Opt option){
 	super(x, y, ID.Enemy, null, 16, 16, 1);
@@ -24,7 +27,7 @@ public CommonEnemy(float x, float y, Opt option){
 		return;
 	}else if (option == Opt.Melee){
 		image   = new Images("/graphics/Enemysheet.png");
-		Human = 1;
+		Human   = 0;
 		wSprite = 1;
 		setHitBox(2, 7, 8, 9);
 		life   = 40;
@@ -33,7 +36,7 @@ public CommonEnemy(float x, float y, Opt option){
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.fastMelee){
 		image   = new Images("/graphics/Enemysheet.png");
-		Human = 2; 
+		Human   = 1;
 		wSprite = 17;
 		setHitBox(2, 7, 8, 9);
 		life   = 20;
@@ -52,24 +55,37 @@ protected void tick(){
 		autoDestroy();
 		return;
 	}
+	
+	if (attacked){
+		attacked        = false;
+		attackAnimation = true;
+	}
 	float herex = (float) bounds.getCenterX();
 	float herey = (float) bounds.getCenterY();
 	float playerx = (float) GameHandler.player.getBounds().getCenterX();
 	float playery = (float) GameHandler.player.getBounds().getCenterY();
-	if (herex != playerx && herey != playery) openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	if (herex != playerx
+	&& herey != playery) openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
 	
-	
-	
-	if (!entered) {
-		if (x < -hitboxX + 1*GameState.MAPBASE) xvel = Spd;
-		else if (y < -hitboxY + 1*GameState.MAPBASE) yvel = Spd;
-		else if (x > Windows.WIDTH - bounds.width - hitboxX - 1*GameState.MAPBASE) xvel = -Spd;
-		else if (y > Windows.HEIGHT - bounds.height - hitboxY - 1*GameState.MAPBASE)   yvel = -Spd;
-		else entered = true;
+	if (!entered){
+		
+		if (x < -hitboxX + 1 * GameState.MAPBASE){
+			xvel      = Spd;
+			direction = "right";
+		}else if (y < -hitboxY + 1 * GameState.MAPBASE){
+			yvel      = Spd;
+			direction = "down";
+		}else if (x > Windows.WIDTH - bounds.width - hitboxX - 1 * GameState.MAPBASE){
+			xvel      = -Spd;
+			direction = "left";
+		}else if (y > Windows.HEIGHT - bounds.height - hitboxY - 1 * GameState.MAPBASE){
+			yvel      = -Spd;
+			direction = "up";
+		}else entered = true;
 	}else if (openPath){
 		goFromTo(herex, herey, playerx, playery, Spd);
 		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-		
+		direction = checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, false);
 	}else{
 		int MapBase = GameState.MAPBASE;
 		Point closestPoint = getTileUL(MapBase);
@@ -83,22 +99,19 @@ protected void tick(){
 			closestPoint  = distance1 > distance2 ? getTileDR(MapBase) : closestPoint;
 		}
 		
-		if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY()) {
+		if (herex != (float) closestBounds.getCenterX() && herey != (float) closestBounds.getCenterY()){
 			goFromTo(herex, herey, (float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), Spd);
-			subject.setDirection(checkForDirection((float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(),10,true));
-		}
-		else{
+			subject.setDirection(checkForDirection((float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), 10, true));
+			direction = checkForDirection((float) closestBounds.getCenterX(), (float) closestBounds.getCenterY(), 10, false);
+		}else{
 			xvel = 0;
 			yvel = 0;
 			subject.setDirection(null);
+			direction = "down";
 		}
-		
-		
-		
-		
 	}
 	int size = GameHandler.objList.size();
-
+	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
 		if (tO == this) continue;
@@ -107,22 +120,32 @@ protected void tick(){
 		getCollisionWithWall(tO);
 	}
 	
-	if (herex == playerx && herey == playery) {
-		xvel = 0;
-		yvel = 0;
+	if (herex == playerx && herey == playery){
+		xvel      = 0;
+		yvel      = 0;
+		direction = "down";
 	}
-	
-	x += xvel;
-	y += yvel;
-	
+	isMoving  = xvel != 0 && yvel != 0 ? true : false;
+	x        += xvel;
+	y        += yvel;
 	refreshBounds();
 	checkForDeath();
+	
+	
+	if (isMoving) if (System.nanoTime() - timer1 > ( 0.065 ) * ( 1000000000 )){
+			timer1 = System.nanoTime();
+			frame = Utilities.clampSwitch(frame + 1, 1, 4);
+	}
 }
 protected void render(Graphics g){
+	
+	if (isMoving) wSprite = Human*16 + frame + 4 * directionToInt(direction);
+	else wSprite = Human*16 + 1;
+	
+
 	renderSprite(g);
 	renderBounds(g);
 }
-
 /*
 private static int       currentList = 0;
 private ArrayList<Point> list;
