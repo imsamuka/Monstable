@@ -1,6 +1,7 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import game.GameHandler;
@@ -19,8 +20,10 @@ public boolean             isRunning = false;
 
 public static void main(String[] args){ new Game(); }
 public Game(){
-	//new MapGenerator("/maps/mockup 1.png", "newMap2" , "/graphics/Tileset.png", new Point(3,5));
-	start();
+	//new MapGenerator("/maps/mockup1.png", "newMap1" , "/graphics/Tileset.png", new Point(3,5));
+	//new MapGenerator("/maps/mockup2.png", "newMap2" , "/graphics/Tileset.png", new Point(7,7));
+	
+	start();	
 }
 public synchronized void start(){
 	isRunning = true;

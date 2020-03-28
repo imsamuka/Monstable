@@ -12,8 +12,7 @@ public Tile(float x, float y, int wSprite, String spritesheet){
 private static ID spriteToID(int wSprite){
 	
 	switch(wSprite){
-		case 1:
-		case 7:
+		case 1:	
 		case 10:
 		case 11:
 		case 12:
@@ -23,7 +22,6 @@ private static ID spriteToID(int wSprite){
 		case 28:
 		case 29:
 		case 30:
-		case 34:
 			return ID.Floor;
 		default:
 			return ID.Wall;
@@ -34,10 +32,10 @@ private void spriteToBounds(int wSprite){
 	Rectangle[] listBounds = new Rectangle[39];
 	listBounds[6]  = new Rectangle(0, 0, 3, 16);
 	listBounds[8]  = new Rectangle(13, 0, 3, 16);
-	listBounds[22] = new Rectangle(0, 0, 16, 3);
-	listBounds[23] = new Rectangle(0, 13, 16, 3);
-	listBounds[26] = listBounds[23];
+
+	listBounds[22] = new Rectangle(0, 13, 16, 3);
 	listBounds[27] = listBounds[22];
+
 	listBounds[33] = listBounds[6];
 	listBounds[35] = listBounds[8];
 	if (listBounds[wSprite]
@@ -49,8 +47,14 @@ protected void render(Graphics g){
 	Point p = getTileDR(GameState.MAPBASE);
 	
 	if (wSprite == 13 || wSprite == 18){
+		int FadeSprite = 16;
+		int off = 2;
+
+		
+		if (wSprite == 13) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, off, 0, 0)), (int) x, (int) y + off, null);
+		else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, off, 0, 0)), (int) x, (int) y + off, true, false, g);
 		p = new Point(p.x, p.y + 1);
-		int FadeSprite = 14;
+		
 		
 		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
 			GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
@@ -67,7 +71,7 @@ protected void render(Graphics g){
 			else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, 0, sHeight - tO.bounds.height)), (int) tO.x, (int) tO.y, true, false, g);
 		}
 	}else if (wSprite == 6 || wSprite == 33){
-		int FadeSprite = 25;
+		int FadeSprite = 7;
 		
 		
 		if (wSprite == 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(bounds.width, 0, 0, 0)), (int) x + bounds.width, (int) y, null);
@@ -82,6 +86,7 @@ protected void render(Graphics g){
 			p = new Point(p.x + 1, p.y);
 		}
 		GameObject tO = GameHandler.getOnPoint(p, ID.Tile);
+		
 		
 		if (tO.id.is(ID.Wall)){
 			if (wSprite == 6) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, 0, sWidth - tO.bounds.width, 0)), (int) tO.x, (int) tO.y, null);
