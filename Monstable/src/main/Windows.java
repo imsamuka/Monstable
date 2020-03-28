@@ -1,10 +1,14 @@
 package main;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import inputs.KeyInput;
@@ -49,6 +53,11 @@ public Windows(){
 	this.setBackground(Color.black);
 	frame.add(this);
 	
+	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
+	Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"); 
+	frame.setCursor(cursor);
+	
+	
 	//DisplayMode Dm = Gd.getDisplayMode();
 	if (!windowed){
 		
@@ -60,6 +69,7 @@ public Windows(){
 			background.setBounds(new Rectangle(screen.x, screen.y, screen.width, screen.height));
 			frame.add(background);
 			//setBackgroundExtension();
+			
 			Gd.setFullScreenWindow(frame);
 			this.setBounds(screen.x + ( screen.width / 2 ) - ( width / 2 ), screen.y + ( screen.height / 2 ) - ( height / 2 ), width, height);
 		}else{

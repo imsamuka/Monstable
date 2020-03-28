@@ -66,11 +66,16 @@ public void tick(){
 			
 			
 			int value2 = (int) ((r.nextInt((int) ( 30 )) + 1)*difficulties[currentWave]);
-			CommonEnemy.Opt option = CommonEnemy.Opt.Melee;
-		
-			if (value2 > 20) option = CommonEnemy.Opt.fastMelee;	
+			Enemy.Opt option = Enemy.Opt.melee;
 			
-			GameHandler.objList.add(new CommonEnemy(p.x, p.y, option));
+			
+			if (value2 > 20) option = Enemy.Opt.fastMelee;	
+			if (value2 > 40) option = Enemy.Opt.zombie;
+
+			if (value2 > 0) option = Enemy.Opt.mage;	
+			
+			
+			GameHandler.objList.add(new Enemy(p.x, p.y, option));
 		}
 	}
 	

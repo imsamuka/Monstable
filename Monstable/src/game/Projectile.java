@@ -10,6 +10,7 @@ Goop,
 }
 
 private int   Shift = 0, MainSprite;
+private Opt option;
 
 public Projectile(float fromX, float fromY, float toX, float toY, Opt option, float Speed, int Damage){
 	super(fromX, fromY, ID.Projectile, null, 0, 0, 1);
@@ -28,6 +29,7 @@ public Projectile(float fromX, float fromY, float toX, float toY, Opt option, fl
 		y                          -= 8 + 1.5;
 		setHitBox(7, 8, 4, 3);
 	}
+	this.option = option;
 	MainSprite = wSprite;
 	Spd        = Speed;
 	damage     = Damage;
@@ -46,11 +48,12 @@ protected void tick(){
 	
 	for (int m = 0; m < size; m++){
 		GameObject tO = GameHandler.objList.get(m);
-		if (tO == this || tO == GameHandler.player) continue;
+		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
 		if (tO.id.is(ID.Wall) && tO.bounds.intersects(bounds))  death = true;
 		if (tO.entitie && tO.bounds.intersects(bounds)){
+			if (tO == GameHandler.player && option == Opt.Goop) continue;
 			tO.takeDamage(damage);
 			autoDestroy();
 			return;

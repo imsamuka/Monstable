@@ -1,19 +1,25 @@
 package game;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 public class GameHandler{
 public static LinkedList<GameObject> objList = new LinkedList<GameObject>();
 public static Player                 player;
+
 public GameHandler(){
-	player  = new Player();
+	player = new Player();
 	objList.clear();
-	if(GameState.currentState > 0) GameState.currentState = 0;
+	if (GameState.currentState > 0) GameState.currentState = 0;
 	new GameState();
 }
 public void tick(){ for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).tick(); }
-public void render(Graphics g){ for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).render(g); }
+public void render(Graphics g){
+	for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).render(g);
+	for (int i = 0; objList != null && i < objList.size(); i++) Tile.createFade(objList.get(i), g);
+	
+}
 public static boolean exists(GameObject o){
 	int size = objList.size();
 	for (int i = 0; i < size; i++) if (objList.get(i) == o) return true;
@@ -63,7 +69,8 @@ private static void setPriorityWallsOnTail(){
 	
 	for (int i = 0; i < GameHandler.objList.size(); i++){
 		GameObject tO = GameHandler.objList.get(i);
-		if ((tO.id.is(ID.Wall)) && (tO.wSprite == 6 || tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 33)) {
+		
+		if (( tO.id.is(ID.Wall) ) && ( tO.wSprite == 6 || tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 33 )){
 			objList.offerLast(tO);
 			objList.removeFirstOccurrence(tO);
 		}else{
