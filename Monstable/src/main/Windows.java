@@ -53,7 +53,7 @@ public Windows(){
 	this.setBackground(Color.black);
 	frame.add(this);
 	
-	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/assets.png");
+	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
 	Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"); 
 	frame.setCursor(cursor);
 	

@@ -86,7 +86,7 @@ private void render(){
 	// Render da UI	
 	uiHandler.render(g);
 	//
-	renderMousePoint(g);
+	//renderMousePoint(g);
 	g.dispose();
 	g = bs.getDrawGraphics();
 	g.drawImage(image, 0, 0, (int) ( Windows.WIDTH * Windows.SCALE ), (int) ( Windows.HEIGHT * Windows.SCALE ), null);
@@ -95,7 +95,7 @@ private void render(){
 public static void getNewWindow(){ window = new Windows(); }
 public static void getNewGameHandler(){ gameHandler = new GameHandler(); }
 
-private static void renderMousePoint(Graphics g) {
+protected static void renderMousePoint(Graphics g) {
 	g.setColor(Color.black);
 	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
 	
