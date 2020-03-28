@@ -1,5 +1,9 @@
 package ui;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import audio.AudioPlayer;
 import game.GameState;
@@ -35,7 +39,7 @@ public static void leavePause(){
 	GameWaves.time    += System.nanoTime() - GameWaves.timeBackup;
 	GameState.song.continueSong();
 }
-public static void enterGame() {
+public static void enterGame(){
 	Game.getNewGameHandler();
 	UIHandler.uiState = UIStates.Game;
 	UIHandler.menuSong.stop();
@@ -46,5 +50,16 @@ public static void returnToMainMenu(){
 	UIHandler.menuSong.loop();
 	GameWaves.resetGameWaves();
 	UIHandler.uiState = UIStates.MainMenu;
+}
+public static Font loadFont(String path, float size){
+	
+	try{
+		return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(Font.PLAIN, size);
+	}
+	catch(FontFormatException | IOException e){
+		e.printStackTrace();
+		System.exit(1);
+	}
+	return null;
 }
 }

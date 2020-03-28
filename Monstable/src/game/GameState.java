@@ -7,7 +7,7 @@ protected static int            currentState = 0;
 
 public static final int       MAPBASE      = 16;
 private static final String[] mapList      = new String[ ] {"/maps/newMap2.png","/maps/newMap1.png"};
-private static final String[] tilesetList  = new String[ ] {"/graphics/Tileset.png","/graphics/Tileset.png"};
+private static final String[] tilesetList  = new String[ ] {"/graphics/tileset_florest.png","/graphics/tileset_florest.png"};
 private static final String[] songList     = new String[ ] {"/sound/athletictheme.mp3","/sound/athletictheme.mp3"};
 private static Images         map;
 public static AudioPlayer     song;

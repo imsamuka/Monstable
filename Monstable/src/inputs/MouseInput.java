@@ -32,7 +32,7 @@ private InputInt left  = new InputInt(){
 								&& GameHandler.player.stamina
 								>= GameHandler.player.goopCost) {
 									//GameHandler.player.sfx.get("goop").play();
-									GameHandler.objList.add(new Projectile((float) ( GameHandler.player.getBounds().getCenterX() ), (float) ( GameHandler.player.getBounds().getCenterY() ), mouseX, mouseY, Projectile.Opt.Goop, 3, 10));
+									GameHandler.objList.add(new Projectile((float) ( GameHandler.player.getBounds().getCenterX() ), (float) ( GameHandler.player.getBounds().getCenterY() ), mouseX, mouseY, Projectile.Opt.Goop));
 								}
 							}
 							

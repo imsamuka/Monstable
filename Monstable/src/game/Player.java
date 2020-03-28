@@ -31,7 +31,7 @@ public HashMap< String , AudioPlayer > sfx = new HashMap< String , AudioPlayer >
 private String     direction = "down";
 
 public Player(){
-	super(Windows.WIDTH / 2, Windows.HEIGHT / 2, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
+	super(Windows.WIDTH / 2, Windows.HEIGHT / 2, ID.Player, "/graphics/sheet_slime.png", 16, 16, 1);
 	//sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
 	collision     = true;
 	entitie       = true;

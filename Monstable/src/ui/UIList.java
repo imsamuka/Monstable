@@ -10,7 +10,7 @@ import ui.UIObject.animations;
 
 public class UIList{
 private static Vector<UIObject> masterlist;
-private static Font             font1 = new Font("Arial", Font.PLAIN, 18);
+private static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf",18);
 
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();
@@ -37,23 +37,23 @@ public UIList(){
 	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
 	public void onClick(){ UIHandler.enterGame(); }
 	});
-	obj.setText("Play", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Play", Color.black, Color.red, Color.GRAY, alphbeta18);
 	obj.setAnimation(animations.slideUp, 60);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 60, 80, 30, UIStates.MainMenu, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.Options; }
 	});
-	obj.setText("Options", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Options", Color.black, Color.red, Color.GRAY, alphbeta18);
 	obj.setAnimation(animations.slideRight, 60);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 100, 80, 30, UIStates.MainMenu, null);
-	obj.setText("Credits", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Credits", Color.black, Color.red, Color.GRAY, alphbeta18);
 	obj.setAnimation(animations.slideLeft, 60);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 140, 80, 30, UIStates.MainMenu, new OnClick(){
 	public void onClick(){ System.exit(1); }
 	});
-	obj.setText("Exit", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Exit", Color.black, Color.red, Color.GRAY, alphbeta18);
 	obj.setAnimation(animations.slideDown, 60);
 	masterlist.add(obj);
 	//
@@ -68,9 +68,9 @@ public UIList(){
 	obj = new ObjButton(20, 20, 80, 30, UIStates.Options, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.MainMenu; }
 	});
-	obj.setText("Return", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Return", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
-	masterlist.add(new ObjText(78, 65, UIStates.Options, "Game Scale", Color.black, font1));
+	masterlist.add(new ObjText(78, 65, UIStates.Options, "Game Scale", Color.black, alphbeta18));
 	obj = new ObjButton(20, 80, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
@@ -78,7 +78,7 @@ public UIList(){
 		if (tempScale != Windows.SCALE) Game.getNewWindow();
 	}
 	});
-	obj.setText("-", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("-", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 	obj = new ObjButton(60, 80, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
@@ -87,7 +87,7 @@ public UIList(){
 		if (tempScale != Windows.SCALE) Game.getNewWindow();
 	}
 	});
-	obj.setText("+", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("+", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 	obj = new ObjButton(100, 80, 40, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
@@ -98,16 +98,16 @@ public UIList(){
 		}
 	}
 	});
-	obj.setText("Max", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Max", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
-	masterlist.add(new ObjText(78, 125, UIStates.Options, "FullScreen", Color.black, font1));
+	masterlist.add(new ObjText(78, 125, UIStates.Options, "FullScreen", Color.black, alphbeta18));
 	obj = new ObjButton(20, 140, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
 		Windows.windowed = true;
 		Game.getNewWindow();
 	}
 	});
-	obj.setText("Off", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Off", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 	obj = new ObjButton(60, 140, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
@@ -115,7 +115,7 @@ public UIList(){
 		Game.getNewWindow();
 	}
 	});
-	obj.setText("On", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("On", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 	//
 	//
@@ -132,12 +132,12 @@ public UIList(){
 	obj = new ObjButton(20, 20, 80, 30, UIStates.Pause, new OnClick(){
 	public void onClick(){ UIHandler.leavePause(); }
 	});
-	obj.setText("Continue", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Continue", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 60, 80, 30, UIStates.Pause, new OnClick(){
 	public void onClick(){ UIHandler.returnToMainMenu(); }
 	});
-	obj.setText("Main Screen", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Main Screen", Color.black, Color.red, Color.GRAY, alphbeta18);
 	masterlist.add(obj);
 }
 }

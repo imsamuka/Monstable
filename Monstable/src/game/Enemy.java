@@ -19,7 +19,7 @@ private Opt     option;
 @SuppressWarnings("unused")
 private boolean openPath = true, entered = false, isMoving = false, attackAnimation = false;
 private int     Human, frame = 0;
-private double  timer1   = System.nanoTime();
+private double  timer1   = System.nanoTime(), timer2   = System.nanoTime();
 private String  direction;
 
 public Enemy(float x, float y, Opt option){
@@ -29,7 +29,7 @@ public Enemy(float x, float y, Opt option){
 		autoDestroy();
 		return;
 	}else if (option == Opt.fastMelee){
-		image = new Images("/graphics/Enemysheet.png");
+		image = new Images("/graphics/sheet_enemy.png");
 		Human = 0;
 		setHitBox(2, 7, 8, 9);
 		life   = 20;
@@ -37,7 +37,7 @@ public Enemy(float x, float y, Opt option){
 		damage = 10;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.melee){
-		image = new Images("/graphics/Enemysheet.png");
+		image = new Images("/graphics/sheet_enemy.png");
 		Human = 1;
 		setHitBox(2, 7, 8, 9);
 		life   = 30;
@@ -45,7 +45,7 @@ public Enemy(float x, float y, Opt option){
 		damage = 20;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.mage){
-		image = new Images("/graphics/Enemysheet.png");
+		image = new Images("/graphics/sheet_enemy.png");
 		Human = 2;
 		setHitBox(2, 7, 8, 9);
 		life   = 20;
@@ -53,7 +53,7 @@ public Enemy(float x, float y, Opt option){
 		damage = 10;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}else if (option == Opt.zombie){
-		image = new Images("/graphics/Enemysheet.png");
+		image = new Images("/graphics/sheet_enemy.png");
 		Human = 3;
 		setHitBox(2, 7, 8, 9);
 		life   = 60;
@@ -101,31 +101,31 @@ protected void tick(){
 			direction = "up";
 		}else entered = true;
 	}else if (openPath){
+		goFromTo(herex, herey, playerx, playery, Spd);
+		subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
+		direction = checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, false);
 		
 		if (option == Opt.mage){
-			float MaxMageDistance = 10;
-			float distance = Utilities.getDistanceLine(herex, herey, playerx, playery);
-			
-			
+			double MaxMageDistance = Math.floor(100 / 16) * 16;
+			double distance = Utilities.getDistanceLine(herex, herey, playerx, playery);
+			distance = Math.floor(distance / 16) * 16;
 			
 			if (distance < MaxMageDistance){
-				goFromTo(herex, herey, playerx, playery, Spd);
-				subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-				direction = checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, false);
-			}else if (distance > MaxMageDistance){
-				goFromTo(herex, herey, playerx, playery, Spd);
-				subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-				direction = checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, false);
-				xvel      = -xvel;
-				yvel      = -yvel;
-			}else{
+				xvel = -xvel;
+				yvel = -yvel;
+			}else if (distance == MaxMageDistance){
 				xvel = 0;
 				yvel = 0;
 			}
-		}else{
-			goFromTo(herex, herey, playerx, playery, Spd);
-			subject.setDirection(checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, true));
-			direction = checkForDirection((float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), 10, false);
+			
+			if (System.nanoTime() - timer2 > ( 0.01 ) * ( 1000000000 )){
+				timer2 = System.nanoTime();
+				GameHandler.objList.add(new Projectile((float)  herex , (float) herey , (float) GameHandler.player.getBounds().getCenterX(), (float) GameHandler.player.getBounds().getCenterY(), Projectile.Opt.Fire));
+				
+			}
+			
+			
+			
 		}
 	}else{
 		int MapBase = GameState.MAPBASE;
@@ -166,11 +166,18 @@ protected void tick(){
 		yvel      = 0;
 		direction = "down";
 	}
-	isMoving  = xvel != 0 && yvel != 0 ? true : false;
-	x        += xvel;
-	y        += yvel;
+	isMoving = xvel != 0 && yvel != 0 ? true : false;
+	
+	if (!entered){
+		x += xvel;
+		y += yvel;
+	}else{
+		x = Utilities.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
+		y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	}
 	refreshBounds();
 	checkForDeath();
+	
 	if (isMoving) if (System.nanoTime() - timer1 > ( 0.065 ) * ( 1000000000 )){
 		timer1 = System.nanoTime();
 		frame  = Utilities.clampSwitch(frame + 1, 1, 4);

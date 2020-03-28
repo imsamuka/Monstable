@@ -7,43 +7,55 @@ import main.Windows;
 public class Projectile extends GameObject{
 public static enum Opt{
 Goop,
+Fire
 }
 
-private int   Shift = 0, MainSprite;
+private int Shift = 0, MainSprite;
+private float ShiftTime = 1;
+private double timer = System.nanoTime();
 private Opt option;
 
-public Projectile(float fromX, float fromY, float toX, float toY, Opt option, float Speed, int Damage){
-	super(fromX, fromY, ID.Projectile, null, 0, 0, 1);
+public Projectile(float fromX, float fromY, float toX, float toY, Opt option){
+	super(fromX, fromY, ID.Projectile, null, 16, 16, 1);
 	
 	if (option == null){
 		autoDestroy();
 		return;
 	}else if (option == Opt.Goop){
 		GameHandler.player.stamina -= GameHandler.player.goopCost;
-		image                       = new Images("/graphics/Slimesheet.png");
-		sWidth                      = 16;
-		sHeight                     = 16;
+		image                       = new Images("/graphics/sheet_slime.png");
 		wSprite                     = 119;
 		Shift                       = 0;
 		x                          -= 7 + 2;
 		y                          -= 8 + 1.5;
 		setHitBox(7, 8, 4, 3);
+		Spd = 3;
+		damage = 10;
+	}
+	else if (option == Opt.Fire) {
+		image                       = new Images("/graphics/sheet_enemy.png");
+		wSprite                     = 65;
+		Shift                       = 3;
+		ShiftTime = 0.1f;
+		x                          -= 1 + 2.5;
+		y                          -= 1 + 2.5;
+		setHitBox(1, 1, 5, 5);
+		Spd = 2.6f;
+		damage = 10;
 	}
 	this.option = option;
-	MainSprite = wSprite;
-	Spd        = Speed;
-	damage     = Damage;
-	collision  = true;
+	MainSprite  = wSprite;
+	collision   = true;
 	//visibleBounds = true;
 	goFromTo((float) bounds.getCenterX(), (float) bounds.getCenterY(), toX, toY, Spd);
 }
 protected void tick(){
-	if (collideX || collideY || death) {
+	
+	if (collideX || collideY || death){
 		autoDestroy();
 		return;
 	}
 	int size = GameHandler.objList.size();
-	
 	float tempXvel = xvel, tempYvel = yvel;
 	
 	for (int m = 0; m < size; m++){
@@ -51,33 +63,40 @@ protected void tick(){
 		if (tO == this) continue;
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
-		if (tO.id.is(ID.Wall) && tO.bounds.intersects(bounds))  death = true;
+		if (tO.id.is(ID.Wall) && tO.bounds.intersects(bounds)) death = true;
+		
 		if (tO.entitie && tO.bounds.intersects(bounds)){
-			if (tO == GameHandler.player && option == Opt.Goop) continue;
+			if (option == Opt.Goop){
+				if (tO == GameHandler.player) continue;
+			}else if (tO != GameHandler.player) continue;
 			tO.takeDamage(damage);
 			autoDestroy();
 			return;
 		}
 		getCollisionWithWall(tO);
 	}
-	
-	x     += tempXvel;
-	y     += tempYvel;
-	
+	x += tempXvel;
+	y += tempYvel;
 	if (x >= Windows.WIDTH - bounds.width - hitboxX) death = true;
 	else if (x <= -hitboxX) death = true;
 	if (y >= Windows.HEIGHT - bounds.height - hitboxY) death = true;
 	else if (y <= -hitboxY) death = true;
-	
-	x     -= tempXvel;
-	y     -= tempYvel;
-	
-	x     += xvel;
-	y     += yvel;
+	x -= tempXvel;
+	y -= tempYvel;
+	x += xvel;
+	y += yvel;
 	refreshBounds();
 	
-
-	wSprite = Utilities.clampSwitch(++wSprite, MainSprite, MainSprite + Shift);
+	
+	
+	if (System.nanoTime() - timer > ( ShiftTime ) * ( 1000000000 )){
+		timer = System.nanoTime();
+		wSprite = Utilities.clampSwitch(++wSprite, MainSprite, MainSprite + Shift);
+	}
+	
+	
+	
+	
 }
 protected void render(Graphics g){
 	//private double angle;
