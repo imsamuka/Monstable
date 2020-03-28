@@ -56,7 +56,9 @@ protected void tick(){
 	float herey = (float) bounds.getCenterY();
 	float playerx = (float) GameHandler.player.getBounds().getCenterX();
 	float playery = (float) GameHandler.player.getBounds().getCenterY();
-	openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	if (herex != playerx && herey != playery) openPath = !GameHandler.LineIntersects(herex, herey, playerx, playery, ID.Wall);
+	
+	
 	
 	if (!entered) {
 		if (x < -hitboxX + 1*GameState.MAPBASE) xvel = Spd;
@@ -103,6 +105,11 @@ protected void tick(){
 		if (!tO.collision) continue;
 		if (filterInTiles(tO)) continue;
 		getCollisionWithWall(tO);
+	}
+	
+	if (herex == playerx && herey == playery) {
+		xvel = 0;
+		yvel = 0;
 	}
 	
 	x += xvel;
