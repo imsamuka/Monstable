@@ -3,7 +3,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.LinkedList;
 import java.util.Vector;
-import game.GameState;
 import main.Game;
 import main.Utilities;
 import main.Windows;

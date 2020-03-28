@@ -14,6 +14,7 @@ Melee,
 
 @SuppressWarnings("unused")
 private Opt     option;
+@SuppressWarnings("unused")
 private boolean openPath = true, entered = false, isMoving = false, attackAnimation = false;
 private int     Human, frame = 0;
 private double timer1 = System.nanoTime();
