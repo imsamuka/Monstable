@@ -53,7 +53,7 @@ protected void render(Graphics g){
 		
 		if (wSprite == 13) g.drawImage(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, off, 0, 0)), (int) x, (int) y + off, null);
 		else renderInverted(image.getSprite(FadeSprite, sWidth, sHeight, new Rectangle(0, off, 0, 0)), (int) x, (int) y + off, true, false, g);
-		p = new Point(p.x, p.y + 1);
+		p = new Point(p.x, p.y + 1); 
 		
 		
 		while(GameHandler.getOnPoint(p, ID.Tile).id.is(ID.Floor)){
