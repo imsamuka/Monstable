@@ -11,8 +11,6 @@ private static final String[] tilesetList  = new String[ ] {"/graphics/Tileset.p
 private static final String[] songList     = new String[ ] {"/sound/athletictheme.mp3","/sound/athletictheme.mp3"};
 private static Images         map;
 public static AudioPlayer     song;
-//public static final MySubject subject = new MySubject();////
-//if (!Windows.windowed) subject.setBackgroundTile(map.getSprite(1, MAPBASE, MAPBASE));
 
 public GameState(){
 	
@@ -21,7 +19,6 @@ public GameState(){
 		new GameWaves(currentState);
 		song = new AudioPlayer(songList[currentState]);
 		song.setBeginning();
-		
 	}
 	currentState++;
 }

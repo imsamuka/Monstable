@@ -4,8 +4,8 @@ import java.awt.Font;
 import java.util.LinkedList;
 import java.util.Vector;
 import game.GameState;
-import game.GameWaves;
 import main.Game;
+import main.Utilities;
 import main.Windows;
 import ui.UIObject.animations;
 
@@ -36,12 +36,7 @@ public UIList(){
 	//
 	// MAIN MENU
 	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
-	public void onClick(){
-		Game.getNewGameHandler();
-		UIHandler.uiState = UIStates.Game;
-		UIHandler.menuSong.stop();
-		GameState.song.loop();
-	}
+	public void onClick(){ UIHandler.enterGame(); }
 	});
 	obj.setText("Play", Color.black, Color.red, Color.GRAY, font1);
 	obj.setAnimation(animations.slideUp, 60);
@@ -80,7 +75,7 @@ public UIList(){
 	obj = new ObjButton(20, 80, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
-		Windows.SCALE = Game.clamp(Windows.SCALE - 1, 1, Windows.getMaxScale());
+		Windows.SCALE = Utilities.clamp(Windows.SCALE - 1, 1, Windows.getMaxScale());
 		if (tempScale != Windows.SCALE) Game.getNewWindow();
 	}
 	});
@@ -89,7 +84,7 @@ public UIList(){
 	obj = new ObjButton(60, 80, 30, 30, UIStates.Options, new OnClick(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
-		Windows.SCALE = Game.clamp(Windows.SCALE + 1, 1, Windows.getMaxScale());
+		Windows.SCALE = Utilities.clamp(Windows.SCALE + 1, 1, Windows.getMaxScale());
 		if (tempScale != Windows.SCALE) Game.getNewWindow();
 	}
 	});
@@ -131,29 +126,19 @@ public UIList(){
 	//
 	//
 	// PAUSE SCREEN
-	
 	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0);
 	obj.setFillBar(1, 0, 1, Color.black, Color.black, Color.black);
 	obj.setTransparency(0.2f);
 	masterlist.add(obj);
-	
 	obj = new ObjButton(20, 20, 80, 30, UIStates.Pause, new OnClick(){
-	public void onClick(){
-		UIHandler.uiState = UIStates.Game;
-		GameState.song.continueSong();
-	}
+	public void onClick(){ UIHandler.leavePause(); }
 	});
 	obj.setText("Continue", Color.black, Color.red, Color.GRAY, font1);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 60, 80, 30, UIStates.Pause, new OnClick(){
-	public void onClick(){ 
-		UIHandler.menuSong.setBeginning();
-		UIHandler.menuSong.loop();
-		GameWaves.time += System.nanoTime() - GameWaves.timeBackup;
-		GameWaves.resetWaves();
-		UIHandler.uiState = UIStates.MainMenu; }
+	public void onClick(){ UIHandler.returnToMainMenu(); }
 	});
-	obj.setText("Return to Main Screen", Color.black, Color.red, Color.GRAY, font1);
+	obj.setText("Main Screen", Color.black, Color.red, Color.GRAY, font1);
 	masterlist.add(obj);
 }
 }

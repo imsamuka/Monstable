@@ -2,13 +2,12 @@ package game;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
-import main.Windows;
 
 public class GameHandler{
 public static LinkedList<GameObject> objList = new LinkedList<GameObject>();
 public static Player                 player;
 public GameHandler(){
-	player  = new Player(Windows.WIDTH / 2, Windows.HEIGHT / 2);
+	player  = new Player();
 	objList.clear();
 	if(GameState.currentState > 0) GameState.currentState = 0;
 	new GameState();

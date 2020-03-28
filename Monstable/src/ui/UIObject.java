@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import inputs.MouseInput;
-import main.Game;
 import main.Images;
+import main.Utilities;
 import main.Windows;
 
 public abstract class UIObject{
@@ -66,7 +66,7 @@ public void setHitBox(int x, int y, int width, int height){
 	bounds.height = height;
 	refreshBounds();
 }
-public void setTransparency(float transp){ transparency = Game.clamp(transp, 0, 1); }
+public void setTransparency(float transp){ transparency = Utilities.clamp(transp, 0, 1); }
 
 //
 ////
@@ -129,8 +129,8 @@ protected void getAnimation(){
 		vel = svel * ( ( ( currentFrame - ( frames / 2 ) ) ^ 2 ) / ( 4 * ( 0.0625f * ( frames ^ 2 ) ) ) );
 		currentFrame++;
 	}
-	if (animation == animations.slideLeft || animation == animations.slideRight) x = Game.clampAuto(x + vel, x, finaly);
-	if (animation == animations.slideDown || animation == animations.slideUp) y = Game.clampAuto(y + vel, y, finaly);
+	if (animation == animations.slideLeft || animation == animations.slideRight) x = Utilities.clampAuto(x + vel, x, finaly);
+	if (animation == animations.slideDown || animation == animations.slideUp) y = Utilities.clampAuto(y + vel, y, finaly);
 }
 
 //////// Images ////////
@@ -178,9 +178,9 @@ public void setFillBar(float Value, float Min, float Max, Color Default, Color F
 	fbackground = Background;
 	fdefault    = Default;
 }
-public void setFillValue(float Value){ fillValue = Game.clamp(Value, min, max); }
+public void setFillValue(float Value){ fillValue = Utilities.clamp(Value, min, max); }
 public boolean isFull(){ return fillValue == max; }
-public void moreFillValue(float Value){ fillValue = Game.clamp(fillValue+Value, min, max); }
+public void moreFillValue(float Value){ fillValue = Utilities.clamp(fillValue+Value, min, max); }
 
 protected void getFillBar(Graphics g){
 	if (!fill) return;

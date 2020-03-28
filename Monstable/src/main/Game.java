@@ -1,12 +1,8 @@
 package main;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import game.GameHandler;
 import game.GameWaves;
 import inputs.MouseInput;
@@ -80,25 +76,15 @@ private void render(){
 	if (gameHandler != null) {
 		gameHandler.render(g);
 		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
+		else if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
+			image = Utilities.blurImage(3, image);
+			g = image.getGraphics();
+		}
 	}
-	
-	// Blur if the main menu comes from the game
-	if (gameHandler != null && UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
-		image = blurImage(3, image);
-		g = image.getGraphics();
-	}
-	// Render de UI
-	
+	// Render da UI	
 	uiHandler.render(g);
 	//
-	
-	// Setting music main menu music do loop again
-	if (UIHandler.uiState != UIStates.Game
-	&& UIHandler.uiState != UIStates.Pause && !UIHandler.menuSong.isRunning()) UIHandler.menuSong.loop();
-	// Mouse Point
-	g.setColor(Color.black);
-	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
-	//
+	renderMousePoint(g);
 	g.dispose();
 	g = bs.getDrawGraphics();
 	g.drawImage(image, 0, 0, (int) ( Windows.WIDTH * Windows.SCALE ), (int) ( Windows.HEIGHT * Windows.SCALE ), null);
@@ -106,48 +92,12 @@ private void render(){
 }
 public static void getNewWindow(){ window = new Windows(); }
 public static void getNewGameHandler(){ gameHandler = new GameHandler(); }
-public static Rectangle extendRectangle(Rectangle bounds, int x, int y, int width, int height){
-	return new Rectangle(bounds.x + x, bounds.y + y, bounds.width + width, bounds.height + height);
-}
-public static Rectangle extendRectangle(Rectangle bounds, int value){
-	return new Rectangle(bounds.x - value, bounds.y - value, bounds.width + value * 2, bounds.height + value * 2);
-}
-public static boolean isEven(int num){ return( num % 2 == 0 ); }
-public static int clamp(int var, int min, int max){
-	if (var > max) return max;
-	else if (var < min) return min;
-	else return var;
-}
-public static int clampSwitch(int var, int min, int max){
-	if (var > max) return var - ( max - min + 1 );
-	else if (var < min) return var + ( max - min + 1 );
-	else return var;
-}
-public static float clamp(float var, float min, float max){
-	if (var > max) return max;
-	else if (var < min) return min;
-	else return var;
-}
-public static float clampAuto(float var, float limiter1, float limiter2){
-	float min = limiter1 > limiter2 ? limiter2 : limiter1;
-	float max = min == limiter1 ? limiter2 : limiter1;
-	if (var > max) return max;
-	else if (var < min) return min;
-	else return var;
-}
-public static boolean checkIntArrayEquality(int[] array1, int[] array2){
-	int size = array1.length;
-	if (size != array2.length) return false;
-	for (int m = 0; m < size; m++) if (array1[m] != array2[m]) return false;
-	return true;
-}
-private static BufferedImage blurImage(int radius, BufferedImage image){
-	int size = radius * radius;
-	float[] matrix = new float[size];
-	for (int i = 0; i < size; i++) matrix[i] = 1.0f / size;
-	return new ConvolveOp(new Kernel(radius, radius, matrix)).filter(image, new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB));
-}
 
+private static void renderMousePoint(Graphics g) {
+	g.setColor(Color.black);
+	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
+	
+}
 
 
 

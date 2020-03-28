@@ -7,7 +7,7 @@ import audio.AudioPlayer;
 import inputs.KeyInput;
 import inputs.KeyObj;
 import inputs.MouseInput;
-import main.Game;
+import main.Utilities;
 import main.Windows;
 import ui.ObjImage;
 import ui.UIHandler;
@@ -30,8 +30,8 @@ timer4 = System.nanoTime();
 public HashMap< String , AudioPlayer > sfx = new HashMap< String , AudioPlayer >();
 private String     direction = "down";
 
-public Player(float x, float y){
-	super(x, y, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
+public Player(){
+	super(Windows.WIDTH / 2, Windows.HEIGHT / 2, ID.Player, "/graphics/Slimesheet.png", 16, 16, 1);
 	//sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
 	collision     = true;
 	entitie       = true;
@@ -47,11 +47,11 @@ public Player(float x, float y){
 	
 }
 public void setPosition(float tx, float ty){
-	x = Game.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-	y = Game.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	x = Utilities.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
+	y = Utilities.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 }
 protected void tick(){
-	if (!roll) stamina = Game.clamp(stamina + 1, 0, 30);
+	if (!roll) stamina = Utilities.clamp(stamina + 1, 0, 30);
 	
 	// Movement check
 	if (!roll && !knockback){
@@ -82,7 +82,7 @@ protected void tick(){
 	checkRoll();
 	
 	
-	if (Game.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)){
+	if (Utilities.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)){
 		StaminaBar.setTransparency(0.2f);
 		LifeBar.setTransparency(0.2f);
 	}else{
@@ -109,8 +109,8 @@ protected void tick(){
 	if (roll && yvelRoll != yvel) collideY = true;
 	if (( collideX || collideY ) && waitKnockback) newKnockback();
 	// Movement Apply
-	x = Game.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-	y = Game.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	x = Utilities.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
+	y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
 	getAnimations();
 }
@@ -122,7 +122,7 @@ protected void render(Graphics g){
 	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	
-	if (Game.isEven(damageCooldown)) renderSprite(g);
+	if (Utilities.isEven(damageCooldown)) renderSprite(g);
 	renderBounds(g);
 	
 	if (UIHandler.uiState == UIStates.Game) {
@@ -146,7 +146,7 @@ private void getAnimations(){
 		
 		if (System.nanoTime() - timer4 > ( 0.13 ) * ( 1000000000 )){
 			timer4 = System.nanoTime();
-			frame  = Game.clampSwitch(frame + 1, 1, 8);
+			frame  = Utilities.clampSwitch(frame + 1, 1, 8);
 		}
 		return;
 	}else idleAnimation = false;
@@ -155,7 +155,7 @@ private void getAnimations(){
 	if (!idleAnimation && !roll){
 		if (!jumpAnimation) if (System.nanoTime() - timer1 > ( 0.1 ) * ( 1000000000 )){
 			timer1 = System.nanoTime();
-			frame  = Game.clampSwitch(frame + 1, 1, 4);
+			frame  = Utilities.clampSwitch(frame + 1, 1, 4);
 			return;
 		}
 		if (jumpAnimation) if (System.nanoTime() - timer2 > ( 0.065 ) * ( 1000000000 )){
@@ -199,7 +199,7 @@ public void newRoll(float toX, float toY, int rollQtd){
 private void checkRoll(){
 	if (!roll) return;
 	rollCount++;
-	frame = Game.clampSwitch(rollCount / rollQtd + 1, 1, 8);
+	frame = Utilities.clampSwitch(rollCount / rollQtd + 1, 1, 8);
 	
 	if (rollCount == 8 * rollQtd){
 		// Roll End

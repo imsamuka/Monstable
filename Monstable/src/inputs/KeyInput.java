@@ -2,8 +2,6 @@ package inputs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
-import game.GameState;
-import game.GameWaves;
 import ui.UIHandler;
 import ui.UIStates;
 
@@ -12,13 +10,11 @@ public class KeyInput extends KeyAdapter{
 public static LinkedList<KeyObj> KeyList = new LinkedList<KeyObj>();
 
 public static KeyObj getFirst(KeyObj.types type){
-	int size = KeyList.size();
-	for (int i = 0; i < size; i++) if (KeyList.get(i).getType() == type) return KeyList.get(i);
+	for (int i = 0; i < KeyList.size(); i++) if (KeyList.get(i).getType() == type) return KeyList.get(i);
 	return null;
 }
 public static void setFirst(String name){
-	int size = KeyList.size();
-	for (int i = 0; i < size; i++) if (KeyList.get(i).getName() == name){
+	for (int i = 0; i < KeyList.size(); i++) if (KeyList.get(i).getName() == name){
 		KeyObj oKey = KeyList.get(i);
 		KeyList.offerFirst(oKey);
 		KeyList.removeLastOccurrence(oKey);
@@ -32,9 +28,8 @@ public static boolean keyIsFirst(KeyObj key1, KeyObj key2){
 	return KeyList.indexOf(key1) < KeyList.indexOf(key2) ? true : false;
 }
 public static boolean isAnyKeyPressed(KeyObj.types type){
-	int size = KeyList.size();
 	
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < KeyList.size(); i++){
 		KeyObj key = KeyList.get(i);
 		if (key.getType() == type && key.isPressed()) return true;
 	}
@@ -73,16 +68,8 @@ public static KeyObj x     = new KeyObj(new int[ ] {KeyEvent.VK_X}, "x", new Inp
 							});
 public static KeyObj esc   = new KeyObj(new int[ ] {KeyEvent.VK_ESCAPE}, "esc", new InputInt(){
 							public void OnSinglePressed(){
-								if (UIHandler.uiState == UIStates.Game) {
-									UIHandler.uiState = UIStates.Pause;
-									GameWaves.timeBackup = System.nanoTime();
-									GameState.song.stop();
-								}
-								else if (UIHandler.uiState == UIStates.Pause) {
-									UIHandler.uiState = UIStates.Game;
-									GameWaves.time += System.nanoTime() - GameWaves.timeBackup;
-									GameState.song.continueSong();
-								}
+								if (UIHandler.uiState == UIStates.Game) UIHandler.enterPause();
+								else if (UIHandler.uiState == UIStates.Pause) UIHandler.leavePause();
 							}
 							public void OnPressed(){}
 							public void OnReleased(){}
@@ -100,9 +87,8 @@ public KeyInput(){
 // Key Pressing
 public void keyPressed(KeyEvent e){
 	int key = e.getKeyCode();
-	int size = KeyList.size();
 	
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < KeyList.size(); i++){
 		KeyObj oKey = KeyList.get(i);
 		for (int j: oKey.getKeyID()) if (key == j){
 			// Key Recognized
@@ -129,9 +115,8 @@ public void keyPressed(KeyEvent e){
 //Key Releasing
 public void keyReleased(KeyEvent e){
 	int key = e.getKeyCode();
-	int size = KeyList.size();
 	
-	for (int i = 0; i < size; i++){
+	for (int i = 0; i < KeyList.size(); i++){
 		KeyObj oKey = KeyList.get(i);
 		for (int j: oKey.getKeyID()) if (key == j){
 			// Key Recognized
