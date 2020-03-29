@@ -1,0 +1,1 @@
+Quem mudar o "config.properties" é viado

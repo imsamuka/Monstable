@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import inputs.KeyInput;
@@ -20,7 +22,7 @@ public static final int              WIDTH            = 256, HEIGHT = (int) ( 1 
 public static int                    SCALE            = 2;
 public static boolean                windowed         = true;
 private static Canvas                background       = new Canvas();
-private static JFrame                frame;
+protected static JFrame              frame;
 private static GraphicsEnvironment   Ge               = GraphicsEnvironment.getLocalGraphicsEnvironment();
 private static GraphicsDevice        Gd               = Ge.getDefaultScreenDevice();
 private static GraphicsConfiguration Gc               = Gd.getDefaultConfiguration();
@@ -40,23 +42,35 @@ private static BufferedImage         backgroundTile;
 
 public static GraphicsConfiguration getGc(){ return Gc; }
 public static int getMaxScale(){ return maxScale; }
+public static void setScale(int value){ SavingData.prop.setProperty("Scale", String.valueOf(value)); }
 public Windows(){
+	String scale = SavingData.prop.getProperty("Scale");
+	if (scale != null) SCALE = Integer.parseInt(scale);
+	else SavingData.prop.setProperty("Scale", String.valueOf(SCALE));
 	int width = (int) ( WIDTH * SCALE );
 	int height = (int) ( HEIGHT * SCALE );
 	// Frame
 	if (frame != null) frame.dispose();
 	frame = new JFrame("Monstable");
 	frame.setResizable(false);
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	frame.addWindowListener(new WindowAdapter(){
+	public void windowClosing(WindowEvent e){ Game.exitGame(); }
+	});
 	frame.setBackground(Color.black);
 	// Canvas
 	this.setBackground(Color.black);
 	frame.add(this);
-	
 	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
-	Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"); 
+	Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor");
 	frame.setCursor(cursor);
-	
+	frame.requestFocusInWindow();
+	frame.addKeyListener(keyInput);
+	frame.addMouseListener(mouseInput);
+	frame.addMouseMotionListener(mouseInput);
+	this.addKeyListener(keyInput);
+	this.addMouseListener(mouseInput);
+	this.addMouseMotionListener(mouseInput);
 	
 	//DisplayMode Dm = Gd.getDisplayMode();
 	if (!windowed){
@@ -69,7 +83,6 @@ public Windows(){
 			background.setBounds(new Rectangle(screen.x, screen.y, screen.width, screen.height));
 			frame.add(background);
 			//setBackgroundExtension();
-			
 			Gd.setFullScreenWindow(frame);
 			this.setBounds(screen.x + ( screen.width / 2 ) - ( width / 2 ), screen.y + ( screen.height / 2 ) - ( height / 2 ), width, height);
 		}else{
@@ -81,13 +94,6 @@ public Windows(){
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-	frame.requestFocusInWindow();
-	frame.addKeyListener(keyInput);
-	frame.addMouseListener(mouseInput);
-	frame.addMouseMotionListener(mouseInput);
-	this.addKeyListener(keyInput);
-	this.addMouseListener(mouseInput);
-	this.addMouseMotionListener(mouseInput);
 }
 public void setBackgroundExtension(){
 	/*

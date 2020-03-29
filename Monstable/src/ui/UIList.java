@@ -10,7 +10,7 @@ import ui.UIObject.animations;
 
 public class UIList{
 private static Vector<UIObject> masterlist;
-private static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf",18);
+private static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
 
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();
@@ -51,7 +51,7 @@ public UIList(){
 	obj.setAnimation(animations.slideLeft, 60);
 	masterlist.add(obj);
 	obj = new ObjButton(20, 140, 80, 30, UIStates.MainMenu, new OnClick(){
-	public void onClick(){ System.exit(1); }
+	public void onClick(){ Game.exitGame(); }
 	});
 	obj.setText("Exit", Color.black, Color.red, Color.GRAY, alphbeta18);
 	obj.setAnimation(animations.slideDown, 60);
@@ -75,7 +75,11 @@ public UIList(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
 		Windows.SCALE = Utilities.clamp(Windows.SCALE - 1, 1, Windows.getMaxScale());
-		if (tempScale != Windows.SCALE) Game.getNewWindow();
+		
+		if (tempScale != Windows.SCALE){
+			Windows.setScale(Windows.SCALE);
+			Game.getNewWindow();
+		}
 	}
 	});
 	obj.setText("-", Color.black, Color.red, Color.GRAY, alphbeta18);
@@ -84,7 +88,11 @@ public UIList(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
 		Windows.SCALE = Utilities.clamp(Windows.SCALE + 1, 1, Windows.getMaxScale());
-		if (tempScale != Windows.SCALE) Game.getNewWindow();
+		
+		if (tempScale != Windows.SCALE){
+			Windows.setScale(Windows.SCALE);
+			Game.getNewWindow();
+		}
 	}
 	});
 	obj.setText("+", Color.black, Color.red, Color.GRAY, alphbeta18);
@@ -93,7 +101,7 @@ public UIList(){
 	public void onClick(){
 		
 		if (Windows.SCALE != Windows.getMaxScale()){
-			Windows.SCALE = Windows.getMaxScale();
+			Windows.setScale(Windows.getMaxScale());
 			Game.getNewWindow();
 		}
 	}

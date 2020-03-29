@@ -10,15 +10,19 @@ import ui.UIHandler;
 import ui.UIStates;
 
 public class Game implements Runnable{
-private static Windows     window    = new Windows();
+private static Windows     window;
 private static GameHandler gameHandler;
-private BufferedImage      image     = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
+private static BufferedImage      image     = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
+public static UIHandler     uiHandler;
+public static boolean             isRunning = false;
 private Thread             thread    = new Thread(this);
-public final UIHandler     uiHandler = new UIHandler();
-public boolean             isRunning = false;
 
-public static void main(String[] args){ new Game(); }
+public static void main(String[] args){new Game(); }
 public Game(){
+	SavingData.getSaveFiles();
+	getNewWindow();
+	uiHandler = new UIHandler();
+	
 	//new MapGenerator("/maps/mockup1.png", "newMap1" , "/graphics/Tileset.png", new Point(3,5));
 	//new MapGenerator("/maps/mockup2.png", "newMap2" , "/graphics/Tileset.png", new Point(7,7));
 	
@@ -28,6 +32,10 @@ public synchronized void start(){
 	isRunning = true;
 	thread.setName("FPS");
 	thread.start();
+}
+public static void exitGame() {
+	SavingData.setSaveFiles();
+	System.exit(1); 
 }
 public void run(){
 	long lastTime = System.nanoTime();
@@ -57,6 +65,7 @@ public void run(){
 	}
 }
 private void tick(){
+	
 	uiHandler.tick();
 	if (UIHandler.uiState == UIStates.Game) {
 		gameHandler.tick();
