@@ -179,8 +179,7 @@ protected void tick(){
 	x = Utilities.clamp(x + xvel, Waves.left != null ? -hitboxX + Waves.left.x + 1 * GameState.MAPBASE : -hitboxX , Waves.right != null ? Waves.right.x - bounds.width - hitboxX :  Windows.WIDTH - bounds.width - hitboxX );
 	y = Utilities.clamp(y + yvel, Waves.up != null ?  -hitboxY + Waves.up.y + 1 * GameState.MAPBASE : -hitboxY, Waves.down != null ? Waves.down.y - bounds.height - hitboxY :  Windows.HEIGHT - bounds.height - hitboxY);
 	
-	//x = Utilities.clamp(x + xvel,-hitboxX , Windows.WIDTH - bounds.width - hitboxX );
-	//y = Utilities.clamp(y + yvel,-hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	
 	
 	
 	refreshBounds();

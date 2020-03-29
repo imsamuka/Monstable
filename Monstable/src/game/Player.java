@@ -127,15 +127,12 @@ protected void render(Graphics g){
 	
 	if (UIHandler.uiState == UIStates.Game) {
 		g.setColor(new Color(0, 0, 0, 255));
-		
-		//g.drawString("f:"+frame, 234, 20);
-		//g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
-		//g.drawString(bounds.x+","+bounds.y, 185, 20);
+		g.drawString("f:"+frame, 234, 20);
+		g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
+		g.drawString(bounds.x+","+bounds.y, 185, 20);
 		g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
-		
-		//g.setColor(new Color(255, 255, 255, 130));
-		//if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
-		
+		g.setColor(new Color(255, 255, 255, 130));
+		if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 		StaminaBar.render(g);
 		LifeBar.render(g);
 	}

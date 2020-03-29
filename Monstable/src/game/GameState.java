@@ -13,9 +13,10 @@ private static Images         map;
 public static AudioPlayer     song;
 
 public GameState(){
+	
 	if (currentState < mapList.length){
 		newMap(mapList[currentState]);
-		if (!GameHandler.getPointsOfMap()) {
+		if (!GameHandler.getPointsOfMap()) { 
 			currentState++;
 			new GameState();
 		}
@@ -27,10 +28,10 @@ public GameState(){
 }
 public void newMap(String path){
 	map = new Images(path);
+	GameHandler.objList.clear();
 	int[] rgbArray = map.getPixelRGBArray();
 	int width = map.getWidth();
 	int height = map.getHeight();
-	GameHandler.objList.clear();
 	for (int xx = 0; xx < width; xx++) for (int yy = 0; yy < height; yy++) GameHandler.objList.add(pixelSwitch(rgbArray[xx + ( yy * map.getWidth() )], xx * MAPBASE, yy * MAPBASE));
 	GameHandler.correctOrder();
 	
