@@ -1,7 +1,6 @@
 package game;
 import java.awt.Point;
 import java.util.Random;
-import main.Game;
 import main.Utilities;
 
 public class Waves{

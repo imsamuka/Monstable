@@ -1,7 +1,6 @@
 package main;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -12,7 +11,6 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import inputs.KeyInput;
 import inputs.MouseInput;
@@ -64,7 +62,7 @@ public Windows(){
 	frame.add(this);
 	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
 	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"));
-	frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/portrait_slime.png"));
+	frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/icon.png"));
 	frame.requestFocusInWindow();
 	frame.addKeyListener(keyInput);
 	frame.addMouseListener(mouseInput);

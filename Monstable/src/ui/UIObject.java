@@ -218,8 +218,9 @@ protected void drawString(Graphics g){
 	else g.setColor(defaultColor);
 	g.setFont(font);
 	FontMetrics fm = g.getFontMetrics(font);
-	int xpos = (int) x + ( width / 2 );
-	int ypos = (int) y + ( height / 2 );
+	
+	int xpos = (int) bounds.x + ( bounds.width / 2 );
+	int ypos = (int) bounds.y + ( bounds.height / 2 );
 	xpos = xpos - fm.stringWidth(text) / 2;
 	ypos = ( ypos - fm.getHeight() / 2 ) + fm.getAscent();
 	g.drawString(text, xpos, ypos);

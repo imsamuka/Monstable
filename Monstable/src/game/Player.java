@@ -6,7 +6,6 @@ import java.util.HashMap;
 import audio.AudioPlayer;
 import inputs.KeyInput;
 import inputs.KeyObj;
-import inputs.MouseInput;
 import main.Utilities;
 import main.Windows;
 import ui.ObjImage;

@@ -6,12 +6,11 @@ import java.util.Vector;
 import main.Game;
 import main.Utilities;
 import main.Windows;
-import ui.UIObject.animations;
 
 public class UIList{
 private static Vector<UIObject> masterlist;
-public static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
-public static Font             font2 = UIHandler.loadFont("res/fonts/a_LCDMini.ttf", 10);
+public static Font              alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
+public static Font              font2      = UIHandler.loadFont("res/fonts/a_LCDMini.ttf", 10);
 
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();
@@ -22,6 +21,21 @@ public static LinkedList<UIObject> getList(UIStates id){
 		if (masterlist.get(i).id == id){ list.add(masterlist.get(i)); }
 	}
 	return list;
+}
+public static UIObject defaultButton1(float x, float y, String text, UIStates id, OnClick onClick){
+	UIObject obj = new ObjButton(x, y, 0, 0, id, onClick);
+	obj.setHitBox(0, 0, 70, 25);
+	obj.setImage("/graphics/button_main2.png", 70, 25);
+	obj.setSprite(1, 2);
+	obj.setText(text, Color.black, Color.red, Color.GRAY, alphbeta18);
+	return obj;
+}
+public static UIObject defaultButton1(float x, float y, int w, int h, String text, UIStates id, OnClick onClick){
+	UIObject obj = new ObjButton(x, y, w, h, id, onClick);
+	obj.setImage("/graphics/button_main2.png", 70, 25);
+	obj.setSprite(1, 2);
+	obj.setText(text, Color.black, Color.red, Color.GRAY, alphbeta18);
+	return obj;
 }
 public UIList(){
 	masterlist = new Vector<UIObject>(30);
@@ -35,44 +49,28 @@ public UIList(){
 	//
 	//
 	// MAIN MENU
-	obj = new ObjButton(20, 20, 80, 30, UIStates.MainMenu, new OnClick(){
+	masterlist.add(defaultButton1(20, 20, "Play", UIStates.MainMenu, new OnClick(){
 	public void onClick(){ UIHandler.enterGame(); }
-	});
-	obj.setText("Play", Color.black, Color.red, Color.GRAY, alphbeta18);
-	obj.setAnimation(animations.slideUp, 60);
-	masterlist.add(obj);
-	obj = new ObjButton(20, 60, 80, 30, UIStates.MainMenu, new OnClick(){
+	}));
+	masterlist.add(defaultButton1(20, 60, "Options", UIStates.MainMenu, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.Options; }
-	});
-	obj.setText("Options", Color.black, Color.red, Color.GRAY, alphbeta18);
-	obj.setAnimation(animations.slideRight, 60);
-	masterlist.add(obj);
-	obj = new ObjButton(20, 100, 80, 30, UIStates.MainMenu, null);
-	obj.setText("Credits", Color.black, Color.red, Color.GRAY, alphbeta18);
-	obj.setAnimation(animations.slideLeft, 60);
-	masterlist.add(obj);
-	obj = new ObjButton(20, 140, 80, 30, UIStates.MainMenu, new OnClick(){
+	}));
+	masterlist.add(defaultButton1(20, 100, "Credits", UIStates.MainMenu, null));
+	masterlist.add(defaultButton1(20, 140, "Exit", UIStates.MainMenu, new OnClick(){
 	public void onClick(){ Game.exitGame(); }
-	});
-	obj.setText("Exit", Color.black, Color.red, Color.GRAY, alphbeta18);
-	obj.setAnimation(animations.slideDown, 60);
-	masterlist.add(obj);
-	//
-	//
-	//
+	}));
 	//
 	//
 	//
 	//
 	//
 	// OPTIONS
-	obj = new ObjButton(20, 20, 80, 30, UIStates.Options, new OnClick(){
+	masterlist.add(defaultButton1(20, 20, "Return", UIStates.Options, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.MainMenu; }
-	});
-	obj.setText("Return", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
+	}));
+	/*				Game Scale				 */
 	masterlist.add(new ObjText(78, 65, UIStates.Options, "Game Scale", Color.black, alphbeta18));
-	obj = new ObjButton(20, 80, 30, 30, UIStates.Options, new OnClick(){
+	masterlist.add(defaultButton1(20, 80, 25, 25, "-", UIStates.Options, new OnClick(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
 		Windows.SCALE = Utilities.clamp(Windows.SCALE - 1, 1, Windows.getMaxScale());
@@ -82,10 +80,8 @@ public UIList(){
 			Game.getNewWindow();
 		}
 	}
-	});
-	obj.setText("-", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
-	obj = new ObjButton(60, 80, 30, 30, UIStates.Options, new OnClick(){
+	}));
+	masterlist.add(defaultButton1(60, 80, 25, 25, "+", UIStates.Options, new OnClick(){
 	public void onClick(){
 		int tempScale = Windows.SCALE;
 		Windows.SCALE = Utilities.clamp(Windows.SCALE + 1, 1, Windows.getMaxScale());
@@ -95,10 +91,8 @@ public UIList(){
 			Game.getNewWindow();
 		}
 	}
-	});
-	obj.setText("+", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
-	obj = new ObjButton(100, 80, 40, 30, UIStates.Options, new OnClick(){
+	}));
+	masterlist.add(defaultButton1(100, 80, 35, 25, "Max", UIStates.Options, new OnClick(){
 	public void onClick(){
 		
 		if (Windows.SCALE != Windows.getMaxScale()){
@@ -106,45 +100,47 @@ public UIList(){
 			Game.getNewWindow();
 		}
 	}
-	});
-	obj.setText("Max", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
+	}));
+	/*				FullScreen				 */
 	masterlist.add(new ObjText(78, 125, UIStates.Options, "FullScreen", Color.black, alphbeta18));
-	obj = new ObjButton(20, 140, 30, 30, UIStates.Options, new OnClick(){
+	masterlist.add(defaultButton1(20, 140, 35, 25, "Off", UIStates.Options, new OnClick(){
 	public void onClick(){
 		Windows.windowed = true;
 		Game.getNewWindow();
 	}
-	});
-	obj.setText("Off", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
-	obj = new ObjButton(60, 140, 30, 30, UIStates.Options, new OnClick(){
+	}));
+	masterlist.add(defaultButton1(60, 140, 35, 25, "On", UIStates.Options, new OnClick(){
 	public void onClick(){
 		Windows.windowed = false;
 		Game.getNewWindow();
 	}
-	});
-	obj.setText("On", Color.black, Color.red, Color.GRAY, alphbeta18);
-	masterlist.add(obj);
+	}));
 	//
 	//
 	//
 	//
 	//
 	// GAME SCREEN
-	
 	obj = new ObjButton(240, 0, 16, 16, UIStates.Game, new OnClick(){
-		public void onClick(){ UIHandler.enterPause(); }
-		});
+	public void onClick(){ UIHandler.enterPause(); }
+	});
 	obj.setImage("/graphics/button_pause.png", 16, 16);
 	obj.setSprite(1, 2);
 	obj.setHitBox(2, 2, 12, 12);
-		masterlist.add(obj);
-
+	masterlist.add(obj);
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 	//
 	//
 	// PAUSE SCREEN
-	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0,0);
+	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0, 0);
 	obj.setFillBar(1, 0, 1, Color.black, Color.black, Color.black);
 	obj.setTransparency(0.2f);
 	masterlist.add(obj);
