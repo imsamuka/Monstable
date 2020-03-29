@@ -13,7 +13,10 @@ public ObjImage(float x, float y, int width, int height, UIStates id, String pat
 	if (width == 0) fullWidth = true;
 	if (height == 0) fullHeight = true;
 }
-public void tick(){ if (animation != animations.nothing) getAnimation(); }
+public void tick(){ 
+	hoveringCheck();
+	onHover();
+	if (animation != animations.nothing) getAnimation(); }
 public void render(Graphics g){
 	
 	

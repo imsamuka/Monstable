@@ -25,7 +25,12 @@ public void tick(){
 		objList = UIList.getList(uiState);
 		size    = objList.size();
 	}
-	for (int i = 0; i < size; i++) objList.get(i).tick();
+	for (int i = 0; i < size; i++) {
+		objList.get(i).tick();
+		if (UIList.rimuru.hovering) {
+			UIList.controls.setSprite(2);
+		}else UIList.controls.setSprite(1);
+	}
 	tempuiState = uiState;
 }
 public void render(Graphics g){ for (int i = 0; i < size; i++) objList.get(i).render(g); }

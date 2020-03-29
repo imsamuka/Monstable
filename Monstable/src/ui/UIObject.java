@@ -17,7 +17,6 @@ public boolean isOnClickNull(){ return onClick == null; }
 public void setX(float x){ this.x = x; }
 public void setY(float y){ this.y = y; }
 public void setActive(boolean active){ this.active = active; }
-
 //////// Main ////////
 
 protected float     x, y, transparency = 1;
@@ -25,10 +24,10 @@ protected int       width, height, boundsX = 0, boundsY = 0;
 protected boolean   hovering = false, active = true;
 protected UIStates  id;
 protected OnClick   onClick;
+protected OnHover   onHover;
 protected Rectangle bounds;
+
 public Rectangle getBounds(){ return bounds; }
-
-
 protected UIObject(float x, float y, int width, int height, UIStates id, OnClick onClick){
 	this.x       = x;
 	this.y       = y;
@@ -45,16 +44,17 @@ protected UIObject(float x, float y, int width, int height, UIStates id){
 	this.height = height;
 	this.id     = id;
 	bounds      = new Rectangle((int) x, (int) y, width + 1, height + 1);
-
 }
 // Methods:
 public abstract void tick();
 public abstract void render(Graphics g);
 public void onClick(){ if (onClick != null && active) onClick.onClick(); }
+public void onHover(){ if (onHover != null && hovering) onHover.onHover(); }
 public void hoveringCheck(){
 	if (bounds.contains(MouseInput.getMouseX(), MouseInput.getMouseY())) hovering = true;
 	else hovering = false;
 }
+public void setOnHover(OnHover onHover){ this.onHover = onHover; }
 public void refreshBounds(){
 	bounds.x = (int) x + boundsX;
 	bounds.y = (int) y + boundsY;
@@ -129,21 +129,34 @@ protected void getAnimation(){
 		vel = svel * ( ( ( currentFrame - ( frames / 2 ) ) ^ 2 ) / ( 4 * ( 0.0625f * ( frames ^ 2 ) ) ) );
 		currentFrame++;
 	}
-	if (animation == animations.slideLeft || animation == animations.slideRight) x = Utilities.clampAuto(x + vel, x, finaly);
-	if (animation == animations.slideDown || animation == animations.slideUp) y = Utilities.clampAuto(y + vel, y, finaly);
+	if (animation == animations.slideLeft
+	|| animation == animations.slideRight) x = Utilities.clampAuto(x + vel, x, finaly);
+	if (animation == animations.slideDown
+	|| animation == animations.slideUp) y = Utilities.clampAuto(y + vel, y, finaly);
 }
 
 //////// Images ////////
-protected Images        image;
-protected int           wSprite, dSprite, hSprite, spriteWidth, spriteHeight;
-protected boolean       fullImage = true;
+protected Images  image;
+protected int     wSprite, dSprite, hSprite, spriteWidth, spriteHeight;
+protected boolean fullImage = true;
 
 public void setImage(String path, int spriteWidth, int spriteHeight){
 	if (path != null) this.image = new Images(path);
 	this.spriteWidth  = spriteWidth;
 	this.spriteHeight = spriteHeight;
 }
-public void setSprite(int dSprite, int hSprite ){
+public void setSprite(int dSprite){
+	
+	if (dSprite == 0){
+		fullImage = true;
+		return;
+	}
+	fullImage    = false;
+	this.wSprite = dSprite;
+	this.dSprite = dSprite;
+	this.hSprite = dSprite;
+}
+public void setSprite(int dSprite, int hSprite){
 	
 	if (dSprite == 0){
 		fullImage = true;
@@ -156,7 +169,7 @@ public void setSprite(int dSprite, int hSprite ){
 }
 protected BufferedImage getImage(){
 	if (image == null) return null;
-
+	
 	try{
 		if (fullImage) return image.getThisImage();
 		return image.getSprite(wSprite, spriteWidth, spriteHeight);
@@ -182,8 +195,7 @@ public void setFillBar(float Value, float Min, float Max, Color Default, Color F
 }
 public void setFillValue(float Value){ fillValue = Utilities.clamp(Value, min, max); }
 public boolean isFull(){ return fillValue == max; }
-public void moreFillValue(float Value){ fillValue = Utilities.clamp(fillValue+Value, min, max); }
-
+public void moreFillValue(float Value){ fillValue = Utilities.clamp(fillValue + Value, min, max); }
 protected void getFillBar(Graphics g){
 	if (!fill) return;
 	
@@ -208,9 +220,7 @@ public void setText(String text, Color defaultColor, Color selectedColor, Color 
 	this.inactiveColor = inactiveColor;
 	this.font          = font;
 }
-public void setText(String text){
-	this.text          = text;
-}
+public void setText(String text){ this.text = text; }
 protected void drawString(Graphics g){
 	if (text == null) return;
 	if (!active) g.setColor(inactiveColor);
@@ -218,7 +228,6 @@ protected void drawString(Graphics g){
 	else g.setColor(defaultColor);
 	g.setFont(font);
 	FontMetrics fm = g.getFontMetrics(font);
-	
 	int xpos = (int) bounds.x + ( bounds.width / 2 );
 	int ypos = (int) bounds.y + ( bounds.height / 2 );
 	xpos = xpos - fm.stringWidth(text) / 2;

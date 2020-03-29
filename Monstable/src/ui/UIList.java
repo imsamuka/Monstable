@@ -11,6 +11,7 @@ public class UIList{
 private static Vector<UIObject> masterlist;
 public static Font              alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
 public static Font              font2      = UIHandler.loadFont("res/fonts/a_LCDMini.ttf", 10);
+public static UIObject controls, rimuru;
 
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();
@@ -132,17 +133,25 @@ public UIList(){
 	}));
 	// CHARACTER SELECTION
 	masterlist.add(new ObjText(Windows.WIDTH/2, 20, UIStates.CharSelection, "Select Your Character", Color.black, alphbeta18));
-	
 	masterlist.add(defaultButton1(20, 55, "Return", UIStates.CharSelection, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.Modes; }
 	}));
 	
+	
+	controls = new ObjImage(0,0,0,0,UIStates.CharSelection,"/graphics/ui_controls.png",64,64,1,1);
+	masterlist.add(controls);
+	
+	
 	int BlockSize = 50;
 	
-	obj = new ObjButton(30, 90,BlockSize,BlockSize,UIStates.CharSelection,new OnClick(){
+	rimuru = new ObjButton(30, 90,BlockSize,BlockSize,UIStates.CharSelection,new OnClick(){
 		public void onClick(){ UIHandler.enterGame(); }
 		});
-	masterlist.add(obj);
+	rimuru.setOnHover(new OnHover() {
+		public void onHover(){
+			controls.setSprite(2, 2);
+		 }});
+	masterlist.add(rimuru);
 	
 	obj = new ObjButton(30 + BlockSize + 10, 90, BlockSize, BlockSize, UIStates.CharSelection, null);
 	masterlist.add(obj);
