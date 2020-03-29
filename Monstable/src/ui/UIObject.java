@@ -135,7 +135,7 @@ protected void getAnimation(){
 
 //////// Images ////////
 protected Images        image;
-protected int           wSprite, spriteWidth, spriteHeight;
+protected int           wSprite, dSprite, hSprite, spriteWidth, spriteHeight;
 protected boolean       fullImage = true;
 
 public void setImage(String path, int spriteWidth, int spriteHeight){
@@ -143,14 +143,16 @@ public void setImage(String path, int spriteWidth, int spriteHeight){
 	this.spriteWidth  = spriteWidth;
 	this.spriteHeight = spriteHeight;
 }
-public void setSprite(int wSprite){
+public void setSprite(int dSprite, int hSprite ){
 	
-	if (wSprite == 0){
+	if (dSprite == 0){
 		fullImage = true;
 		return;
 	}
 	fullImage    = false;
-	this.wSprite = wSprite;
+	this.wSprite = dSprite;
+	this.dSprite = dSprite;
+	this.hSprite = hSprite;
 }
 protected BufferedImage getImage(){
 	if (image == null) return null;

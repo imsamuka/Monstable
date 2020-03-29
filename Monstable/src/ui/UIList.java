@@ -130,10 +130,20 @@ public UIList(){
 	//
 	//
 	//
+	// GAME SCREEN
+	
+	obj = new ObjButton(240, 0, 16, 16, UIStates.Game, new OnClick(){
+		public void onClick(){ UIHandler.enterPause(); }
+		});
+	obj.setImage("/graphics/button_pause.png", 16, 16);
+	obj.setSprite(1, 2);
+	obj.setHitBox(2, 2, 12, 12);
+		masterlist.add(obj);
+
 	//
 	//
 	// PAUSE SCREEN
-	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0);
+	obj = new ObjImage(0, 0, Windows.WIDTH, Windows.HEIGHT, UIStates.Pause, null, 0, 0, 0,0);
 	obj.setFillBar(1, 0, 1, Color.black, Color.black, Color.black);
 	obj.setTransparency(0.2f);
 	masterlist.add(obj);

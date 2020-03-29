@@ -65,15 +65,17 @@ public void tick(){
 		for (int i = spawnQtd; i > 0; i--){
 			int w = r.nextInt(4);
 			Point p = intToPoint(w);
+				
+			if (p == null) for (int j = 0; j < 4;j++) {
+				p = intToPoint(j);
+				if (p != null) break;
+			}
 			
-			while (p == null) {
-				p = intToPoint(w++);
-				if (w > 100) {
-					GameWaves.WaveBar.setFillValue(100);
-					System.out.println("No Entrances");
-					new GameState();
-					hasInitied = false;
-				}
+			if (p == null) {
+				GameWaves.WaveBar.setFillValue(100);
+				System.out.println("No Entrances");
+				new GameState();
+				hasInitied = false;
 			}
 			
 			int value2 = (int) ( ( r.nextInt((int) ( 30 )) + 1 ) * difficulties[currentWave] );

@@ -64,7 +64,7 @@ public Windows(){
 	frame.add(this);
 	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
 	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"));
-	//frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png"));
+	frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/portrait_slime.png"));
 	frame.requestFocusInWindow();
 	frame.addKeyListener(keyInput);
 	frame.addMouseListener(mouseInput);

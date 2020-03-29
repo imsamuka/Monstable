@@ -39,11 +39,13 @@ public Player(){
 	visibleBounds = false;
 	setHitBox(2, 7, 12, 9);
 	life    = 100;
-	LifeBar = new ObjImage(5, 5, 50, 5, UIStates.Game, null, 0, 0, 0);
-	LifeBar.setFillBar(life, 0, 100, new Color(200, 0, 0, 210), new Color(250, 30, 30, 255), new Color(140, 140, 140, 140));
-	StaminaBar = new ObjImage(5, 15, 50, 5, UIStates.Game, null, 0, 0, 0);
-	StaminaBar.setFillBar(stamina, 0, 30, new Color(0, 0, 200, 210), new Color(30, 30, 230, 255), new Color(140, 140, 140, 140));
-	
+	//new Color(200, 0, 0, 210)
+	LifeBar = new ObjImage(0, 0, 0, 0, UIStates.Game, "/graphics/ui_bars.png",64,16,1,1);
+	LifeBar.setFillBar(life, 0, 100, new Color(221,57,57, 255) , new Color(221,57,57, 255) , null);
+	LifeBar.setHitBox(0, 0, 64, 2);
+	StaminaBar = new ObjImage(0, 16, 0, 0, UIStates.Game, "/graphics/ui_bars.png",64,16,2,2);
+	StaminaBar.setFillBar(stamina, 0, 30, new Color(34,116,255, 255), new Color(34,116,255, 255),null);
+	StaminaBar.setHitBox(0, 0, 64, 2);
 	
 }
 public void setPosition(float tx, float ty){
@@ -127,12 +129,13 @@ protected void render(Graphics g){
 	
 	if (UIHandler.uiState == UIStates.Game) {
 		g.setColor(new Color(0, 0, 0, 255));
-		g.drawString("f:"+frame, 234, 20);
-		g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
-		g.drawString(bounds.x+","+bounds.y, 185, 20);
+		
+		//g.drawString("f:"+frame, 234, 20);
+		//g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
+		//g.drawString(bounds.x+","+bounds.y, 185, 20);
 		g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
-		g.setColor(new Color(255, 255, 255, 130));
-		if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
+		//g.setColor(new Color(255, 255, 255, 130));
+		//if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 		StaminaBar.render(g);
 		LifeBar.render(g);
 	}

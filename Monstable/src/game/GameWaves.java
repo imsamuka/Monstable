@@ -14,7 +14,7 @@ private static Waves[] newWaves(){ return new Waves[ ] {new Waves(10, 0, 0), new
 
 public static void resetGameWaves(){
 	WavesfromState = newWaves();
-	WaveBar        = null;
+	WaveBar        = null; 
 	initWaveBar();
 	thisState  = 0;
 	time       = System.nanoTime();
@@ -22,8 +22,9 @@ public static void resetGameWaves(){
 }
 public static void initWaveBar(){
 	if (WaveBar != null) return;
-	WaveBar = new ObjImage(5, 40, 50, 5, UIStates.Game, null, 0, 0, 0);
-	WaveBar.setFillBar(0, 0, 100, new Color(200, 0, 0, 210), new Color(250, 30, 30, 255), new Color(140, 140, 140, 140));
+	WaveBar = new ObjImage(64, 0, 0, 0, UIStates.Game, "/graphics/ui_bars.png",64,16,3,3);
+	WaveBar.setHitBox(1, 6, 47, 4);
+	WaveBar.setFillBar(0, 0, 100, new Color(87,19,161, 255), new Color(87,19,161, 255), null);
 }
 public GameWaves(int state){
 	initWaveBar();

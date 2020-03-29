@@ -6,10 +6,10 @@ import java.awt.Graphics2D;
 public class ObjImage extends UIObject{
 private boolean fullWidth = false, fullHeight = false;
 
-public ObjImage(float x, float y, int width, int height, UIStates id, String path, int spriteWidth, int spriteHeight, int wSprite){
+public ObjImage(float x, float y, int width, int height, UIStates id, String path, int spriteWidth, int spriteHeight, int dSprite, int hSprite){
 	super(x, y, width, height, id);
 	setImage(path, spriteWidth, spriteHeight);
-	setSprite(wSprite);
+	setSprite(dSprite, hSprite);
 	if (width == 0) fullWidth = true;
 	if (height == 0) fullHeight = true;
 }

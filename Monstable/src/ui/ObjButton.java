@@ -12,6 +12,8 @@ public ObjButton(float x, float y, int width, int height, UIStates id, OnClick o
 public void tick(){
 	refreshBounds();
 	hoveringCheck();
+	if (image != null) wSprite = hovering ? hSprite : dSprite; 
+	
 	if (animation != animations.nothing) getAnimation();
 }
 public void render(Graphics g){
