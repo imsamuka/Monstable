@@ -50,7 +50,7 @@ public UIList(){
 	//
 	// MAIN MENU
 	masterlist.add(defaultButton1(20, 20, "Play", UIStates.MainMenu, new OnClick(){
-	public void onClick(){ UIHandler.enterGame(); }
+	public void onClick(){ UIHandler.uiState = UIStates.Modes; }
 	}));
 	masterlist.add(defaultButton1(20, 60, "Options", UIStates.MainMenu, new OnClick(){
 	public void onClick(){ UIHandler.uiState = UIStates.Options; }
@@ -115,6 +115,38 @@ public UIList(){
 		Game.getNewWindow();
 	}
 	}));
+	//
+	//
+	//
+	//
+	//
+	// MODE SELECTION
+	masterlist.add(new ObjText(Windows.WIDTH/2, 20, UIStates.Modes, "Select Your Mode", Color.black, alphbeta18));
+	
+	masterlist.add(defaultButton1((Windows.WIDTH/2) - (70/2), 100, "History", UIStates.Modes, new OnClick(){
+	public void onClick(){ UIHandler.uiState = UIStates.CharSelection; }
+	}));
+	masterlist.add(defaultButton1((Windows.WIDTH/2) - (70/2), 130, "Arcade", UIStates.Modes, null));
+	masterlist.add(defaultButton1((Windows.WIDTH/2) - (70/2), 160, "Return", UIStates.Modes, new OnClick(){
+	public void onClick(){ UIHandler.uiState = UIStates.MainMenu; }
+	}));
+	// CHARACTER SELECTION
+	masterlist.add(new ObjText(Windows.WIDTH/2, 20, UIStates.CharSelection, "Select Your Character", Color.black, alphbeta18));
+	
+	masterlist.add(defaultButton1(20, 55, "Return", UIStates.CharSelection, new OnClick(){
+	public void onClick(){ UIHandler.uiState = UIStates.Modes; }
+	}));
+	
+	int BlockSize = 50;
+	
+	obj = new ObjButton(30, 90,BlockSize,BlockSize,UIStates.CharSelection,new OnClick(){
+		public void onClick(){ UIHandler.enterGame(); }
+		});
+	masterlist.add(obj);
+	
+	obj = new ObjButton(30 + BlockSize + 10, 90, BlockSize, BlockSize, UIStates.CharSelection, null);
+	masterlist.add(obj);
+	
 	//
 	//
 	//
