@@ -138,19 +138,14 @@ public UIList(){
 	}));
 	
 	
-	controls = new ObjImage(0,0,0,0,UIStates.CharSelection,"/graphics/ui_controls.png",64,64,1,1);
+	controls = new ObjImage(12*16,32,0,0,UIStates.CharSelection,"/graphics/ui_controls.png",64,64,1,1);
 	masterlist.add(controls);
-	
 	
 	int BlockSize = 50;
 	
 	rimuru = new ObjButton(30, 90,BlockSize,BlockSize,UIStates.CharSelection,new OnClick(){
 		public void onClick(){ UIHandler.enterGame(); }
 		});
-	rimuru.setOnHover(new OnHover() {
-		public void onHover(){
-			controls.setSprite(2, 2);
-		 }});
 	masterlist.add(rimuru);
 	
 	obj = new ObjButton(30 + BlockSize + 10, 90, BlockSize, BlockSize, UIStates.CharSelection, null);
