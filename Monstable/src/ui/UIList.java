@@ -129,6 +129,14 @@ public UIList(){
 	//
 	//
 	//
+	// GAME SCREEN
+		obj = new ObjButton(240, 0, 16, 16, UIStates.Game, new OnClick(){
+		public void onClick(){ UIHandler.enterPause(); }
+		});	
+		obj.setHitBox(2, 2, 12, 12);
+		masterlist.add(obj);
+		
+	
 	//
 	//
 	//

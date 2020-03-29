@@ -57,15 +57,10 @@ public static void correctListOrder(){
 }
 
 // The Keys
-public static KeyObj down  = new KeyObj(new int[ ] {KeyEvent.VK_DOWN, KeyEvent.VK_S}, "down", "up");
-public static KeyObj up    = new KeyObj(new int[ ] {KeyEvent.VK_UP, KeyEvent.VK_W}, "up", "down");
-public static KeyObj left  = new KeyObj(new int[ ] {KeyEvent.VK_LEFT, KeyEvent.VK_A}, "left", "right");
-public static KeyObj right = new KeyObj(new int[ ] {KeyEvent.VK_RIGHT, KeyEvent.VK_D}, "right", "left");
-public static KeyObj x     = new KeyObj(new int[ ] {KeyEvent.VK_X}, "x", new InputInt(){
-							public void OnSinglePressed(){ System.out.println("Power"); }
-							public void OnPressed(){}
-							public void OnReleased(){}
-							});
+public static KeyObj down  = new KeyObj(new int[ ] {KeyEvent.VK_S}, "down", "up");
+public static KeyObj up    = new KeyObj(new int[ ] {KeyEvent.VK_W}, "up", "down");
+public static KeyObj left  = new KeyObj(new int[ ] {KeyEvent.VK_A}, "left", "right");
+public static KeyObj right = new KeyObj(new int[ ] {KeyEvent.VK_D}, "right", "left");
 public static KeyObj esc   = new KeyObj(new int[ ] {KeyEvent.VK_ESCAPE}, "esc", new InputInt(){
 							public void OnSinglePressed(){
 								if (UIHandler.uiState == UIStates.Game) UIHandler.enterPause();
@@ -81,7 +76,6 @@ public KeyInput(){
 	KeyList.add(up);
 	KeyList.add(left);
 	KeyList.add(right);
-	KeyList.add(x);
 	KeyList.add(esc);
 }
 // Key Pressing
