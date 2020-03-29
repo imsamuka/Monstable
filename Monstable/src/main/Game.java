@@ -90,24 +90,29 @@ private void render(){
 		gameHandler.render(g);
 		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
 		else if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
-			int value = 0;
-			File file = new File("res/backgrounds/background_"+value+".png");
 			
-			while(file.exists()){
-				value++;
-				file = new File("res/backgrounds/background_"+value+".png");
-			}
-			if (!imageCreated) {
-				try{
-					ImageIO.write(image, "png", file);
-					System.out.println("New Background");
-					
-					imageCreated = true;
+			if (new File("C:\\Users\\ziza\\Desktop").exists()) {
+				int value = 0;
+				File file = new File("C:\\Users\\ziza\\Desktop\\background_"+value+".png");
+				
+				while(file.exists()){
+					value++;
+					file = new File("C:\\Users\\ziza\\Desktop\\background_"+value+".png");
 				}
-				catch(IOException e){
-					e.printStackTrace();
+				if (!imageCreated) {
+					try{
+						ImageIO.write(image, "png", file);
+						System.out.println("New Background");
+						
+						imageCreated = true;
+					}
+					catch(IOException e){
+						e.printStackTrace();
+					}
 				}
 			}
+			
+			
 			
 			image = Utilities.blurImage(3, image);
 			g     = image.getGraphics();

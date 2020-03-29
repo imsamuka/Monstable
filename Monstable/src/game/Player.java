@@ -52,6 +52,11 @@ public void setPosition(float tx, float ty){
 	y = Utilities.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 }
 protected void tick(){
+	if (death) {
+		UIHandler.uiState = UIStates.Death;
+	}
+	
+	
 	if (!roll) stamina = Utilities.clamp(stamina + 1, 0, 30);
 	
 	// Movement check
@@ -114,6 +119,7 @@ protected void tick(){
 	y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 	refreshBounds();
 	getAnimations();
+	checkForDeath();
 }
 protected void render(Graphics g){
 	// Sprite Choosing

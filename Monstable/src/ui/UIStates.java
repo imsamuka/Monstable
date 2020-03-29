@@ -7,4 +7,5 @@ MainMenu,
 	Options,
 Game,
 	Pause,
+	Death
 }
