@@ -17,7 +17,7 @@ public boolean          hasInitied  = false;
 public Random           r           = new Random();
 
 public Waves(int Quantity, double initialDificculties, float dificcultyMultiplier){
-	quantity             = Quantity +1;
+	quantity             = Quantity + 1;
 	dificcultyMultiplier = Utilities.clamp(dificcultyMultiplier, 0.05f, 0.2f);
 	if (dificcultyMultiplier != 0.05f && dificcultyMultiplier != 0.2f) dificcultyMultiplier = 0.1f;
 	difficulties = new double[quantity];
@@ -29,13 +29,13 @@ public Waves(int Quantity, double initialDificculties, float dificcultyMultiplie
 	}
 }
 public void init(){ hasInitied = true; }
-public Point intToPoint(int w) {
-w = Utilities.clampSwitch(w, 0, 4);
-if (w == 0) return down;
-if (w == 1) return up;
-if (w == 2) return left;
-if (w == 3) return right;
-return null;
+public Point intToPoint(int w){
+	w = Utilities.clampSwitch(w, 0, 4);
+	if (w == 0) return down;
+	if (w == 1) return up;
+	if (w == 2) return left;
+	if (w == 3) return right;
+	return null;
 }
 public void tick(){
 	if (!hasInitied) return;
@@ -65,20 +65,18 @@ public void tick(){
 		for (int i = spawnQtd; i > 0; i--){
 			int w = r.nextInt(4);
 			Point p = intToPoint(w);
-				
-			if (p == null) for (int j = 0; j < 4;j++) {
+			if (p == null) for (int j = 0; j < 4; j++){
 				p = intToPoint(j);
 				if (p != null) break;
 			}
 			
-			if (p == null) {
+			if (p == null){
 				GameWaves.WaveBar.setFillValue(100);
 				GameWaves.WaveNumber.setText("0");
 				System.out.println("No Entrances");
 				new GameState();
 				hasInitied = false;
 			}
-			
 			int value2 = (int) ( ( r.nextInt((int) ( 30 )) + 1 ) * difficulties[currentWave] );
 			Enemy.Opt option = Enemy.Opt.melee;
 			if (value2 > 20) option = Enemy.Opt.fastMelee;
@@ -88,22 +86,27 @@ public void tick(){
 		}
 	}
 	
-	if (GameWaves.WaveBar.isFull() || !GameHandler.exists(ID.Enemy)){
+	if (currentWave + 1 < quantity){
 		
-		if (currentWave + 1 < quantity){
+		if (GameWaves.WaveBar.isFull() || !GameHandler.exists(ID.Enemy)){
 			GameWaves.WaveBar.setFillValue(0);
 			GameWaves.time = System.nanoTime();
 			currentWave++;
 			GameWaves.WaveNumber.setText(String.valueOf(currentWave));
-		}else if (currentWave + 1 == quantity){
+			return;
+		}
+	}else if (currentWave + 1 == quantity){
+		
+		if (!GameHandler.exists(ID.Enemy)){
 			GameWaves.WaveBar.setFillValue(100);
 			GameWaves.WaveNumber.setText("0");
 			System.out.println("Waves for this state end");
 			new GameState();
 			hasInitied = false;
+			return;
 		}
-		return;
 	}
+
 	GameWaves.WaveBar.setFillValue((float) ( ( ( ( ( System.nanoTime() - GameWaves.time ) / 1000000000 ) / waveSeconds ) * 100 ) ));
 }
 }

@@ -3,6 +3,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import game.GameHandler;
 import game.GameWaves;
 import inputs.MouseInput;
@@ -10,32 +13,30 @@ import ui.UIHandler;
 import ui.UIStates;
 
 public class Game implements Runnable{
-private static Windows     window;
-private static GameHandler gameHandler;
-private static BufferedImage      image     = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
-public static UIHandler     uiHandler;
-public static boolean             isRunning = false;
-private Thread             thread    = new Thread(this);
+private static Windows       window;
+private static GameHandler   gameHandler;
+private static BufferedImage image        = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
+public static UIHandler      uiHandler;
+public static boolean        isRunning    = false, imageCreated = false;
+private Thread               thread       = new Thread(this);           
 
-public static void main(String[] args){new Game(); }
+public static void main(String[] args){ new Game(); }
 public Game(){
 	SavingData.getSaveFiles();
 	getNewWindow();
 	uiHandler = new UIHandler();
-	
 	//new MapGenerator("/maps/mockup1.png", "newMap1" , "/graphics/Tileset.png", new Point(3,5));
 	//new MapGenerator("/maps/mockup2.png", "newMap2" , "/graphics/Tileset.png", new Point(7,7));
-	
-	start();	
+	start();
 }
 public synchronized void start(){
 	isRunning = true;
 	thread.setName("FPS");
 	thread.start();
 }
-public static void exitGame() {
+public static void exitGame(){
 	SavingData.setSaveFiles();
-	System.exit(1); 
+	System.exit(1);
 }
 public void run(){
 	long lastTime = System.nanoTime();
@@ -65,9 +66,9 @@ public void run(){
 	}
 }
 private void tick(){
-	
 	uiHandler.tick();
-	if (UIHandler.uiState == UIStates.Game) {
+	
+	if (UIHandler.uiState == UIStates.Game){
 		gameHandler.tick();
 		GameWaves.tick();
 	}
@@ -83,13 +84,33 @@ private void render(){
 	// Background Color
 	g.setColor(Color.white);
 	g.fillRect(0, 0, Windows.WIDTH, Windows.HEIGHT);
+	
 	// Render the game
-	if (gameHandler != null) {
+	if (gameHandler != null){
 		gameHandler.render(g);
 		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
 		else if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
+			int value = 0;
+			File file = new File("res/backgrounds/background_"+value+".png");
+			
+			while(file.exists()){
+				value++;
+				file = new File("res/backgrounds/background_"+value+".png");
+			}
+			if (!imageCreated) {
+				try{
+					ImageIO.write(image, "png", file);
+					System.out.println("New Background");
+					
+					imageCreated = true;
+				}
+				catch(IOException e){
+					e.printStackTrace();
+				}
+			}
+			
 			image = Utilities.blurImage(3, image);
-			g = image.getGraphics();
+			g     = image.getGraphics();
 		}
 	}
 	// Render da UI	
@@ -103,14 +124,8 @@ private void render(){
 }
 public static void getNewWindow(){ window = new Windows(); }
 public static void getNewGameHandler(){ gameHandler = new GameHandler(); }
-
-protected static void renderMousePoint(Graphics g) {
+protected static void renderMousePoint(Graphics g){
 	g.setColor(Color.black);
 	if (MouseInput.isOnScreen()) g.fillRect((int) ( MouseInput.getMouseX() ), (int) ( MouseInput.getMouseY() ), 1, 1);
-
 }
-
-
-
-
 }

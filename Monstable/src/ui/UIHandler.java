@@ -44,6 +44,7 @@ public static void enterGame(){
 	UIHandler.uiState = UIStates.Game;
 	UIHandler.menuSong.stop();
 	GameState.song.loop();
+	Game.imageCreated = false;
 }
 public static void returnToMainMenu(){
 	UIHandler.menuSong.setBeginning();
