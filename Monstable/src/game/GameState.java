@@ -16,6 +16,10 @@ public GameState(){
 	
 	if (currentState < mapList.length){
 		newMap(mapList[currentState]);
+		if (!GameHandler.getPointsOfMap()) { 
+			currentState++;
+			new GameState();
+		}
 		new GameWaves(currentState);
 		song = new AudioPlayer(songList[currentState]);
 		song.setBeginning();

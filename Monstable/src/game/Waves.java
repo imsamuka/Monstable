@@ -1,22 +1,21 @@
 package game;
-
 import java.awt.Point;
 import java.util.Random;
+import main.Game;
 import main.Utilities;
 
 public class Waves{
-public static final Point up             = new Point(7 * GameState.MAPBASE, -1 * GameState.MAPBASE),
+public static Point     up          = new Point(7 * GameState.MAPBASE, -1 * GameState.MAPBASE),
 down = new Point(7 * GameState.MAPBASE, 16 * GameState.MAPBASE),
 left = new Point(-1 * GameState.MAPBASE, 7 * GameState.MAPBASE),
 right = new Point(16 * GameState.MAPBASE, 7 * GameState.MAPBASE);
-public final static int   waveSeconds    = 10;
-public int       quantity;
-public double[]  difficulties;
-public boolean[] enemiesG;
-public int       currentWave = -1;
-public boolean   hasInitied  = false;
-public Random r = new Random();
-
+public final static int waveSeconds = 10;
+public int              quantity;
+public double[]         difficulties;
+public boolean[]        enemiesG;
+public int              currentWave = -1;
+public boolean          hasInitied  = false;
+public Random           r           = new Random();
 
 public Waves(int Quantity, double initialDificculties, float dificcultyMultiplier){
 	quantity             = Quantity;
@@ -31,6 +30,14 @@ public Waves(int Quantity, double initialDificculties, float dificcultyMultiplie
 	}
 }
 public void init(){ hasInitied = true; }
+public Point intToPoint(int w) {
+w = Utilities.clampSwitch(w, 0, 4);
+if (w == 0) return down;
+if (w == 1) return up;
+if (w == 2) return left;
+if (w == 3) return right;
+return null;
+}
 public void tick(){
 	if (!hasInitied) return;
 	
@@ -46,10 +53,8 @@ public void tick(){
 	
 	if (!enemiesG[currentWave]){
 		enemiesG[currentWave] = true;
-		
-		int value1 = (int) ((r.nextInt((int) ( 49 )) + 51)*difficulties[currentWave]);
+		int value1 = (int) ( ( r.nextInt((int) ( 49 )) + 51 ) * difficulties[currentWave] );
 		int spawnQtd = 1;
-		
 		if (value1 > 10) spawnQtd++;
 		if (value1 > 40) spawnQtd++;
 		if (value1 > 70) spawnQtd++;
@@ -57,39 +62,25 @@ public void tick(){
 		if (value1 > 150) spawnQtd++;
 		if (value1 > 300) spawnQtd++;
 		
-		int[] quantityInPos = { 0,0,0,0 };
-		int off = 1;
-		
-		for (int i = spawnQtd; i > 0; i--) {
+		for (int i = spawnQtd; i > 0; i--){
 			int w = r.nextInt(4);
-			Point p = new Point(0,0);
-			if (w == 0) {
-				p = down;
-				p.x += quantityInPos[w]*off;
-			}
-			else if (w == 1) { 
-				p = up;
-				p.x += quantityInPos[w]*off;
-			}
-			else if (w == 2) {
-				p = left;
-				p.y += quantityInPos[w]*off;
-			}
-			else if (w == 3) {
-				p = right;
-				p.y += quantityInPos[w]*off;
-			}
-			quantityInPos[w]++;
+			Point p = intToPoint(w);
 			
-			int value2 = (int) ((r.nextInt((int) ( 30 )) + 1)*difficulties[currentWave]);
+			while (p == null) {
+				p = intToPoint(w++);
+				if (w > 100) {
+					GameWaves.WaveBar.setFillValue(100);
+					System.out.println("No Entrances");
+					new GameState();
+					hasInitied = false;
+				}
+			}
+			
+			int value2 = (int) ( ( r.nextInt((int) ( 30 )) + 1 ) * difficulties[currentWave] );
 			Enemy.Opt option = Enemy.Opt.melee;
-			
-			
-			if (value2 > 20) option = Enemy.Opt.fastMelee;	
+			if (value2 > 20) option = Enemy.Opt.fastMelee;
 			if (value2 > 40) option = Enemy.Opt.zombie;
-			if (value2 > 60) option = Enemy.Opt.mage;	
-			
-			
+			if (value2 > 60) option = Enemy.Opt.mage;
 			GameHandler.objList.add(new Enemy(p.x, p.y, option));
 		}
 	}

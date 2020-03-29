@@ -105,4 +105,32 @@ protected void render(Graphics g){
 	g.drawImage(image.getSprite(wSprite, sWidth, sHeight), (int) x, (int) y, null);
 	renderBounds(g);
 }
+
+
+
+
+
+public static void getPoints(GameObject tO, Point[] points){
+	if (!tO.id.is(ID.Wall)) return;	
+	if (!(tO.wSprite == 13 || tO.wSprite == 18 || tO.wSprite == 6 || tO.wSprite == 33)) return;
+	int off = 8;
+	if (tO.wSprite == 33) {
+		points[0] = new Point((int)tO.x + off,(int)tO.y);
+	}else if (tO.wSprite == 6) {
+		points[1] = new Point((int)tO.x + off,(int)tO.y);
+	}else if (tO.wSprite == 13) {
+		points[2] = new Point((int)tO.x,(int)tO.y + off + GameState.MAPBASE);
+	}else if (tO.wSprite == 18) {
+		points[3] = new Point((int)tO.x,(int)tO.y + off + GameState.MAPBASE);
+	}
+ }
 }
+
+
+
+
+
+
+
+
+

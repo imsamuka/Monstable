@@ -14,7 +14,6 @@ mage,
 zombie;
 }
 
-@SuppressWarnings("unused")
 private Opt     option;
 @SuppressWarnings("unused")
 private boolean openPath = true, entered = false, isMoving = false, attackAnimation = false;
@@ -87,18 +86,18 @@ protected void tick(){
 	
 	if (!entered){
 		
-		if (x < -hitboxX + 1 * GameState.MAPBASE){
-			xvel      = Spd;
-			direction = "right";
-		}else if (y < -hitboxY + 1 * GameState.MAPBASE){
-			yvel      = Spd;
-			direction = "down";
-		}else if (x > Windows.WIDTH - bounds.width - hitboxX - 1 * GameState.MAPBASE){
-			xvel      = -Spd;
-			direction = "left";
-		}else if (y > Windows.HEIGHT - bounds.height - hitboxY - 1 * GameState.MAPBASE){
+		if (Waves.down != null && y > Waves.down.y - bounds.height - hitboxY){
 			yvel      = -Spd;
 			direction = "up";
+		}else if (Waves.up != null && y < -hitboxY + Waves.up.y + 1 * GameState.MAPBASE){
+			yvel      = Spd;
+			direction = "down";
+		}else if (Waves.left != null && x < -hitboxX + Waves.left.x + 1 * GameState.MAPBASE){
+			xvel      = Spd;
+			direction = "right";
+		}else if (Waves.right != null && x > Waves.right.x - bounds.width - hitboxX){
+			xvel      = -Spd;
+			direction = "left";
 		}else entered = true;
 		
 	
@@ -177,8 +176,11 @@ protected void tick(){
 	isMoving = xvel != 0 && yvel != 0 ? true : false;
 	
 	
-	x = Utilities.clamp(x + xvel, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
-	y = Utilities.clamp(y + yvel, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
+	x = Utilities.clamp(x + xvel, Waves.left != null ? -hitboxX + Waves.left.x + 1 * GameState.MAPBASE : -hitboxX , Waves.right != null ? Waves.right.x - bounds.width - hitboxX :  Windows.WIDTH - bounds.width - hitboxX );
+	y = Utilities.clamp(y + yvel, Waves.up != null ?  -hitboxY + Waves.up.y + 1 * GameState.MAPBASE : -hitboxY, Waves.down != null ? Waves.down.y - bounds.height - hitboxY :  Windows.HEIGHT - bounds.height - hitboxY);
+	
+	
+	
 	
 	refreshBounds();
 	checkForDeath();

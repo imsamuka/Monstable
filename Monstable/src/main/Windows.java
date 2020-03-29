@@ -12,6 +12,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import inputs.KeyInput;
 import inputs.MouseInput;
@@ -62,8 +63,8 @@ public Windows(){
 	this.setBackground(Color.black);
 	frame.add(this);
 	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
-	Cursor cursor = Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor");
-	frame.setCursor(cursor);
+	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"));
+	//frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png"));
 	frame.requestFocusInWindow();
 	frame.addKeyListener(keyInput);
 	frame.addMouseListener(mouseInput);

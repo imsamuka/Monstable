@@ -17,7 +17,18 @@ public void tick(){ for (int i = 0; objList != null && i < objList.size(); i++) 
 public void render(Graphics g){
 	for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).render(g);
 	for (int i = 0; objList != null && i < objList.size(); i++) Tile.createFade(objList.get(i), g);
-	
+}
+public static boolean getPointsOfMap() {
+	Point[] points = {null,null,null,null};
+	for (int i = 0; objList != null && i < objList.size(); i++)
+		Tile.getPoints(objList.get(i), points);
+	boolean HaveEntrances = false;
+	for (int i = 0; i < 4; i++) if (points[i] != null) HaveEntrances = true;
+	Waves.down = points[0];
+	Waves.up = points[1];
+	Waves.left = points[2];
+	Waves.right = points[3];
+	return HaveEntrances;
 }
 public static boolean exists(GameObject o){
 	int size = objList.size();
