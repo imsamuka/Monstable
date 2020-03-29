@@ -10,7 +10,8 @@ import ui.UIObject.animations;
 
 public class UIList{
 private static Vector<UIObject> masterlist;
-private static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
+public static Font             alphbeta18 = UIHandler.loadFont("res/fonts/alphbeta.ttf", 18);
+public static Font             font2 = UIHandler.loadFont("res/fonts/a_LCDMini.ttf", 10);
 
 public static LinkedList<UIObject> getList(UIStates id){
 	LinkedList<UIObject> list = new LinkedList<UIObject>();

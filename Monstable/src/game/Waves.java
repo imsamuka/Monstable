@@ -18,13 +18,13 @@ public boolean          hasInitied  = false;
 public Random           r           = new Random();
 
 public Waves(int Quantity, double initialDificculties, float dificcultyMultiplier){
-	quantity             = Quantity;
+	quantity             = Quantity +1;
 	dificcultyMultiplier = Utilities.clamp(dificcultyMultiplier, 0.05f, 0.2f);
 	if (dificcultyMultiplier != 0.05f && dificcultyMultiplier != 0.2f) dificcultyMultiplier = 0.1f;
-	difficulties = new double[Quantity];
-	enemiesG     = new boolean[Quantity];
+	difficulties = new double[quantity];
+	enemiesG     = new boolean[quantity];
 	
-	for (int i = 0; i < Quantity; i++){
+	for (int i = 0; i < quantity; i++){
 		difficulties[i] = initialDificculties + i * i * dificcultyMultiplier;
 		enemiesG[i]     = false;
 	}
@@ -48,6 +48,7 @@ public void tick(){
 			GameWaves.WaveBar.setFillValue(0);
 			GameWaves.time = System.nanoTime();
 			currentWave++;
+			GameWaves.WaveNumber.setText(String.valueOf(currentWave));
 		}else return;
 	}
 	
@@ -73,6 +74,7 @@ public void tick(){
 			
 			if (p == null) {
 				GameWaves.WaveBar.setFillValue(100);
+				GameWaves.WaveNumber.setText("0");
 				System.out.println("No Entrances");
 				new GameState();
 				hasInitied = false;
@@ -93,8 +95,10 @@ public void tick(){
 			GameWaves.WaveBar.setFillValue(0);
 			GameWaves.time = System.nanoTime();
 			currentWave++;
+			GameWaves.WaveNumber.setText(String.valueOf(currentWave));
 		}else if (currentWave + 1 == quantity){
 			GameWaves.WaveBar.setFillValue(100);
+			GameWaves.WaveNumber.setText("0");
 			System.out.println("Waves for this state end");
 			new GameState();
 			hasInitied = false;

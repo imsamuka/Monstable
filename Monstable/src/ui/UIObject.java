@@ -208,6 +208,9 @@ public void setText(String text, Color defaultColor, Color selectedColor, Color 
 	this.inactiveColor = inactiveColor;
 	this.font          = font;
 }
+public void setText(String text){
+	this.text          = text;
+}
 protected void drawString(Graphics g){
 	if (text == null) return;
 	if (!active) g.setColor(inactiveColor);

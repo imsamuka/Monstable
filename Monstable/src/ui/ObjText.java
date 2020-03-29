@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 public class ObjText extends UIObject{
-protected ObjText(float x, float y, UIStates id, String text, Color defaultColor, Font font){ 
+public ObjText(float x, float y, UIStates id, String text, Color defaultColor, Font font){ 
 	super(x, y, 0, 0, id);
 	setText(text, defaultColor, null, null, font);
 }
