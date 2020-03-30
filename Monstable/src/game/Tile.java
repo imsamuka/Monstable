@@ -16,12 +16,15 @@ private static ID spriteToID(int wSprite){
 		case 10:
 		case 11:
 		case 12:
+		case 17:
 		case 19:
 		case 20:
 		case 21:
 		case 28:
 		case 29:
 		case 30:
+		case 37:
+		case 38:
 			return ID.Floor;
 		default:
 			return ID.Wall;

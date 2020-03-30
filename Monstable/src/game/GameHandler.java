@@ -15,8 +15,15 @@ public GameHandler(){
 }
 public void tick(){ for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).tick(); }
 public void render(Graphics g){
-	for (int i = 0; objList != null && i < objList.size(); i++) objList.get(i).render(g);
-	for (int i = 0; objList != null && i < objList.size(); i++) Tile.createFade(objList.get(i), g);
+	for (int i = 0; objList != null && i < objList.size(); i++) {
+		
+		GameObject tO = objList != null ? objList.get(i) : null ;
+		if (tO != null) tO.render(g);
+	}
+	for (int i = 0; objList != null && i < objList.size(); i++) {
+		GameObject tO = objList != null ? objList.get(i) : null ;
+		if (tO != null) Tile.createFade(tO, g);
+	}
 }
 public static boolean getPointsOfMap() {
 	Point[] points = {null,null,null,null};

@@ -57,7 +57,7 @@ public Enemy(float x, float y, Opt option){
 		setHitBox(2, 7, 8, 9);
 		life   = 60;
 		Spd    = 0.7f;
-		damage = 10;
+		damage = 30;
 		GameHandler.objList.add(new Melee((float) bounds.getCenterX(), (float) bounds.getCenterX(), bounds.width, bounds.height, damage, this));
 	}
 	//visibleBounds = true;

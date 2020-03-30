@@ -13,10 +13,12 @@ public void tick(){
 	refreshBounds();
 	hoveringCheck();
 	onHover();
-	if (image != null) wSprite = hovering ? hSprite : dSprite; 
+	if (image != null) wSprite = hovering && onClick != null ? hSprite : dSprite; 
 	if (animation != animations.nothing) getAnimation();
 }
 public void render(Graphics g){
+	if (!visible) return;
+		
 	
 
 	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency));

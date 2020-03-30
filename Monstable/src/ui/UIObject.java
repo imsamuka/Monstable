@@ -21,12 +21,13 @@ public void setActive(boolean active){ this.active = active; }
 
 protected float     x, y, transparency = 1;
 protected int       width, height, boundsX = 0, boundsY = 0;
-protected boolean   hovering = false, active = true;
+protected boolean   hovering = false, active = true, visible = true;
 protected UIStates  id;
 protected OnClick   onClick;
 protected OnHover   onHover;
 protected Rectangle bounds;
 
+public void setVisible(boolean v){ visible = v; }
 public Rectangle getBounds(){ return bounds; }
 protected UIObject(float x, float y, int width, int height, UIStates id, OnClick onClick){
 	this.x       = x;
@@ -54,7 +55,8 @@ public void hoveringCheck(){
 	if (bounds.contains(MouseInput.getMouseX(), MouseInput.getMouseY())) hovering = true;
 	else hovering = false;
 }
-public void setOnHover(OnHover onHover){ this.onHover = onHover; }
+public void setOn(OnHover onHover){ this.onHover = onHover; }
+public void setOn(OnClick onClick){ this.onClick = onClick; }
 public void refreshBounds(){
 	bounds.x = (int) x + boundsX;
 	bounds.y = (int) y + boundsY;
@@ -222,7 +224,7 @@ public void setText(String text, Color defaultColor, Color selectedColor, Color 
 }
 public void setText(String text){ this.text = text; }
 protected void drawString(Graphics g){
-	if (text == null) return;
+	if (text == null) 	return;
 	if (!active) g.setColor(inactiveColor);
 	else if (hovering) g.setColor(selectedColor);
 	else g.setColor(defaultColor);

@@ -3,8 +3,13 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import javax.swing.JOptionPane;
 
 public abstract class Utilities{
+public static void dialogBox(String text) {
+	
+	JOptionPane.showMessageDialog(null, text, "Monstable", JOptionPane.INFORMATION_MESSAGE);
+}
 public static Rectangle extendRectangle(Rectangle bounds, int value){
 	return new Rectangle(bounds.x - value, bounds.y - value, bounds.width + value * 2, bounds.height + value * 2);
 }

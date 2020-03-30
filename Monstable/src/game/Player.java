@@ -19,19 +19,19 @@ protected boolean moving = false, roll = false, jumpAnimation = false, idleAnima
 public boolean isRoll(){ return roll; }
 public void setRoll(boolean roll){ this.roll = roll; }
 
-public final float rollCost  = 15, goopCost = 12, damageCooldownFrames = 40;
-public float       stamina   = 0, xvelRoll, yvelRoll;
-public int         rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1, damageCooldown = 0;
-private Melee      attack;
-private UIObject   StaminaBar, LifeBar;
-private double     timer1    = System.nanoTime(), timer2 = System.nanoTime(), timer3 = System.nanoTime(),
-timer4 = System.nanoTime();
-public HashMap< String , AudioPlayer > sfx = new HashMap< String , AudioPlayer >();
-private String     direction = "down";
+public final float                  rollCost  = 15, goopCost = 12, damageCooldownFrames = 40;
+public float                        stamina   = 0, xvelRoll, yvelRoll;
+public int                          rollCount = 0, knockbackCount = 0, frame = 0, rollQtd = 1, damageCooldown = 0;
+private Melee                       attack;
+private UIObject                    StaminaBar, LifeBar;
+private double                      timer1    = System.nanoTime(), timer2 = System.nanoTime(),
+timer3 = System.nanoTime(), timer4 = System.nanoTime();
+public HashMap<String, AudioPlayer> sfx       = new HashMap<String, AudioPlayer>();
+private String                      direction = "down";
 
 public Player(){
 	super(Windows.WIDTH / 2, Windows.HEIGHT / 2, ID.Player, "/graphics/sheet_slime.png", 16, 16, 1);
-	//sfx.put("goop", new AudioPlayer("/sound/goop1.mp3"));
+	sfx.put("goop", new AudioPlayer("/sound/goop.mp3"));
 	collision     = true;
 	entitie       = true;
 	Spd           = 1.5f;
@@ -39,24 +39,18 @@ public Player(){
 	setHitBox(2, 7, 12, 9);
 	life    = 100;
 	//new Color(200, 0, 0, 210)
-	LifeBar = new ObjImage(0, 0, 0, 0, UIStates.Game, "/graphics/ui_bars.png",64,16,1,1);
-	LifeBar.setFillBar(life, 0, 100, new Color(221,57,57, 255) , new Color(221,57,57, 255) , null);
-	LifeBar.setHitBox(0, 0, 64, 2);
-	StaminaBar = new ObjImage(0, 16, 0, 0, UIStates.Game, "/graphics/ui_bars.png",64,16,2,2);
-	StaminaBar.setFillBar(stamina, 0, 30, new Color(34,116,255, 255), new Color(34,116,255, 255),null);
-	StaminaBar.setHitBox(0, 0, 64, 2);
-	
+	LifeBar = new ObjImage(0, 0, 0, 0, UIStates.Game, "/graphics/ui_bars.png", 64, 16, 1, 1);
+	LifeBar.setFillBar(life, 0, 100, new Color(221, 57, 57, 255), new Color(221, 57, 57, 255), null);
+	LifeBar.setHitBox(5, 7, 54, 4);
+	StaminaBar = new ObjImage(0, 8, 0, 0, UIStates.Game, "/graphics/ui_bars.png", 64, 16, 2, 2);
+	StaminaBar.setFillBar(stamina, 0, 30, new Color(34, 116, 255, 255), new Color(34, 116, 255, 255), null);
+	StaminaBar.setHitBox(5, 7, 54, 4);
 }
 public void setPosition(float tx, float ty){
 	x = Utilities.clamp(tx, -hitboxX, Windows.WIDTH - bounds.width - hitboxX);
 	y = Utilities.clamp(ty, -hitboxY, Windows.HEIGHT - bounds.height - hitboxY);
 }
 protected void tick(){
-	if (death) {
-		UIHandler.uiState = UIStates.Death;
-	}
-	
-	
 	if (!roll) stamina = Utilities.clamp(stamina + 1, 0, 30);
 	
 	// Movement check
@@ -87,7 +81,6 @@ protected void tick(){
 	checkKnockback();
 	checkRoll();
 	
-	
 	if (Utilities.extendRectangle((Rectangle) StaminaBar.getBounds().createUnion(LifeBar.getBounds()), 5).intersects(bounds)){
 		StaminaBar.setTransparency(0.2f);
 		LifeBar.setTransparency(0.2f);
@@ -97,8 +90,11 @@ protected void tick(){
 	}
 	StaminaBar.setFillValue(stamina);
 	LifeBar.setFillValue(life);
-	damageCooldown -= damageCooldown > 0 ? 1 : 0 ;
-	ableToDamage = damageCooldown > 0 ? false : true;
+	
+	
+	if (damageCooldown > 0) damageCooldown--;
+	ableToDamage = damageCooldown > 0 ? false : true ;
+	
 	
 	int size = GameHandler.objList.size();
 	collideX = false;
@@ -120,6 +116,10 @@ protected void tick(){
 	refreshBounds();
 	getAnimations();
 	checkForDeath();
+	if (death){
+		GameState.setLastWave();
+		UIHandler.uiState = UIStates.Death;
+	}
 }
 protected void render(Graphics g){
 	// Sprite Choosing
@@ -128,17 +128,15 @@ protected void render(Graphics g){
 	else if (knockback) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else if (jumpAnimation) wSprite = 48 + frame + 8 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
 	else wSprite = frame + 4 * directionToInt(KeyInput.getFirst(KeyObj.types.movement).getName());
-	
 	if (Utilities.isEven(damageCooldown)) renderSprite(g);
 	renderBounds(g);
 	
-	if (UIHandler.uiState == UIStates.Game) {
+	if (UIHandler.uiState == UIStates.Game){
 		g.setColor(new Color(0, 0, 0, 255));
-		
 		//g.drawString("f:"+frame, 234, 20);
 		//g.drawString(getTileUL(16).x+","+getTileUL(16).y, 160, 20);
 		//g.drawString(bounds.x+","+bounds.y, 185, 20);
-		g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
+		//g.drawString("Objects:"+GameHandler.objList.size(), 160, 40);
 		//g.setColor(new Color(255, 255, 255, 130));
 		//if (MouseInput.isOnScreen()) g.drawLine((int) bounds.getCenterX(), (int) bounds.getCenterY(), (int) MouseInput.getMouseX(), (int) MouseInput.getMouseY());
 		StaminaBar.render(g);

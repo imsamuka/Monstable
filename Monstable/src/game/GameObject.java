@@ -4,6 +4,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 import main.Images;
+import main.Utilities;
 import main.Windows;
 import observer.MySubject;
 
@@ -20,7 +21,8 @@ protected ID        id;
 protected Images    image;
 protected int       wSprite, sWidth, sHeight, hitboxX = 0, hitboxY = 0, life = 0, damage = 0;
 protected boolean   death    = false, visibleBounds = false, collision = false, invertedSprite = false, entitie = false;
-protected boolean   collideX = false, collideY = false,  attacked = false, waitKnockback = false, knockback = false, ableToDamage = true;
+protected boolean   collideX = false, collideY = false, attacked = false, waitKnockback = false, knockback = false,
+ableToDamage = true;
 
 protected GameObject(float x, float y, ID id, String spritesheet, int sWidth, int sHeight, int wSprite){
 	//NumberID = masterNumberID;
@@ -55,6 +57,7 @@ protected void setHitBox(int x, int y, int width, int height){
 }
 protected int directionToInt(String pos){
 	if (pos == null) return 0;
+	
 	switch(pos){
 		case "down":
 			return 0;
@@ -140,8 +143,11 @@ protected String checkForDirection(float posx, float posy, int area, boolean wit
 	}
 	return null;
 }
-protected void checkForDeath(){ if (life == 0) death = true; }
-protected void takeDamage(int Damage){ life -= ableToDamage ? Damage : 0; }
+protected void checkForDeath(){ if (life <= 0) death = true; }
+protected void takeDamage(int Damage){
+	life -= ableToDamage ? Damage : 0;
+	life  = Utilities.clamp(life, 0, 100);
+}
 protected void autoDestroy(){ GameHandler.objList.remove(this); }
 protected void goFromTo(float fromX, float fromY, float toX, float toY, float Speed){
 	double diffX = fromX - toX;

@@ -46,6 +46,7 @@ public Windows(){
 	String scale = SavingData.prop.getProperty("Scale");
 	if (scale != null) SCALE = Integer.parseInt(scale);
 	else SavingData.prop.setProperty("Scale", String.valueOf(SCALE));
+	
 	int width = (int) ( WIDTH * SCALE );
 	int height = (int) ( HEIGHT * SCALE );
 	// Frame
@@ -60,9 +61,11 @@ public Windows(){
 	// Canvas
 	this.setBackground(Color.black);
 	frame.add(this);
-	Image i = Toolkit.getDefaultToolkit().getImage("res/graphics/cursor.png");
-	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"));
-	frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/icon.png"));
+	if (!Game.planB) {
+		Image i = Toolkit.getDefaultToolkit().getImage("C:\\Users\\ziza\\Desktop\\Monstable\\archives\\cursor.png");
+		frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(i, new Point(0, 0), "NewCursor"));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/graphics/icon.png"));
+	}
 	frame.requestFocusInWindow();
 	frame.addKeyListener(keyInput);
 	frame.addMouseListener(mouseInput);

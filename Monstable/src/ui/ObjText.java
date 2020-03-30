@@ -12,7 +12,7 @@ public ObjText(float x, float y, UIStates id, String text, Color defaultColor, F
 }
 public void tick(){ if (animation != animations.nothing) getAnimation(); }
 public void render(Graphics g){ 
-	
+	if (!visible) return;
 	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,transparency));
 	drawString(g); 
 	( (Graphics2D) g ).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1));

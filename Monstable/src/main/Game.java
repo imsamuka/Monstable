@@ -7,17 +7,21 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import game.GameHandler;
+import game.GameState;
 import game.GameWaves;
 import inputs.MouseInput;
+import ui.ObjText;
 import ui.UIHandler;
+import ui.UIList;
 import ui.UIStates;
+
 
 public class Game implements Runnable{
 private static Windows       window;
 private static GameHandler   gameHandler;
 private static BufferedImage image        = new BufferedImage(Windows.WIDTH, Windows.HEIGHT, BufferedImage.TYPE_INT_RGB);
 public static UIHandler      uiHandler;
-public static boolean        isRunning    = false, imageCreated = false;
+public static boolean        isRunning    = false, imageCreated = false, planB = true;
 private Thread               thread       = new Thread(this);           
 
 public static void main(String[] args){ new Game(); }
@@ -25,8 +29,9 @@ public Game(){
 	SavingData.getSaveFiles();
 	getNewWindow();
 	uiHandler = new UIHandler();
-	//new MapGenerator("/maps/mockup1.png", "newMap1" , "/graphics/Tileset.png", new Point(3,5));
-	//new MapGenerator("/maps/mockup2.png", "newMap2" , "/graphics/Tileset.png", new Point(7,7));
+	
+	//for (int i = 0; i < 15; i++) new MapGenerator("/maps/map"+i+".png", "newMap"+i, "/graphics/tileset_florest.png", new Point(3,5));
+	
 	start();
 }
 public synchronized void start(){
@@ -66,6 +71,10 @@ public void run(){
 	}
 }
 private void tick(){
+	if (GameWaves.record == null) GameWaves.record = new ObjText(Windows.WIDTH / 2, 85, UIStates.Modes, "Record: "+ String.valueOf(GameState.lastWave), Color.black, UIList.alphbeta18);
+	
+	
+	
 	uiHandler.tick();
 	
 	if (UIHandler.uiState == UIStates.Game){
@@ -80,6 +89,7 @@ private void render(){
 		window.createBufferStrategy(3);
 		return;
 	}
+	
 	Graphics g = image.getGraphics();
 	// Background Color
 	g.setColor(Color.white);
@@ -89,43 +99,46 @@ private void render(){
 	if (gameHandler != null){
 		gameHandler.render(g);
 		if (UIHandler.uiState == UIStates.Game) GameWaves.render(g);
-		else if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){
-			
-			if (new File("C:\\Users\\ziza\\Desktop").exists()) {
-				int value = 0;
-				File file = new File("C:\\Users\\ziza\\Desktop\\background_"+value+".png");
-				
-				while(file.exists()){
-					value++;
-					file = new File("C:\\Users\\ziza\\Desktop\\background_"+value+".png");
-				}
-				if (!imageCreated) {
-					try{
-						ImageIO.write(image, "png", file);
-						System.out.println("New Background");
-						
-						imageCreated = true;
-					}
-					catch(IOException e){
-						e.printStackTrace();
-					}
-				}
-			}
-			
-			
-			
-			image = Utilities.blurImage(3, image);
-			g     = image.getGraphics();
-		}
+		//else if (UIHandler.uiState != UIStates.Game && UIHandler.uiState != UIStates.Pause){ createBackground(); }
 	}
 	// Render da UI	
 	uiHandler.render(g);
+	if (UIHandler.uiState == UIStates.Modes) {
+		GameWaves.record.setText( "Record: "+ SavingData.prop.getProperty("Record"));
+		GameWaves.record.render(g);
+	}
+	else if (UIHandler.uiState == UIStates.Death) {
+		GameWaves.lastWave.setVisible(GameState.arcadeMode);
+		GameWaves.lastWave.render(g);
+	}
 	//
 	//renderMousePoint(g);
 	g.dispose();
 	g = bs.getDrawGraphics();
 	g.drawImage(image, 0, 0, (int) ( Windows.WIDTH * Windows.SCALE ), (int) ( Windows.HEIGHT * Windows.SCALE ), null);
 	bs.show();
+}
+public static void createBackground() {
+	if (new File("C:\\Users\\ziza\\Desktop\\backgrounds").exists()) {
+		int value = 0;
+		File file = new File("C:\\Users\\ziza\\Desktop\\backgrounds\\background_"+value+".png");
+		
+		while(file.exists()){
+			value++;
+			file = new File("C:\\Users\\ziza\\Desktop\\backgrounds\\\\background_"+value+".png");
+		}
+		if (!imageCreated) {
+			try{
+				ImageIO.write(image, "png", file);
+				System.out.println("New Background");
+				
+				imageCreated = true;
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+	}
 }
 public static void getNewWindow(){ window = new Windows(); }
 public static void getNewGameHandler(){ gameHandler = new GameHandler(); }

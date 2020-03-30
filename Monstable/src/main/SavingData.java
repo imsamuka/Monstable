@@ -1,5 +1,10 @@
 package main;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class SavingData{
@@ -7,6 +12,9 @@ public static File file = new File("res/config.properties");
 public static Properties  prop = new Properties();
 
 public static void setSaveFiles(){
+	
+	if (Game.planB) return;
+	
 	try{
 		OutputStream output = new FileOutputStream(file);
 		
@@ -19,6 +27,16 @@ public static void setSaveFiles(){
 	}
 }
 public static void getSaveFiles(){
+	
+	if (Game.planB) {
+		prop.setProperty("Scale", "2");
+		prop.setProperty("Record", "0");
+		return;
+	}
+	
+	
+	
+	
 	if (!file.exists()) {
 		System.out.println("Settings Dont exist.");
 		return;
@@ -33,4 +51,6 @@ public static void getSaveFiles(){
 	}
 	
 }
+
+
 }

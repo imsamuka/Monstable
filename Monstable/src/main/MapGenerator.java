@@ -31,7 +31,7 @@ public MapGenerator(String inputPath, String output, String tilesetPath){
 		outputImage.setRGB(xx, yy, GameState.SpriteAndColor(1, false));
 		
 		if (playerPoint != null && xx == playerPoint.x && yy == playerPoint.y){
-			outputImage.setRGB(xx, yy, GameState.SpriteAndColor(37, false));
+			outputImage.setRGB(xx, yy, GameState.SpriteAndColor(GameState.PLAYERSPRITE, false));
 			continue;
 		}
 		
@@ -48,8 +48,10 @@ public MapGenerator(String inputPath, String output, String tilesetPath){
 	}
 	
 	try{
-		ImageIO.write(outputImage, "png", new File("res/maps/"+output+".png"));
+		File file = new File("res/maps/"+output+".png");
+		ImageIO.write(outputImage, "png", file);
 		System.out.println("Novo mapa "+output+".png baseado em "+inputPath);
+		//System.out.println(file.getPath());
 	}
 	catch(IOException e){
 		e.printStackTrace();
